@@ -35,7 +35,8 @@
     <button onclick='navigator.clipboard.writeText(gE("outtext").value)'>Copy to Clipboard</button>
 
     <h2>Options</h2>
-    <label for="pat">Pattern: </label><input type="text" id="pat" size=50 oninput="match()"><br><br>
+    <label for="pat">Pattern: </label><input type="text" id="pat" size=50 oninput="match()">
+    <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions/Cheatsheet" target="_blank">cheatsheet</a><br><br>
     <input type="checkbox" id="invert" onchange="match()"><label for="invert">Invert match (only keep non-matching lines)</label><br>
     <input type="checkbox" id="ic" onchange="match()"><label for="ic">Ignore case</label><br>
     <input type="checkbox" id="match" onchange="match()"><label for="match">Only Matching (only keep part that matched)</label>
