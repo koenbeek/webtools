@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang=”en”>
+
+<head>
+    <script type="text/javascript">
+        function gE(id) { return document.getElementById(id) };
+
+        function match() {
+            var intext = gE("intext").value;
+            var scope = gE("multiline").value;
+            var options = (gE("ic").checked ? "i" : "") + (gE("global").checked ? "g" : "") + (scope == "M" ? "m" : "")
+            var re;
+
+            try {
+                re = new RegExp(gE("matchpat").value, options);
+
+                if (scope == "L") {
+                    var lines = intext.split('\n');
+                    gE("outtext").value = lines.map(line => line.replace(re, gE("replacepat").value)).join("\n");
+                } else {
+                    gE("outtext").value = intext.replace(re, gE("replacepat").value);
+                }
+                gE("matchpat").style.color = "inherit";
+
+            } catch (e) {
+                gE("matchpat").style.color = "red";
+                gE("outtext").value = e.name + e.message;
+            }
+
+        } 
+    </script>
+    <title>REplace text</title>
+    <meta charset="utf-8">
+    <style>
+        label {
+            display: inline-block;
+            width: 8em;
+            text-align: right;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>REplace text</h1>
+    <h2>Input</h2>
+    <textarea id="intext" rows="10" cols="150" oninput="match()"></textarea><br>
+
+    <h2>Output</h2>
+    <textarea id="outtext" rows="5" cols="150" readonly></textarea><br>
+    <button onclick='navigator.clipboard.writeText(gE("outtext").value)'>Copy to Clipboard</button>
+
+    <h2>Options</h2>
+    <label for="matchpat">Match pattern:&nbsp;</label><input type="text" id="matchpat" size=50 oninput="match()">
+    <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions/Cheatsheet" target="_blank">cheatsheet</a><br><br>
+    <label for="replacepat">Replace pattern:&nbsp;</label><input type="text" id="replacepat" size=50 oninput="match()">
+    match: $&amp; - precedes: $`- follows: $' - group: $n - named: $&lt;Name&gt;<br><br>
+    <label for="multiline">Match scope:&nbsp;</label>
+    <select id="multiline" onchange="match()">
+        <option value="F">Full (^ and $ on doc level)</option>
+        <option value="M" selected="selected">Full (^ and $ on line level)</option>
+        <option value="L">Line by Line match</option>
+    </select><br><br>
+    <input type="checkbox" id="ic" onchange="match()">Ignore case<br>
+    <input type="checkbox" id="global" checked onchange="match()">Global match (more than 1 match possible)
+
+</body>
+
+</html>

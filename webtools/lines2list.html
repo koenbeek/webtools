@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang=”en”>
+
+<head>
+    <script type="text/javascript">
+        function gE(id) { return document.getElementById(id) };
+
+        function convert() {
+            var sep = gE("sep").value;
+            var quote = gE("quote").value;
+            var lines = gE("intext").value.split('\n');
+
+            if (gE("leading").checked) { lines = lines.map(line => line.trimLeft()) }
+            if (gE("trailing").checked) { lines = lines.map(line => line.trimRight()) }
+            if (gE("emptylines").checked) { lines = lines.filter(line => line.length > 0); }
+            lines = lines.map(line => quote + line + quote);
+
+            gE("outtext").value = lines.join(sep);
+        }
+    </script>
+    <title>Lines To List</title>
+    <meta charset="utf-8">
+    <style>
+        label {
+            display: inline-block;
+            width: 8em;
+            text-align: right;
+        }
+    </style>
+</head>
+
+<body onload="convert()">
+    <h1>Lines To List</h1>
+    <h2>Input</h2>
+    <textarea id="intext" rows="10" cols="100" oninput="convert()"></textarea><br>
+
+    <h2>Output</h2>
+    <textarea id="outtext" rows="1" cols="100" readonly></textarea><br>
+    <button onclick='navigator.clipboard.writeText(gE("outtext").value)'>Copy to Clipboard</button>
+
+    <h2>Options</h2>
+    <label for="sep">Separator String:&nbsp;</label><input type="text" id="sep" size=4 value="," oninput="convert()"><br><br>
+    <label for="quote">Quote Char:&nbsp;</label><input type="text" id="quote" size=1 value="'" oninput="convert()"><br><br>
+    <input type="checkbox" id="emptylines" checked onchange="convert()">Remove empty lines<br>
+    <input type="checkbox" id="leading" checked onchange="convert()">Remove leading whitespace<br>
+    <input type="checkbox" id="trailing" checked onchange="convert()">Remove trailing whitespace
+
+</body>
+
+</html>
