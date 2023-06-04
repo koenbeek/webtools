@@ -6,6 +6,8 @@
         function gE(id) { return document.getElementById(id) };
 
         function match() {
+            var pat = gE("matchpat").value;
+            if (pat == "") { gE("outtext").value = ""; return; }
             var intext = gE("intext").value;
             var scope = gE("multiline").value;
             var options = (gE("ic").checked ? "i" : "") + (gE("global").checked ? "g" : "") + (scope == "M" ? "m" : "")
@@ -22,7 +24,7 @@
             };
 
             try {
-                re = new RegExp(gE("matchpat").value, options);
+                re = new RegExp(pat, options);
 
                 if (scope == "L") {
                     var lines = intext.split("\n");
