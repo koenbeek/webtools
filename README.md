@@ -8,4 +8,4 @@
 
 - [Grep](webtools/grep.html) - find lines containing some text pattern
 - [Match List](webtools/matchlist.html) - list certain matches
-- [REplace](webtools/grep.html) - replace matched text
+- [REplace](webtools/replace.html) - replace matched text
