@@ -1,1 +1,0 @@
-python3 -m http.server ${1:=8888}
