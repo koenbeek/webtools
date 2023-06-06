@@ -79,6 +79,7 @@
     const p = new URLSearchParams(document.location.search);
     ["matchpat", "listpat", "multiline", "intext"].forEach(d => { if (p.has(d)) { gE(d).value = p.get(d) } });
     ["ic", "global"].forEach(d => { if (p.has(d)) { gE(d).checked = (p.get(d) == "on") } })
+    match()
 </script>
 
 </html>

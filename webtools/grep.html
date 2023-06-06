@@ -25,7 +25,7 @@
     <meta charset="utf-8">
 </head>
 
-<body onload="match()">
+<body>
     <h1>Match Lines</h1>
 
     <label for="pat">Pattern: </label><input type="text" id="pat" size=50 oninput="match()">
@@ -44,7 +44,8 @@
 <script>
     const p = new URLSearchParams(document.location.search);
     ["pat", "intext"].forEach(d => { if (p.has(d)) { gE(d).value = p.get(d) } });
-    [!"invert", "ic", "match"].forEach(d => { if (p.has(d)) { gE(d).checked = (p.get(d) == "on") } })
+    ["invert", "ic", "match"].forEach(d => { if (p.has(d)) { gE(d).checked = (p.get(d) == "on") } })
+    match()
 </script>
 
 </html>
