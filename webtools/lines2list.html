@@ -25,26 +25,31 @@
             display: inline-block;
             width: 8em;
             text-align: right;
+            line-height: 1.6em;
         }
     </style>
 </head>
 
 <body onload="convert()">
     <h1>Lines To List</h1>
-    <h2>Input</h2>
-    <textarea id="intext" rows="10" cols="100" oninput="convert()"></textarea><br>
 
-    <h2>Output</h2>
-    <textarea id="outtext" rows="1" cols="100" readonly></textarea><br>
-    <button onclick='navigator.clipboard.writeText(gE("outtext").value)'>Copy to Clipboard</button>
-
-    <h2>Options</h2>
-    <label for="sep">Separator String:&nbsp;</label><input type="text" id="sep" size=4 value="," oninput="convert()"><br><br>
-    <label for="quote">Quote Char:&nbsp;</label><input type="text" id="quote" size=1 value="'" oninput="convert()"><br><br>
+    <label for="sep">Separator String:&nbsp;</label><input type="text" id="sep" size=4 value="," oninput="convert()"><br>
+    <label for="quote">Quote Char:&nbsp;</label><input type="text" id="quote" size=1 value="'" oninput="convert()"><br>
     <input type="checkbox" id="emptylines" checked onchange="convert()">Remove empty lines<br>
     <input type="checkbox" id="leading" checked onchange="convert()">Remove leading whitespace<br>
     <input type="checkbox" id="trailing" checked onchange="convert()">Remove trailing whitespace
 
+    <h2>Input</h2>
+    <textarea id="intext" rows="10" cols="100" oninput="convert()"></textarea><br>
+
+    <h2>Output <button onclick='navigator.clipboard.writeText(gE("outtext").value)'>Copy to Clipboard</button></h2>
+    <textarea id="outtext" rows="1" cols="100" readonly></textarea><br>
+
 </body>
+<script>
+    const p = new URLSearchParams(document.location.search);
+    ["sep", "quote", "intext"].forEach(d => { if (p.has(d)) { gE(d).value = p.get(d) } });
+    ["emptylines", "leading", "trailing"].forEach(d => { if (p.has(d)) { gE(d).checked = (p.get(d) == "on") } })
+</script>
 
 </html>

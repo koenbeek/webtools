@@ -36,33 +36,37 @@
             display: inline-block;
             width: 8em;
             text-align: right;
+            line-height: 1.6em;
         }
     </style>
 </head>
 
 <body>
     <h1>REplace text</h1>
-    <h2>Input</h2>
-    <textarea id="intext" rows="10" cols="150" oninput="match()"></textarea><br>
-
-    <h2>Output</h2>
-    <textarea id="outtext" rows="5" cols="150" readonly></textarea><br>
-    <button onclick='navigator.clipboard.writeText(gE("outtext").value)'>Copy to Clipboard</button>
-
-    <h2>Options</h2>
     <label for="matchpat">Match pattern:&nbsp;</label><input type="text" id="matchpat" size=50 oninput="match()">
-    <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions/Cheatsheet" target="_blank">cheatsheet</a><br><br>
+    <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions/Cheatsheet" target="_blank">cheatsheet</a><br>
     <label for="replacepat">Replace pattern:&nbsp;</label><input type="text" id="replacepat" size=50 oninput="match()">
-    match: $&amp; - precedes: $`- follows: $' - group: $n - named: $&lt;Name&gt;<br><br>
+    match: $&amp; - precedes: $`- follows: $' - group: $n - named: $&lt;Name&gt;<br>
     <label for="multiline">Match scope:&nbsp;</label>
     <select id="multiline" onchange="match()">
         <option value="F">Full (^ and $ on doc level)</option>
         <option value="M" selected="selected">Full (^ and $ on line level)</option>
         <option value="L">Line by Line match</option>
-    </select><br><br>
+    </select><br>
     <input type="checkbox" id="ic" onchange="match()">Ignore case<br>
     <input type="checkbox" id="global" checked onchange="match()">Global match (more than 1 match possible)
 
+    <h2>Input</h2>
+    <textarea id="intext" rows="10" cols="150" oninput="match()"></textarea><br>
+
+    <h2>Output <button onclick='navigator.clipboard.writeText(gE("outtext").value)'>Copy to Clipboard</button></h2>
+    <textarea id="outtext" rows="5" cols="150" readonly></textarea><br>
+
 </body>
+<script>
+    const p = new URLSearchParams(document.location.search);
+    ["matchpat", "replacepat", "multiline", "intext"].forEach(d => { if (p.has(d)) { gE(d).value = p.get(d) } });
+    ["ic", "global"].forEach(d => { if (p.has(d)) { gE(d).checked = (p.get(d) == "on") } })
+</script>
 
 </html>

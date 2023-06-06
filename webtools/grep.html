@@ -27,19 +27,24 @@
 
 <body onload="match()">
     <h1>Match Lines</h1>
-    <h2>Input</h2>
-    <textarea id="intext" rows="10" cols="100" oninput="match()"></textarea><br>
 
-    <h2>Output</h2>
-    <textarea id="outtext" rows="10" cols="100" readonly></textarea><br>
-    <button onclick='navigator.clipboard.writeText(gE("outtext").value)'>Copy to Clipboard</button>
-
-    <h2>Options</h2>
     <label for="pat">Pattern: </label><input type="text" id="pat" size=50 oninput="match()">
     <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions/Cheatsheet" target="_blank">cheatsheet</a><br><br>
     <input type="checkbox" id="invert" onchange="match()"><label for="invert">Invert match (only keep non-matching lines)</label><br>
     <input type="checkbox" id="ic" onchange="match()"><label for="ic">Ignore case</label><br>
     <input type="checkbox" id="match" onchange="match()"><label for="match">Only Matching (only keep part that matched)</label>
+
+    <h2>Input </h2>
+    <textarea id="intext" rows="10" cols="100" oninput="match()"></textarea><br>
+
+    <h2>Output <button onclick='navigator.clipboard.writeText(gE("outtext").value)'>Copy to Clipboard</button></h2>
+    <textarea id="outtext" rows="10" cols="100" readonly></textarea><br>
+
 </body>
+<script>
+    const p = new URLSearchParams(document.location.search);
+    ["pat", "intext"].forEach(d => { if (p.has(d)) { gE(d).value = p.get(d) } });
+    [!"invert", "ic", "match"].forEach(d => { if (p.has(d)) { gE(d).checked = (p.get(d) == "on") } })
+</script>
 
 </html>
