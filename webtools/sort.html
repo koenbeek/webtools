@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang=”en”>
+<!-- todo: basic sanity testing on range input & user feedback when wrong -->
+<!-- todo: handle ranges outside of number of available keys better -> key ="" iso "undefined" -->
+
+<head>
+    <script type="text/javascript">
+        function gE(id) { return document.getElementById(id) };
+        function col(ids, c) { ids.forEach(id => gE(id).style.color = c) }
+
+        function sort() {
+            var lines = [];
+            var key = gE("key").value;
+            var sep = gE("sep").value;
+            var range = gE("range").value;
+            var reopt = gE("ic").checked ? "igd" : "gd";
+            var simple = (key == "" && sep == "")
+
+            if (key != "" && sep != "") { col(["key", "sep"], "red"); return; }
+            col(["key", "sep"], "inherit")
+            var re;
+            if (key != "") { try { re = new RegExp(key, reopt); } catch (e) { col(["key"], "red"); return; }; };
+            if (sep != "") { try { re = new RegExp(sep, reopt); } catch (e) { col(["sep"], "red"); return; }; };
+
+            gE("intext").value.split('\n').map(line => {
+                var allkeys = [];
+                var linekey = "";
+                if (key != "") { allkeys = line.match(re) || []; console.log(allkeys) };
+                if (sep != "") {
+                    var previd = 0;
+                    while ((match = re.exec(line)) != null) {
+                        allkeys.push(line.substr(previd, match.indices[0][0] - previd))
+                        previd = match.indices[0][1];
+                    }
+                    allkeys.push(line.substr(previd, line.length + 1 - previd))
+                }
+                if (key == "" && sep == "") { linekey = gE("ic").checked ? line.toUpperCase() : line };
+
+                range = range.replace(/[^0-9,-]/g, '');
+                linekey = "";
+                if (range == "") {
+                    if (!simple) {
+                        linekey = allkeys.join('');
+                        if (gE("ic").checked) { linekey = linekey.toUpperCase() }
+                    }
+                } else {
+                    range.split(",").forEach(r => {
+                        var dashpos = r.indexOf("-");
+                        if (dashpos == -1) {
+                            end = start = parseInt(r);
+                        } else {
+                            start = parseInt(r.substr(0, dashpos));
+                            end = parseInt(r.substr(dashpos + 1));
+                        }
+                        for (let i = start; i <= end; i++) { linekey += allkeys[i - 1]; }
+                    })
+                }
+                lines.push({ l: line, k: linekey })
+            });
+
+            gE("outtext").value = lines.sort(function (a, b) {
+                var x = a.k; var y = b.k;
+                if (gE("inverse").checked) { [x, y] = [y, x] };
+                return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+            }).map(l => l.l).join("\n");
+        }
+    </script>
+    <title>Sort Lines</title>
+    <meta charset="utf-8">
+    <style>
+        label {
+            display: inline-block;
+            width: 9em;
+            text-align: right;
+            line-height: 1.6em;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Sort Lines</h1>
+
+    <label for="key">Key RegExp:&nbsp;</label><input type="text" id="key" size=50 oninput="sort()">ex.: keyvalue:[A-Z0-9]{16}<br>
+    <label for="sep">Seperator RegExp:&nbsp;</label><input type="text" id="sep" size=50 oninput="sort()">ex.: [,;]<br>
+    <label for="range">Key Range:&nbsp;</label><input type="text" id="range" size=50 oninput="sort()">ex.: 4,5-7,1<br>
+    <input type="checkbox" id="inverse" onchange="sort()">Inverse order<br>
+    <input type="checkbox" id="ic" onchange="sort()">Ignore case<br>
+    <input type="checkbox" id="unique" onchange="sort()">Unique lines only
+
+    <h2>Input</h2>
+    <textarea id="intext" rows="10" cols="100" oninput="sort()"></textarea><br>
+
+    <h2>Output <button onclick='navigator.clipboard.writeText(gE("outtext").value)'>Copy to Clipboard</button></h2>
+    <textarea id="outtext" rows="10" cols="100" readonly></textarea><br>
+</body>
+<script>
+    const p = new URLSearchParams(document.location.search);
+    ["key", "sep", "range"].forEach(d => { if (p.has(d)) { gE(d).value = p.get(d) } });
+    ["inverse", "ic", "unique"].forEach(d => { if (p.has(d)) { gE(d).checked = (p.get(d) == "on") } })
+    sort()
+</script>
+
+</html>
