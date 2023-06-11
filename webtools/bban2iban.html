@@ -2,49 +2,8 @@
 <html lang=”en”>
 <!-- js code based on https://github.com/arhs/iban.js/blob/master/iban.js -->
 <!-- todo: add some bban format checks -->
-<!-- todo: allow to put country in input text on each line iso general parameter for all input text -->
 
 <head>
-    <script type="text/javascript">
-        function gE(id) { return document.getElementById(id) };
-        var NON_ALPHANUM = /[^a-zA-Z0-9]/g,
-            A = 'A'.charCodeAt(0),
-            Z = 'Z'.charCodeAt(0);
-
-        function iso13616Prepare(iban) {
-            iban = iban.toUpperCase();
-            iban = iban.substr(4) + iban.substr(0, 4);
-
-            return iban.split('').map(function (n) {
-                var code = n.charCodeAt(0);
-                if (code >= A && code <= Z) { // A = 10, B = 11, ... Z = 35
-                    return code - A + 10;
-                } else {
-                    return n;
-                }
-            }).join('');
-        }
-
-        function iso7064Mod97_10(iban) {
-            var remainder = iban, block;
-            while (remainder.length > 2) {
-                block = remainder.slice(0, 9);
-                remainder = parseInt(block, 10) % 97 + remainder.slice(block.length);
-            }
-            return parseInt(remainder, 10) % 97;
-        }
-
-        function convert() {
-            var ctry = gE("country").value;
-            gE("outtext").value = gE("intext").value.split('\n').map(bban => {
-                bban.replace(NON_ALPHANUM, '').toUpperCase();
-                var remainder = iso7064Mod97_10(iso13616Prepare(ctry + '00' + bban)),
-                    checkDigit = ('0' + (98 - remainder)).slice(-2);
-                return ctry + checkDigit + bban;
-            });
-        }
-    </script>
-
     <title>BBAN to IBAN</title>
     <meta charset="utf-8">
 </head>
@@ -52,19 +11,32 @@
 <body>
     <h1>BBAN to IBAN</h1>
 
-    <label for="country">Country: </label><input type="text" id="country" size=2 minlength=2 maxlength=2 value="BE" oninput="convert()"><br>
+    <label for="country">Country: </label><input type="text" id="country" size=2 minlength=2 maxlength=2 value="BE"><br>
+    <input type="checkbox" id="ctry"><label for="ctry">Country code in Input text (f.ex. BE 979931653073)</label><br>
+    <input type="checkbox" id="human"><label for="human">IBAN in human format</label>
 
     <h2>Input</h2>
-    <textarea id="intext" rows="10" cols="100" oninput="convert()"></textarea><br>
+    <textarea id="intext" rows="10" cols="100"></textarea><br>
 
-    <h2>Output <button onclick='navigator.clipboard.writeText(gE("outtext").value)'>Copy to Clipboard</button></h2>
+    <h2>Output <button onclick="toCP()">Copy to Clipboard</button></h2>
     <textarea id="outtext" rows="10" cols="100" readonly></textarea><br>
 </body>
-
-<script>
-    const p = new URLSearchParams(document.location.search);
-    ["country", "intext"].forEach(d => { if (p.has(d)) { gE(d).value = p.get(d) } });
-    convert()
+<script type="module">
+    import { gE, gV, gC, toCP, doSetup, sErr, sOK } from './js/lib.js';
+    import { toIBAN } from './js/acc.js';
+    function convert() {
+        var c;
+        gE("outtext").value = gE("intext").value.split('\n').map(bban => {
+            if (gC("ctry")) {
+                c = bban.substr(0, 2);
+                bban = bban.substr(2);
+            } else {
+                c = gV("country");
+            };
+            return toIBAN(c, bban, gC("human"))
+        });
+    }
+    doSetup(convert);    
 </script>
 
 </html>

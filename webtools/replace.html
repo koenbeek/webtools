@@ -2,71 +2,55 @@
 <html lang=”en”>
 
 <head>
-    <script type="text/javascript">
-        function gE(id) { return document.getElementById(id) };
-
-        function match() {
-            var intext = gE("intext").value;
-            var scope = gE("multiline").value;
-            var options = (gE("ic").checked ? "i" : "") + (gE("global").checked ? "g" : "") + (scope == "M" ? "m" : "")
-            var re;
-
-            try {
-                re = new RegExp(gE("matchpat").value, options);
-
-                if (scope == "L") {
-                    var lines = intext.split('\n');
-                    gE("outtext").value = lines.map(line => line.replace(re, gE("replacepat").value)).join("\n");
-                } else {
-                    gE("outtext").value = intext.replace(re, gE("replacepat").value);
-                }
-                gE("matchpat").style.color = "inherit";
-
-            } catch (e) {
-                gE("matchpat").style.color = "red";
-                gE("outtext").value = e.name + e.message;
-            }
-        } 
-    </script>
     <title>REplace text</title>
     <meta charset="utf-8">
-    <style>
-        label {
-            display: inline-block;
-            width: 8em;
-            text-align: right;
-            line-height: 1.6em;
-        }
-    </style>
+    <link rel="stylesheet" href="css/main.css">
 </head>
 
 <body>
     <h1>REplace text</h1>
-    <label for="matchpat">Match pattern:&nbsp;</label><input type="text" id="matchpat" size=50 oninput="match()">
+    <label for="matchpat">Match pattern:&nbsp;</label><input type="text" id="matchpat" size=50>
     <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions/Cheatsheet" target="_blank">cheatsheet</a><br>
-    <label for="replacepat">Replace pattern:&nbsp;</label><input type="text" id="replacepat" size=50 oninput="match()">
+    <label for="replacepat">Replace pattern:&nbsp;</label><input type="text" id="replacepat" size=50>
     match: $&amp; - precedes: $`- follows: $' - group: $n - named: $&lt;Name&gt;<br>
     <label for="multiline">Match scope:&nbsp;</label>
-    <select id="multiline" onchange="match()">
+    <select id="multiline">
         <option value="F">Full (^ and $ on doc level)</option>
         <option value="M" selected="selected">Full (^ and $ on line level)</option>
         <option value="L">Line by Line match</option>
     </select><br>
-    <input type="checkbox" id="ic" onchange="match()">Ignore case<br>
-    <input type="checkbox" id="global" checked onchange="match()">Global match (more than 1 match possible)
+    <input type="checkbox" id="ic">Ignore case<br>
+    <input type="checkbox" id="global" checked>Global match (more than 1 match possible)
 
     <h2>Input</h2>
-    <textarea id="intext" rows="10" cols="150" oninput="match()"></textarea><br>
+    <textarea id="intext" rows="10" cols="150"></textarea><br>
 
-    <h2>Output <button onclick='navigator.clipboard.writeText(gE("outtext").value)'>Copy to Clipboard</button></h2>
+    <h2>Output <button onclick="toCP">Copy to Clipboard</button></h2>
     <textarea id="outtext" rows="5" cols="150" readonly></textarea><br>
 
 </body>
-<script>
-    const p = new URLSearchParams(document.location.search);
-    ["matchpat", "replacepat", "multiline", "intext"].forEach(d => { if (p.has(d)) { gE(d).value = p.get(d) } });
-    ["ic", "global"].forEach(d => { if (p.has(d)) { gE(d).checked = (p.get(d) == "on") } })
-    match()
+<script type="module">
+    import { gE, gV, gC, toCP, doSetup, sErr, sOK } from './js/lib.js';
+    function match() {
+        var intext = gV("intext");
+        var scope = gV("multiline");
+        var options = (gC("ic") ? "i" : "") + (gC("global") ? "g" : "") + (scope == "M" ? "m" : "")
+        var re;
+
+        try {
+            re = new RegExp(gE("matchpat").value, options);
+            if (scope == "L") {
+                gE("outtext").value = gV("intext").split('\n').map(l => l.replace(re, gV("replacepat"))).join("\n");
+            } else {
+                gE("outtext").value = gV("intext").replace(re, gV("replacepat"));
+            }
+            sOK("matchpat");
+        } catch (e) {
+            sErr("matchpat");
+            gE("outtext").value = e.name + e.message;
+        }
+    }
+    doSetup(match);
 </script>
 
 </html>

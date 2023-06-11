@@ -2,55 +2,42 @@
 <html lang=”en”>
 
 <head>
-    <script type="text/javascript">
-        function gE(id) { return document.getElementById(id) };
-
-        function convert() {
-            var sep = gE("sep").value;
-            var quote = gE("quote").value;
-            var lines = gE("intext").value.split('\n');
-
-            if (gE("leading").checked) { lines = lines.map(line => line.trimLeft()) }
-            if (gE("trailing").checked) { lines = lines.map(line => line.trimRight()) }
-            if (gE("emptylines").checked) { lines = lines.filter(line => line.length > 0); }
-            lines = lines.map(line => quote + line + quote);
-
-            gE("outtext").value = lines.join(sep);
-        }
-    </script>
     <title>Lines To List</title>
     <meta charset="utf-8">
-    <style>
-        label {
-            display: inline-block;
-            width: 8em;
-            text-align: right;
-            line-height: 1.6em;
-        }
-    </style>
+    <link rel="stylesheet" href="css/main.css">
 </head>
 
 <body>
     <h1>Lines To List</h1>
 
-    <label for="sep">Separator String:&nbsp;</label><input type="text" id="sep" size=4 value="," oninput="convert()"><br>
-    <label for="quote">Quote Char:&nbsp;</label><input type="text" id="quote" size=1 value="'" oninput="convert()"><br>
-    <input type="checkbox" id="emptylines" checked onchange="convert()">Remove empty lines<br>
-    <input type="checkbox" id="leading" checked onchange="convert()">Remove leading whitespace<br>
-    <input type="checkbox" id="trailing" checked onchange="convert()">Remove trailing whitespace
+    <label for="sep">Separator String:&nbsp;</label><input type="text" id="sep" size=4 value=","><br>
+    <label for="quote">Quote Char:&nbsp;</label><input type="text" id="quote" size=1 value="'"><br>
+    <input type="checkbox" id="emptylines" checked>Remove empty lines<br>
+    <input type="checkbox" id="leading" checked>Remove leading whitespace<br>
+    <input type="checkbox" id="trailing" checked>Remove trailing whitespace
 
     <h2>Input</h2>
-    <textarea id="intext" rows="10" cols="100" oninput="convert()"></textarea><br>
+    <textarea id="intext" rows="10" cols="100"></textarea><br>
 
-    <h2>Output <button onclick='navigator.clipboard.writeText(gE("outtext").value)'>Copy to Clipboard</button></h2>
+    <h2>Output <button onclick="toCP()">Copy to Clipboard</button></h2>
     <textarea id="outtext" rows="1" cols="100" readonly></textarea><br>
-
 </body>
-<script>
-    const p = new URLSearchParams(document.location.search);
-    ["sep", "quote", "intext"].forEach(d => { if (p.has(d)) { gE(d).value = p.get(d) } });
-    ["emptylines", "leading", "trailing"].forEach(d => { if (p.has(d)) { gE(d).checked = (p.get(d) == "on") } })
-    convert()
+<script type="module">
+    import { gE, gV, gC, toCP, doSetup, sErr, sOK } from './js/lib.js';
+
+    function convert() {
+        var sep = gV("sep");
+        var quote = gV("quote");
+        var lines = gV("intext").split('\n');
+
+        if (gC("leading")) { lines = lines.map(line => line.trimLeft()) }
+        if (gC("trailing")) { lines = lines.map(line => line.trimRight()) }
+        if (gC("emptylines")) { lines = lines.filter(line => line.length > 0); }
+        lines = lines.map(line => quote + line + quote);
+
+        gE("outtext").value = lines.join(sep);
+    }
+    doSetup(convert);
 </script>
 
 </html>
