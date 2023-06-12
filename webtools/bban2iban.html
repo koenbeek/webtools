@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang=”en”>
-<!-- js code based on https://github.com/arhs/iban.js/blob/master/iban.js -->
-<!-- todo: add some bban format checks -->
+<!-- todo: add some bban format checks and maybe some country code checks -->
 
 <head>
     <title>BBAN to IBAN</title>
@@ -22,19 +21,14 @@
     <textarea id="outtext" rows="10" cols="100" readonly></textarea><br>
 </body>
 <script type="module">
-    import { gE, gV, gC, toCP, doSetup, sErr, sOK } from './js/lib.js';
+    import { gE, gV, gC, toCP, doSetup } from './js/lib.js';
     import { toIBAN } from './js/acc.js';
     function convert() {
         var c;
-        gE("outtext").value = gE("intext").value.split('\n').map(bban => {
-            if (gC("ctry")) {
-                c = bban.substr(0, 2);
-                bban = bban.substr(2);
-            } else {
-                c = gV("country");
-            };
+        gE("outtext").value = gV("intext").split('\n').map(bban => {
+            gC("ctry") ? (c = bban.substr(0, 2), bban = bban.substr(2)) : c = gV("country");
             return toIBAN(c, bban, gC("human"))
-        });
+        }).join("\n");
     }
     doSetup(convert);    
 </script>

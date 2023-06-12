@@ -1,7 +1,5 @@
 <!DOCTYPE html>
 <html lang=”en”>
-<!-- todo: basic sanity testing on range input & user feedback when wrong -->
-<!-- todo: handle ranges outside of number of available keys better -> key = "" iso "undefined" -->
 
 <head>
     <title>Sort Lines</title>
@@ -29,43 +27,38 @@
     import { gE, gV, gC, toCP, doSetup, sErr, sOK } from './js/lib.js';
 
     function sort() {
-        var lines = [];
-        var key = gV("key");
-        var sep = gV("sep");
-        var range = gV("range");
+        var lines = [], re;
+        var key = gV("key"), sep = gV("sep"), range = gV("range");
         var reopt = gC("ic") ? "igd" : "gd";
-        var simple = (key == "" && sep == "")
 
+        // basic input value checks
         if (key != "" && sep != "") { sErr(["key", "sep"]); return; }
         sOK(["key", "sep"])
-        var re;
+        if (range != "" && sep == "" && key == "") { key = "." };
         if (key != "") { try { re = new RegExp(key, reopt); } catch (e) { sErr("key"); return; }; };
         if (sep != "") { try { re = new RegExp(sep, reopt); } catch (e) { sErr("sep"); return; }; };
 
+        // determine key values for each line -> lines array
         var alllines = gV("intext").split('\n');
         if (gC("unique")) { alllines = [... new Set(alllines)] }
         alllines.map(line => {
-            var allkeys = [];
-            var linekey = "";
+            var allkeys = [], linekey = "", match;
             if (key != "") { allkeys = line.match(re) || []; };
             if (sep != "") {
                 var previd = 0;
-                while ((match = re.exec(line)) != null) {
+                while (match = re.exec(line)) {
                     allkeys.push(line.substr(previd, match.indices[0][0] - previd))
                     previd = match.indices[0][1];
                 }
                 allkeys.push(line.substr(previd, line.length + 1 - previd))
             }
-            if (key == "" && sep == "") { linekey = gC("ic") ? line.toUpperCase() : line };
 
             range = range.replace(/[^0-9,-]/g, '');
             linekey = "";
             if (range == "") {
-                if (!simple) {
-                    linekey = allkeys.join('');
-                    if (gC("ic")) { linekey = linekey.toUpperCase() }
-                }
+                (key == "" && sep == "") ? linekey = line : linekey = allkeys.join('');
             } else {
+                var end, start;
                 range.split(",").forEach(r => {
                     var dashpos = r.indexOf("-");
                     if (dashpos == -1) {
@@ -74,14 +67,16 @@
                         start = parseInt(r.substr(0, dashpos));
                         end = parseInt(r.substr(dashpos + 1));
                     }
-                    for (let i = start; i <= end; i++) { linekey += allkeys[i - 1]; }
+                    for (let i = start; i <= end; i++) { linekey += allkeys[i - 1] ?? ""; }
                 })
             }
+            if (gC("ic")) { linekey = linekey.toUpperCase() }
             lines.push({ l: line, k: linekey })
         });
 
+        // sort lines based on key k in lines array
         gE("outtext").value = lines.sort(function (a, b) {
-            var x = a.k; var y = b.k;
+            var x = a.k, y = b.k;
             if (gC("inverse")) { [x, y] = [y, x] };
             return ((x < y) ? -1 : ((x > y) ? 1 : 0));
         }).map(l => l.l).join("\n");

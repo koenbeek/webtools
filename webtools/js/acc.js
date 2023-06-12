@@ -1,3 +1,4 @@
+// js code based on https://github.com/arhs/iban.js/blob/master/iban.js
 var NON_ALPHANUM = /[^a-zA-Z0-9]/g,
     A = 'A'.charCodeAt(0),
     Z = 'Z'.charCodeAt(0);

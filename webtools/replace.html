@@ -11,7 +11,7 @@
     <h1>REplace text</h1>
     <label for="matchpat">Match pattern:&nbsp;</label><input type="text" id="matchpat" size=50>
     <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions/Cheatsheet" target="_blank">cheatsheet</a><br>
-    <label for="replacepat">Replace pattern:&nbsp;</label><input type="text" id="replacepat" size=50>
+    <label for="reppat">Replace pattern:&nbsp;</label><input type="text" id="reppat" size=50>
     match: $&amp; - precedes: $`- follows: $' - group: $n - named: $&lt;Name&gt;<br>
     <label for="multiline">Match scope:&nbsp;</label>
     <select id="multiline">
@@ -26,23 +26,22 @@
     <textarea id="intext" rows="10" cols="150"></textarea><br>
 
     <h2>Output <button onclick="toCP">Copy to Clipboard</button></h2>
-    <textarea id="outtext" rows="5" cols="150" readonly></textarea><br>
+    <textarea id="outtext" rows="10" cols="150" readonly></textarea><br>
 
 </body>
 <script type="module">
     import { gE, gV, gC, toCP, doSetup, sErr, sOK } from './js/lib.js';
     function match() {
-        var intext = gV("intext");
         var scope = gV("multiline");
         var options = (gC("ic") ? "i" : "") + (gC("global") ? "g" : "") + (scope == "M" ? "m" : "")
-        var re;
 
+        // execute replace on full text or each line depending on scope/multiline setting
         try {
-            re = new RegExp(gE("matchpat").value, options);
+            var re = new RegExp(gE("matchpat").value, options);
             if (scope == "L") {
-                gE("outtext").value = gV("intext").split('\n').map(l => l.replace(re, gV("replacepat"))).join("\n");
+                gE("outtext").value = gV("intext").split('\n').map(l => l.replace(re, gV("reppat"))).join("\n");
             } else {
-                gE("outtext").value = gV("intext").replace(re, gV("replacepat"));
+                gE("outtext").value = gV("intext").replace(re, gV("reppat"));
             }
             sOK("matchpat");
         } catch (e) {

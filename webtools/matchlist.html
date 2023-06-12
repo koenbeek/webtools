@@ -27,7 +27,7 @@
     <textarea id="intext" rows="10" cols="150"></textarea><br>
 
     <h2>Output <button onclick='toCP()'>Copy to Clipboard</button></h2>
-    <textarea id="outtext" rows="5" cols="150" readonly></textarea><br>
+    <textarea id="outtext" rows="10" cols="150" readonly></textarea><br>
 
 </body>
 <script type="module">
@@ -37,22 +37,17 @@
         if (pat == "") { gE("outtext").value = ""; return; }
         var scope = gV("multiline");
         var options = (gC("ic") ? "i" : "") + (gC("global") ? "g" : "") + (scope == "M" ? "m" : "")
-        var re;
         var matches = [];
-        var addm = function (txt) {
-            var m;
-            if (gC("global")) {
-                m = txt.match(re);
-                if (m != null) { matches = matches.concat(m); }
-            } else {
-                m = txt.match(re);
-                if (m != null) { matches.push(m[0]) }
-            }
+
+        // helper function: add all matches in txt to the matches list
+        function addm(txt) {
+            var m = txt.match(re);
+            (m != null) ? gC("global") ? matches = matches.concat(m) : matches.push(m[0]) : 1;
         };
 
+        // execute matches on full text or each line depending on scope/multiline setting
         try {
-            re = new RegExp(pat, options);
-
+            var re = new RegExp(pat, options);
             if (scope == "L") { gV("intext").split("\n").forEach(l => addm(l)); } else { addm(gV("intext")) }
             gE("outtext").value = matches.map(m => m.replace(re, gE("listpat").value)).join("\n");
             sOK("matchpat");
