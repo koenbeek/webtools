@@ -17,6 +17,9 @@
     <textarea id="outtext" rows="10" cols="100" readonly></textarea><br>
 </body>
 <script type="module">
+    // todo: why is the IBAN CD of all my FR example IBANs always 76 ??
+    //       is this because of Math.random not being really random or 
+    //       are all FR IBAN with numeric BBANs like that or WTF ????
     import { gE, gV, gC, toCP, doSetup } from './js/lib.js';
     import { IBANex } from './js/acc.js';
     function convert() {
