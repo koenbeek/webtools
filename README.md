@@ -12,7 +12,7 @@
 ## Banking related tools
 
 - [BBAN to IBAN](webtools/bban2iban.html) - convert BBAN list to IBAN list (no BBAN format checking)
-- [exampleIBANs](webtools/exampleIBANs.html) - create list of example IBAN numbers (only BE and FR for now)
+- [exampleIBANs](webtools/exampleIBANs.html) - create list of example IBAN numbers (only a few supported countries)
 
 ## Using the webtools locally without a web server
 
@@ -22,6 +22,6 @@ one way to solve this is to launch chrome with command line option --allow-file-
 
 if possible use a webserver - with python 3 you can start one with "python3 -m http.server" in the webtools folder
 
-## styling
+## Styling
 
 These webtools have no styling - I'm not a UX guy and can't be bothered - if you have a good css to use, create an issue or a pull request and I'll include it

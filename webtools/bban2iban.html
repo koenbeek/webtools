@@ -23,14 +23,14 @@
 <script type="module">
     import { gE, gV, gC, doSetup } from './js/lib.js';
     import { toIBAN } from './js/acc.js';
-    function convert() {
+    function run() {
         var c;
         gE("outtext").value = gV("intext").split('\n').map(bban => {
             gC("ctry") ? (c = bban.substr(0, 2), bban = bban.substr(2)) : c = gV("country");
             return toIBAN(c, bban, gC("human"))
         }).join("\n");
     }
-    doSetup(convert);    
+    doSetup(run);    
 </script>
 
 </html>

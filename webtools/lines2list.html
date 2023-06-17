@@ -25,7 +25,7 @@
 <script type="module">
     import { gE, gV, gC, doSetup, sErr, sOK } from './js/lib.js';
 
-    function convert() {
+    function run() {
         var lines = gV("intext").split('\n');
         if (gC("leading")) { lines = lines.map(line => line.trimLeft()) }
         if (gC("trailing")) { lines = lines.map(line => line.trimRight()) }
@@ -33,7 +33,7 @@
         lines = lines.map(line => gV("quote") + line + gV("quote"));
         gE("outtext").value = lines.join(gV("sep"));
     }
-    doSetup(convert);
+    doSetup(run);
 </script>
 
 </html>

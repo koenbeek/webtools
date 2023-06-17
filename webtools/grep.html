@@ -23,7 +23,7 @@
 </body>
 <script type="module">
     import { gE, gV, gC, doSetup, sErr, sOK } from './js/lib.js';
-    function convert() {
+    function run() {
         try {
             var re = new RegExp(gV("pat"), gC("ic") ? "i" : "")
             var lines = gV("intext").split('\n').filter(line => (line.match(re) != null) != gC("invert"));
@@ -32,7 +32,7 @@
             sOK("pat");
         } catch (e) { sErr("pat") }
     }
-    doSetup(convert);
+    doSetup(run);
 </script>
 
 </html>

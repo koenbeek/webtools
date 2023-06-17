@@ -9,7 +9,7 @@
 <body>
     <h1>example IBANs</h1>
 
-    <label for="countries">Countrylist : </label><input type="text" id="countries" value="BE,FR,NL" size=20><br>
+    <label for="countries">Countrylist : </label><input type="text" id="countries" value="BE,FR,NL,ES" size=20><br>
     <label for="nbr">Number of IBANs : </label><input type="text" id="nbr" size=5 value="10"><br>
     <input type="checkbox" id="human"><label for="human">IBAN in human format</label>
 
@@ -19,12 +19,12 @@
 <script type="module">
     import { gE, gV, gC, doSetup, ran } from './js/lib.js';
     import { IBANex } from './js/acc.js';
-    function convert() {
+    function run() {
         var c = gV("countries").split(","), IBANs = [], human = gC("human");
         for (let i = 0; i < gV("nbr"); i++) { IBANs.push(IBANex(ran(c), human)); }
         gE("outtext").value = IBANs.join("\n");
     }
-    doSetup(convert);    
+    doSetup(run);    
 </script>
 
 </html>

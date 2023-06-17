@@ -31,7 +31,7 @@
 </body>
 <script type="module">
     import { gE, gV, gC, doSetup, sErr, sOK } from './js/lib.js';
-    function convert() {
+    function run() {
         var scope = gV("multiline");
         var options = (gC("ic") ? "i" : "") + (gC("global") ? "g" : "") + (scope == "M" ? "m" : "")
 
@@ -49,7 +49,7 @@
             gE("outtext").value = e.name + e.message;
         }
     }
-    doSetup(convert);
+    doSetup(run);
 </script>
 
 </html>

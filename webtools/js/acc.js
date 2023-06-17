@@ -1,9 +1,9 @@
-// js code based on https://github.com/arhs/iban.js/blob/master/iban.js
+// code based on https://github.com/arhs/iban.js/blob/master/iban.js
 // info about country specific BBAN checkdigits from 
 //     - https://docs.oracle.com/cd/E18727_01/doc.121/e13483/T359831T498954.htm
 // and - https://github.com/globalcitizen/php-iban/issues/39
 // and - https://www.ecbs.org/iban.htm
-//   not all countries are supported for BBAN checkdigits - this should be considered beta-quality
+//   not all countries are supported for BBAN checkdigits
 
 import { ran, ranTxt } from './lib.js';
 
@@ -46,6 +46,7 @@ const BBANformats = new Map([
     // we consider bankcode and subbankcode as 1 large bankcode - strictly incorrect but enough for our use cases
     // blist is incomplete - just used as example bankcode when generating examples - not used to check BBAN validity
     ['BE', { re: /^[0-9]{12}$/, len: 12, bpos: 0, blen: 3, blist: ['000', '299', '979', '210'], apos: 3, alen: 7, cdpos: 10, cdlen: 2 }],
+    ['ES', { re: /^[0-9]{20}$/, len: 20, bpos: 0, blen: 8, blist: ['21000418', '20951234', '04879876', '14655678'], apos: 10, alen: 10, cdpos: 8, cdlen: 2 }],
     ['FR', { re: /^[0-9]{10}[0-9A-Z]{11}[0-9]{2}$/, len: 23, bpos: 0, blen: 10, blist: ['3000600001', '2004101005', '3000400003', '3000100794'], apos: 10, alen: 11, cdpos: 21, cdlen: 2 }],
     ['NL', { re: /^[A-z0-9]{4}[0-9]{10}$/, len: 14, bpos: 0, blen: 4, blist: ['ABNA', 'RABO', 'INGB'], apos: 4, alen: 10, cdpos: 0, cdlen: 0 }]
 ])
@@ -74,7 +75,17 @@ function BBANcd(ctry, bban) {
                 bban = bban.substring(0, 10) + cd;
                 return { bban: bban, cd: cd }
             } catch (e) { return null; }
-        case 'FR': // (97 - modulo 97 on full bban using 00 as cd) - convert characters to numbers first
+        case 'ES': try { // CD1 = weighted CD on bank & branch code - CD2 weighted CD on acc nbr -- then 11 - MOD 11
+            var s1 = 0, s2 = 0, c1, c2;
+            [4, 8, 5, 10, 9, 7, 3, 6].forEach((w, i) => { s1 += w * parseInt(bban[i]) });
+            [1, 2, 4, 8, 5, 10, 9, 7, 3, 6].forEach((w, i) => { s2 += w * parseInt(bban[i + 10]) })
+            c1 = 11 - (s1 % 11)
+            c2 = 11 - (s2 % 11)
+            if (c1 > 9) { c1 = 11 - c1 }
+            if (c2 > 9) { c2 = 11 - c2 }
+            return { bban: bban, cd: String(c1) + String(c2) }
+        } catch (e) { return null; }
+        case 'FR': // (97 - modulo 97 on full bban using 00 as cd) - convert characters to numbers firsts
             try {
                 bban = bban.substr(0, 21); // throw away fake cd at the end
                 var t = bban.replace(/[AJ]/, '1').replace(/[BKS]/, '2').replace(/[CLT]/, '3');
@@ -105,8 +116,11 @@ function BBANex(ctry) {
     if (ctry == 'NL') { // The Dutch acc nbr doesn't have a seperate CD but a control on acc nbr
         while (BBANcd('NL', 'ABNA' + acc) == null) { acc = ranTxt(f.alen, '01234567890') }
     }
-    bban = b + acc + '0'.repeat(f.cdlen); // todo: assuming cd is always at end ... OK ?
-    return bban.substring(0, f.len - f.cdlen) + BBANcd(ctry, bban).cd;
+    bban = "0".repeat(f.len)
+    bban = bban.substring(0, f.bpos) + b + bban.substring(f.bpos + f.blen, f.len)
+    bban = bban.substring(0, f.apos) + acc + bban.substring(f.apos + f.alen, f.len)
+    var cd = BBANcd(ctry, bban).cd
+    return bban.substring(0, f.cdpos) + cd + bban.substring(f.cdpos + f.cdlen, f.len);
 }
 
 // create an example IBAN for a certain country

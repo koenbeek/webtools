@@ -1,7 +1,7 @@
 function gE(id) { return document.getElementById(id) }
 function gV(id) { return gE(id).value }
 function gC(id) { return gE(id).checked }
-function fromCP() { navigator.clipboard.readText().then((t) => { gE("intext").value = t; window.convert() }); }
+function fromCP() { navigator.clipboard.readText().then((t) => { gE("intext").value = t; window.run() }); }
 function toCP() { navigator.clipboard.writeText(gV("outtext")) }
 function doSetup(f) {
     const p = new URLSearchParams(document.location.search);
@@ -12,7 +12,7 @@ function doSetup(f) {
         })
     })
     f()
-    window["convert"] = f; window["toCP"] = toCP; window["fromCP"] = fromCP
+    window["run"] = f; window["toCP"] = toCP; window["fromCP"] = fromCP
 }
 function setErr(id) { gE(id).style.color = "red"; }
 function setOK(id) { gE(id).style.color = "inherit"; }
