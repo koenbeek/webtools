@@ -1,5 +1,3 @@
-# [Webtools](https://koenbeek.github.io/)
-
 ## Basic text tools
 
 - [Lines To List](webtools/lines2list.html) - join data on several lines into 1 line with seperators
