@@ -48,7 +48,8 @@ const BBANformats = new Map([
     ['BE', { re: /^[0-9]{12}$/, len: 12, bpos: 0, blen: 3, blist: ['000', '299', '979', '210'], apos: 3, alen: 7, cdpos: 10, cdlen: 2 }],
     ['ES', { re: /^[0-9]{20}$/, len: 20, bpos: 0, blen: 8, blist: ['21000418', '20951234', '04879876', '14655678'], apos: 10, alen: 10, cdpos: 8, cdlen: 2 }],
     ['FR', { re: /^[0-9]{10}[0-9A-Z]{11}[0-9]{2}$/, len: 23, bpos: 0, blen: 10, blist: ['3000600001', '2004101005', '3000400003', '3000100794'], apos: 10, alen: 11, cdpos: 21, cdlen: 2 }],
-    ['NL', { re: /^[A-z0-9]{4}[0-9]{10}$/, len: 14, bpos: 0, blen: 4, blist: ['ABNA', 'RABO', 'INGB'], apos: 4, alen: 10, cdpos: 0, cdlen: 0 }]
+    ['NL', { re: /^[A-z0-9]{4}[0-9]{10}$/, len: 14, bpos: 0, blen: 4, blist: ['ABNA', 'RABO', 'INGB'], apos: 4, alen: 10, cdpos: 0, cdlen: 0 }],
+    ['PT', { re: /^[0-9]{21}$/, len: 21, bpos: 0, blen: 8, blist: ['00020123', '00270000'], apos: 8, alen: 11, cdpos: 19, cdlen: 2 }]
 ])
 
 // check BBAN format and CD is OK (no check on bankcode existence) - returns true when OK - false when KO
@@ -83,7 +84,9 @@ function BBANcd(ctry, bban) {
             c2 = 11 - (s2 % 11)
             if (c1 > 9) { c1 = 11 - c1 }
             if (c2 > 9) { c2 = 11 - c2 }
-            return { bban: bban, cd: String(c1) + String(c2) }
+            var cd = String(c1) + String(c2)
+            bban = bban.substring(0, 8) + cd + bban.substring(10, 20)
+            return { bban: bban, cd: cd }
         } catch (e) { return null; }
         case 'FR': // (97 - modulo 97 on full bban using 00 as cd) - convert characters to numbers firsts
             try {
@@ -92,7 +95,7 @@ function BBANcd(ctry, bban) {
                 t = t.replace(/[DMU]/, '4').replace(/[ENV]/, '5').replace(/[FOW]/, '6');
                 t = t.replace(/[GPX]/, '7').replace(/[HQY]/, '8').replace(/[IRZ]/, '9');
                 t = BigInt(t + "00");
-                var cd = String(97n - (t % 97n)).padStart(2, '0');
+                var cd = String(97n - (t % 97n)).padStart(2, '0')
                 return { bban: bban + cd, cd: cd }
             } catch (e) { return null; }
         case 'NL': // acc = 10 digits - 1st digit * 10, 2nd * 9, 3rd * 8 ... 10th * 1 - sum of all should be divisible by 11
@@ -104,6 +107,13 @@ function BBANcd(ctry, bban) {
                 for (; i < 10; i++) { tot += parseInt(bban[4 + i]) * (10 - i); }
                 if (tot % 11 == 0) { return { bban: bban, cd: '' } } else { return null }
             } catch (e) { return null; }
+        case 'PT': try { // CD = weighted CD on bank & branch code & account -- then 97 - MOD 97
+            var sum = 0, weights = [73, 17, 89, 38, 62, 45, 53, 15, 50, 5, 49, 34, 81, 76, 27, 90, 9, 30, 3];
+            weights.forEach((w, i) => { sum += w * parseInt(bban[i]) })
+            var cd = String(98 - (sum % 97)).padStart(2, '0');
+            bban = bban.substring(0, 19) + cd
+            return { bban: bban, cd: cd }
+        } catch (e) { return null; }
         default: return null;
     }
 }
@@ -119,8 +129,8 @@ function BBANex(ctry) {
     bban = "0".repeat(f.len)
     bban = bban.substring(0, f.bpos) + b + bban.substring(f.bpos + f.blen, f.len)
     bban = bban.substring(0, f.apos) + acc + bban.substring(f.apos + f.alen, f.len)
-    var cd = BBANcd(ctry, bban).cd
-    return bban.substring(0, f.cdpos) + cd + bban.substring(f.cdpos + f.cdlen, f.len);
+    var bban = BBANcd(ctry, bban).bban
+    return bban;
 }
 
 // create an example IBAN for a certain country
