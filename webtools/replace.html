@@ -22,7 +22,7 @@
     <input type="checkbox" id="ic">Ignore case<br>
     <input type="checkbox" id="global" checked>Global match (more than 1 match possible)
 
-    <h2>Input</h2>
+    <h2>Input <button onclick="fromCP()">Get From Clipboard</button></h2>
     <textarea id="intext" rows="10" cols="150"></textarea><br>
 
     <h2>Output <button onclick="toCP">Copy to Clipboard</button></h2>
@@ -30,8 +30,8 @@
 
 </body>
 <script type="module">
-    import { gE, gV, gC, toCP, doSetup, sErr, sOK } from './js/lib.js';
-    function match() {
+    import { gE, gV, gC, doSetup, sErr, sOK } from './js/lib.js';
+    function convert() {
         var scope = gV("multiline");
         var options = (gC("ic") ? "i" : "") + (gC("global") ? "g" : "") + (scope == "M" ? "m" : "")
 
@@ -49,7 +49,7 @@
             gE("outtext").value = e.name + e.message;
         }
     }
-    doSetup(match);
+    doSetup(convert);
 </script>
 
 </html>

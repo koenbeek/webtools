@@ -1,4 +1,4 @@
-# Webtools
+# [Webtools](https://koenbeek.github.io/)
 
 ## Basic text tools
 
@@ -18,7 +18,7 @@
 
 ## Using the webtools locally without a web server
 
-you may get a CORS error message when accessing the html pages with file:// protocol - i.e. without a web server
+you'll get a CORS error message when accessing the html pages with file:// protocol - i.e. without a web server
 
 one way to solve this is to launch chrome with command line option --allow-file-access-from-files
 
@@ -26,4 +26,4 @@ if possible use a webserver - with python 3 you can start one with "python3 -m h
 
 ## styling
 
-These webtools have no styling - I'm not a UX guy and can't be bothered - if you have a good css to use, create an issue or a pull request and I'll include it :-)
+These webtools have no styling - I'm not a UX guy and can't be bothered - if you have a good css to use, create an issue or a pull request and I'll include it

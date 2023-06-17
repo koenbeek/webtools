@@ -9,27 +9,19 @@
 <body>
     <h1>example IBANs</h1>
 
-    <label for="countries">Countrylist : </label><input type="text" id="countries" value="BE,FR" size=20>f.ex. BE,FR<br>
+    <label for="countries">Countrylist : </label><input type="text" id="countries" value="BE,FR,NL" size=20><br>
     <label for="nbr">Number of IBANs : </label><input type="text" id="nbr" size=5 value="10"><br>
     <input type="checkbox" id="human"><label for="human">IBAN in human format</label>
 
     <h2>Output <button onclick="toCP()">Copy to Clipboard</button></h2>
-    <textarea id="outtext" rows="10" cols="100" readonly></textarea><br>
+    <textarea id="outtext" rows="20" cols="40" readonly></textarea><br>
 </body>
 <script type="module">
-    // todo: why is the IBAN CD of all my FR example IBANs always 76 ??
-    //       is this because of Math.random not being really random or 
-    //       are all FR IBAN with numeric BBANs like that or WTF ????
-    import { gE, gV, gC, toCP, doSetup } from './js/lib.js';
+    import { gE, gV, gC, doSetup, ran } from './js/lib.js';
     import { IBANex } from './js/acc.js';
     function convert() {
         var c = gV("countries").split(","), IBANs = [], human = gC("human");
-
-        for (let i = 0; i < gV("nbr"); i++) {
-            var ctry = c[Math.floor(Math.random() * c.length)];
-            IBANs.push(IBANex(ctry, human));
-        }
-
+        for (let i = 0; i < gV("nbr"); i++) { IBANs.push(IBANex(ran(c), human)); }
         gE("outtext").value = IBANs.join("\n");
     }
     doSetup(convert);    

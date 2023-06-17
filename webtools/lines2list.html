@@ -16,14 +16,14 @@
     <input type="checkbox" id="leading" checked>Remove leading whitespace<br>
     <input type="checkbox" id="trailing" checked>Remove trailing whitespace
 
-    <h2>Input</h2>
+    <h2>Input <button onclick="fromCP()">Get From Clipboard</button></h2>
     <textarea id="intext" rows="10" cols="100"></textarea><br>
 
     <h2>Output <button onclick="toCP()">Copy to Clipboard</button></h2>
     <textarea id="outtext" rows="1" cols="100" readonly></textarea><br>
 </body>
 <script type="module">
-    import { gE, gV, gC, toCP, doSetup, sErr, sOK } from './js/lib.js';
+    import { gE, gV, gC, doSetup, sErr, sOK } from './js/lib.js';
 
     function convert() {
         var lines = gV("intext").split('\n');

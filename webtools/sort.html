@@ -17,16 +17,16 @@
     <input type="checkbox" id="ic">Ignore case<br>
     <input type="checkbox" id="unique">Unique lines only
 
-    <h2>Input</h2>
+    <h2>Input <button onclick="fromCP()">Get From Clipboard</button></h2>
     <textarea id="intext" rows="10" cols="100"></textarea><br>
 
     <h2>Output <button onclick="toCP()">Copy to Clipboard</button></h2>
     <textarea id="outtext" rows="10" cols="100" readonly></textarea><br>
 </body>
 <script type="module">
-    import { gE, gV, gC, toCP, doSetup, sErr, sOK } from './js/lib.js';
+    import { gE, gV, gC, doSetup, sErr, sOK } from './js/lib.js';
 
-    function sort() {
+    function convert() {
         var lines = [], re;
         var key = gV("key"), sep = gV("sep"), range = gV("range");
         var reopt = gC("ic") ? "igd" : "gd";
@@ -81,7 +81,7 @@
             return ((x < y) ? -1 : ((x > y) ? 1 : 0));
         }).map(l => l.l).join("\n");
     }
-    doSetup(sort);
+    doSetup(convert);
 </script>
 
 </html>

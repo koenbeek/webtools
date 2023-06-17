@@ -2,7 +2,10 @@
 // info about country specific BBAN checkdigits from 
 //     - https://docs.oracle.com/cd/E18727_01/doc.121/e13483/T359831T498954.htm
 // and - https://github.com/globalcitizen/php-iban/issues/39
+// and - https://www.ecbs.org/iban.htm
 //   not all countries are supported for BBAN checkdigits - this should be considered beta-quality
+
+import { ran, ranTxt } from './lib.js';
 
 var NON_ALPHANUM = /[^a-zA-Z0-9]/g,
     A = 'A'.charCodeAt(0),
@@ -44,14 +47,14 @@ const BBANformats = new Map([
     // blist is incomplete - just used as example bankcode when generating examples - not used to check BBAN validity
     ['BE', { re: /^[0-9]{12}$/, len: 12, bpos: 0, blen: 3, blist: ['000', '299', '979', '210'], apos: 3, alen: 7, cdpos: 10, cdlen: 2 }],
     ['FR', { re: /^[0-9]{10}[0-9A-Z]{11}[0-9]{2}$/, len: 23, bpos: 0, blen: 10, blist: ['3000600001', '2004101005', '3000400003', '3000100794'], apos: 10, alen: 11, cdpos: 21, cdlen: 2 }],
+    ['NL', { re: /^[A-z0-9]{4}[0-9]{10}$/, len: 14, bpos: 0, blen: 4, blist: ['ABNA', 'RABO', 'INGB'], apos: 4, alen: 10, cdpos: 0, cdlen: 0 }]
 ])
 
-// check BBAN format and CD is OK (no check on bankcode) - returns true when OK - else it returns false
+// check BBAN format and CD is OK (no check on bankcode existence) - returns true when OK - false when KO
 // returns null if country is not supported
-function BBANcheck(ctry, bban) {
+function BBANok(ctry, bban) {
     if (!BBANformats.has(ctry)) { return null; };
     if (!bban.match(BBANformats.get(ctry).re)) { return false; };
-
     var result = BBANcd(ctry, bban);
     return ((result != null) && (bban == result.bban));
 }
@@ -61,20 +64,16 @@ function BBANcheck(ctry, bban) {
 // no bban format check is carried out
 // in case the country is not supported or a cd cannot be calculated a null is returned
 function BBANcd(ctry, bban) {
-    var ban = bban, cd;
-
     switch (ctry) {
         case 'BE': // modulo 97 on first 10 digits - if 00 -> 97
             try {
-                bban = bban.substr(0, 10);
-                cd = parseInt(bban) % 97;
+                bban = bban.substring(0, 10);
+                var cd = parseInt(bban) % 97;
                 cd = (cd == 0) ? 97 : cd;
                 cd = String(cd).padStart(2, '0');
-                bban = bban.substr(0, 10) + cd;
+                bban = bban.substring(0, 10) + cd;
                 return { bban: bban, cd: cd }
-            } catch (e) {
-                return null;
-            }
+            } catch (e) { return null; }
         case 'FR': // (97 - modulo 97 on full bban using 00 as cd) - convert characters to numbers first
             try {
                 bban = bban.substr(0, 21); // throw away fake cd at the end
@@ -82,11 +81,18 @@ function BBANcd(ctry, bban) {
                 t = t.replace(/[DMU]/, '4').replace(/[ENV]/, '5').replace(/[FOW]/, '6');
                 t = t.replace(/[GPX]/, '7').replace(/[HQY]/, '8').replace(/[IRZ]/, '9');
                 t = BigInt(t + "00");
-                cd = String(97n - (t % 97n)).padStart(2, '0');
+                var cd = String(97n - (t % 97n)).padStart(2, '0');
                 return { bban: bban + cd, cd: cd }
-            } catch (e) {
-                return null;
-            }
+            } catch (e) { return null; }
+        case 'NL': // acc = 10 digits - 1st digit * 10, 2nd * 9, 3rd * 8 ... 10th * 1 - sum of all should be divisible by 11
+            // not sure if this is also OK for Post and Giro accounts - in national format these start with a G or a P
+            //  but these probably follow the same rules in BBAN format
+            // todo: make sure P and G accounts are correctly handled by this code
+            try {
+                var tot = 0, i = 0;
+                for (; i < 10; i++) { tot += parseInt(bban[4 + i]) * (10 - i); }
+                if (tot % 11 == 0) { return { bban: bban, cd: '' } } else { return null }
+            } catch (e) { return null; }
         default: return null;
     }
 }
@@ -95,21 +101,19 @@ function BBANcd(ctry, bban) {
 // in case the country is not supported a null is returned
 function BBANex(ctry) {
     if (!BBANformats.has(ctry)) { return null; };
-    var f = BBANformats.get(ctry),
-        b = f.blist[Math.floor(Math.random() * f.blist.length)],
-        bban = '', acc = '';
-
-    for (let i = 0; i < f.alen; i++) { acc = acc + String(Math.floor(Math.random() * 10)) }
+    var f = BBANformats.get(ctry), b = ran(f.blist), bban = '', acc = ranTxt(f.alen, '01234567890');
+    if (ctry == 'NL') { // The Dutch acc nbr doesn't have a seperate CD but a control on acc nbr
+        while (BBANcd('NL', 'ABNA' + acc) == null) { acc = ranTxt(f.alen, '01234567890') }
+    }
     bban = b + acc + '0'.repeat(f.cdlen); // todo: assuming cd is always at end ... OK ?
-    return bban.substr(0, f.len - 2) + BBANcd(ctry, bban).cd;
+    return bban.substring(0, f.len - f.cdlen) + BBANcd(ctry, bban).cd;
 }
 
 // create an example IBAN for a certain country
 // in case the country is not supported a null is returned
 function IBANex(ctry, human = false) {
     var bban = BBANex(ctry);
-
     return bban ? toIBAN(ctry, bban, human) : null;
 }
 
-export { toIBAN, BBANcd, BBANcheck, BBANex, IBANex }
+export { toIBAN, BBANcd, BBANok, BBANex, IBANex }
