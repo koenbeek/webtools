@@ -43,13 +43,14 @@ function toIBAN(ctry, bban, human = false) {
 }
 
 const BBANformats = new Map([
-    // we consider bankcode and subbankcode as 1 large bankcode - strictly incorrect but enough for our use cases
+    // we consider bankcode and branchcode as 1 large bankcode - strictly incorrect but enough for our use case
     // blist is incomplete - just used as example bankcode when generating examples - not used to check BBAN validity
-    ['BE', { re: /^[0-9]{12}$/, len: 12, bpos: 0, blen: 3, blist: ['000', '299', '979', '210'], apos: 3, alen: 7, cdpos: 10, cdlen: 2 }],
-    ['ES', { re: /^[0-9]{20}$/, len: 20, bpos: 0, blen: 8, blist: ['21000418', '20951234', '04879876', '14655678'], apos: 10, alen: 10, cdpos: 8, cdlen: 2 }],
-    ['FR', { re: /^[0-9]{10}[0-9A-Z]{11}[0-9]{2}$/, len: 23, bpos: 0, blen: 10, blist: ['3000600001', '2004101005', '3000400003', '3000100794'], apos: 10, alen: 11, cdpos: 21, cdlen: 2 }],
-    ['NL', { re: /^[A-z0-9]{4}[0-9]{10}$/, len: 14, bpos: 0, blen: 4, blist: ['ABNA', 'RABO', 'INGB'], apos: 4, alen: 10, cdpos: 0, cdlen: 0 }],
-    ['PT', { re: /^[0-9]{21}$/, len: 21, bpos: 0, blen: 8, blist: ['00020123', '00270000'], apos: 8, alen: 11, cdpos: 19, cdlen: 2 }]
+    ['BE', { re: /^[0-9]{12}$/, len: 12, bpos: 0, blen: 3, apos: 3, alen: 7, cdpos: 10, cdlen: 2, blist: ['000', '299', '979', '210'] }],
+    ['ES', { re: /^[0-9]{20}$/, len: 20, bpos: 0, blen: 8, apos: 10, alen: 10, cdpos: 8, cdlen: 2, blist: ['21000418', '20951234', '04879876', '14655678'] }],
+    ['FR', { re: /^[0-9]{10}[0-9A-Z]{11}[0-9]{2}$/, len: 23, bpos: 0, blen: 10, apos: 10, alen: 11, cdpos: 21, cdlen: 2, blist: ['3000600001', '2004101005', '3000400003', '3000100794'] }],
+    ['IT', { re: /^[A-Z]{1}[0-9]{10}[0-9A-Z]{12}$/, len: 23, bpos: 1, blen: 10, apos: 11, alen: 12, cdpos: 0, cdlen: 1, blist: ['0542811101', '0306909606', '0853872440', '0200823803'] }],
+    ['NL', { re: /^[A-z0-9]{4}[0-9]{10}$/, len: 14, bpos: 0, blen: 4, apos: 4, alen: 10, cdpos: 0, cdlen: 0, blist: ['ABNA', 'RABO', 'INGB'] }],
+    ['PT', { re: /^[0-9]{21}$/, len: 21, bpos: 0, blen: 8, apos: 8, alen: 11, cdpos: 19, cdlen: 2, blist: ['00020123', '00270000'] }]
 ])
 
 // check BBAN format and CD is OK (no check on bankcode existence) - returns true when OK - false when KO
@@ -69,12 +70,11 @@ function BBANcd(ctry, bban) {
     switch (ctry) {
         case 'BE': // modulo 97 on first 10 digits - if 00 -> 97
             try {
-                bban = bban.substring(0, 10);
-                var cd = parseInt(bban) % 97;
+                var b = bban.substring(0, 10);
+                var cd = parseInt(b) % 97;
                 cd = (cd == 0) ? 97 : cd;
                 cd = String(cd).padStart(2, '0');
-                bban = bban.substring(0, 10) + cd;
-                return { bban: bban, cd: cd }
+                return { bban: b + cd, cd: cd }
             } catch (e) { return null; }
         case 'ES': try { // CD1 = weighted CD on bank & branch code - CD2 weighted CD on acc nbr -- then 11 - MOD 11
             var s1 = 0, s2 = 0, c1, c2;
@@ -97,6 +97,18 @@ function BBANcd(ctry, bban) {
                 t = BigInt(t + "00");
                 var cd = String(97n - (t % 97n)).padStart(2, '0')
                 return { bban: bban + cd, cd: cd }
+            } catch (e) { return null; }
+        case 'IT': // add all together using a map for odd positions - modulo 26 - convert to A-Z char
+            try {
+                var map = [1, 0, 5, 7, 9, 13, 15, 17, 19, 21, 2, 4, 18, 20, 11, 3, 6, 8, 12, 14, 16, 10, 22, 25, 24, 23]
+                var sum = 0, i, c, n
+                for (i = 1; i < 23; i++) {
+                    c = bban.charAt(i)
+                    n = (c >= 'A') ? c.charCodeAt(0) - A : parseInt(c)
+                    sum += (i % 2 == 1) ? map[n] : n
+                }
+                var cd = String.fromCharCode(A + (sum % 26))
+                return { bban: cd + bban.substring(1, 23), cd: cd }
             } catch (e) { return null; }
         case 'NL': // acc = 10 digits - 1st digit * 10, 2nd * 9, 3rd * 8 ... 10th * 1 - sum of all should be divisible by 11
             // not sure if this is also OK for Post and Giro accounts - in national format these start with a G or a P
