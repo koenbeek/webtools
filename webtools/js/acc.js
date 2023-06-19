@@ -1,4 +1,4 @@
-// code based on https://github.com/arhs/iban.js/blob/master/iban.js
+// iban cd code based on https://github.com/arhs/iban.js/blob/master/iban.js
 // info about country specific BBAN checkdigits from 
 //     - https://docs.oracle.com/cd/E18727_01/doc.121/e13483/T359831T498954.htm
 // and - https://github.com/globalcitizen/php-iban/issues/39
@@ -49,7 +49,9 @@ const BBANformats = new Map([
     ['ES', { re: /^[0-9]{20}$/, len: 20, bpos: 0, blen: 8, apos: 10, alen: 10, cdpos: 8, cdlen: 2, blist: ['21000418', '20951234', '04879876', '14655678'] }],
     ['FR', { re: /^[0-9]{10}[0-9A-Z]{11}[0-9]{2}$/, len: 23, bpos: 0, blen: 10, apos: 10, alen: 11, cdpos: 21, cdlen: 2, blist: ['3000600001', '2004101005', '3000400003', '3000100794'] }],
     ['IT', { re: /^[A-Z]{1}[0-9]{10}[0-9A-Z]{12}$/, len: 23, bpos: 1, blen: 10, apos: 11, alen: 12, cdpos: 0, cdlen: 1, blist: ['0542811101', '0306909606', '0853872440', '0200823803'] }],
+    ['LU', { re: /^[0-9]{3}[0-9A-Z]{13}$/, len: 16, bpos: 0, blen: 3, apos: 3, alen: 13, cdpos: 0, cdlen: 0, blist: ['001', '010'] }],
     ['NL', { re: /^[A-z0-9]{4}[0-9]{10}$/, len: 14, bpos: 0, blen: 4, apos: 4, alen: 10, cdpos: 0, cdlen: 0, blist: ['ABNA', 'RABO', 'INGB'] }],
+    ['PL', { re: /^[0-9]{24}$/, len: 24, bpos: 0, blen: 8, apos: 8, alen: 16, cdpos: 0, cdlen: 0, blist: ['61109010', '10901014', '10500099',] }],
     ['PT', { re: /^[0-9]{21}$/, len: 21, bpos: 0, blen: 8, apos: 8, alen: 11, cdpos: 19, cdlen: 2, blist: ['00020123', '00270000'] }]
 ])
 
@@ -68,6 +70,9 @@ function BBANok(ctry, bban) {
 // in case the country is not supported or a cd cannot be calculated a null is returned
 function BBANcd(ctry, bban) {
     switch (ctry) {
+        case 'LU':
+        case 'PL':
+            return { bban: bban, cd: '' }
         case 'BE': // modulo 97 on first 10 digits - if 00 -> 97
             try {
                 var b = bban.substring(0, 10);
@@ -88,7 +93,7 @@ function BBANcd(ctry, bban) {
             bban = bban.substring(0, 8) + cd + bban.substring(10, 20)
             return { bban: bban, cd: cd }
         } catch (e) { return null; }
-        case 'FR': // (97 - modulo 97 on full bban using 00 as cd) - convert characters to numbers firsts
+        case 'FR': // (97 - modulo 97 on full bban using 00 as cd) - convert characters to numbers first
             try {
                 bban = bban.substr(0, 21); // throw away fake cd at the end
                 var t = bban.replace(/[AJ]/, '1').replace(/[BKS]/, '2').replace(/[CLT]/, '3');
@@ -98,7 +103,7 @@ function BBANcd(ctry, bban) {
                 var cd = String(97n - (t % 97n)).padStart(2, '0')
                 return { bban: bban + cd, cd: cd }
             } catch (e) { return null; }
-        case 'IT': // add all together using a map for odd positions - modulo 26 - convert to A-Z char
+        case 'IT': // add all together (A=0, Z=25) using a map for odd positions - modulo 26 - convert to A-Z char
             try {
                 var map = [1, 0, 5, 7, 9, 13, 15, 17, 19, 21, 2, 4, 18, 20, 11, 3, 6, 8, 12, 14, 16, 10, 22, 25, 24, 23]
                 var sum = 0, i, c, n

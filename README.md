@@ -14,6 +14,10 @@
 - [BBAN to IBAN](webtools/bban2iban.html) - convert BBAN list to IBAN list (no BBAN format checking)
 - [exampleIBANs](webtools/exampleIBANs.html) - create list of example IBAN numbers (only a few supported countries)
 
+## Example Uses
+
+see [how some of these tools can be used in practice](Examples.md)
+
 ## Using the webtools locally without a web server
 
 you'll get a CORS error message when accessing the html pages with file:// protocol - i.e. without a web server
