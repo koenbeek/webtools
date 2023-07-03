@@ -9,19 +9,12 @@
 
 <body>
     <h1>Sort Lines</h1>
-
     <label for="key">Key RegExp:&nbsp;</label><input type="text" id="key" size=50>ex.: keyvalue:[A-Z0-9]{16}<br>
     <label for="sep">Seperator RegExp:&nbsp;</label><input type="text" id="sep" size=50>ex.: [,;]<br>
     <label for="range">Key Range:&nbsp;</label><input type="text" id="range" size=50>ex.: 4,5-7,1<br>
     <input type="checkbox" id="inverse">Inverse order<br>
     <input type="checkbox" id="ic">Ignore case<br>
     <input type="checkbox" id="unique">Unique lines only
-
-    <h2>Input <button onclick="fromCP()">Get From Clipboard</button></h2>
-    <textarea id="intext" rows="10" cols="100"></textarea><br>
-
-    <h2>Output <button onclick="toCP()">Copy to Clipboard</button></h2>
-    <textarea id="outtext" rows="10" cols="100" readonly></textarea><br>
 </body>
 <script type="module">
     import { gE, gV, gC, doSetup, sErr, sOK } from './js/lib.js';
@@ -81,7 +74,7 @@
             return ((x < y) ? -1 : ((x > y) ? 1 : 0));
         }).map(l => l.l).join("\n");
     }
-    doSetup(run);
+    doSetup(run, [10, 100], [10, 100]);
 </script>
 
 </html>

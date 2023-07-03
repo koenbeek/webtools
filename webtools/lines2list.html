@@ -9,18 +9,11 @@
 
 <body>
     <h1>Lines To List</h1>
-
     <label for="sep">Separator String:&nbsp;</label><input type="text" id="sep" size=4 value=","><br>
     <label for="quote">Quote Char:&nbsp;</label><input type="text" id="quote" size=1 value="'"><br>
     <input type="checkbox" id="emptylines" checked>Remove empty lines<br>
     <input type="checkbox" id="leading" checked>Remove leading whitespace<br>
     <input type="checkbox" id="trailing" checked>Remove trailing whitespace
-
-    <h2>Input <button onclick="fromCP()">Get From Clipboard</button></h2>
-    <textarea id="intext" rows="10" cols="100"></textarea><br>
-
-    <h2>Output <button onclick="toCP()">Copy to Clipboard</button></h2>
-    <textarea id="outtext" rows="1" cols="100" readonly></textarea><br>
 </body>
 <script type="module">
     import { gE, gV, gC, doSetup, sErr, sOK } from './js/lib.js';
@@ -33,7 +26,7 @@
         lines = lines.map(line => gV("quote") + line + gV("quote"));
         gE("outtext").value = lines.join(gV("sep"));
     }
-    doSetup(run);
+    doSetup(run, [1, 100], [10, 100]);
 </script>
 
 </html>

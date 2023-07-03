@@ -9,9 +9,8 @@
 
 <body>
     <h1>List Matches</h1>
-
     <label for="matchpat">Match pattern:&nbsp;</label><input type="text" id="matchpat" size=50>
-    <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions/Cheatsheet" target="_blank">cheatsheet</a><br>
+    <a href="docs/regex.html" target="_blank">cheatsheet</a><br>
     <label for="listpat">List pattern:&nbsp;</label><input type="text" id="listpat" size=50 value="$&">
     match: $&amp; - group: $n - named: $&lt;Name&gt;<br>
     <label for="multiline">Match scope:&nbsp;</label>
@@ -22,13 +21,6 @@
     </select><br>
     <input type="checkbox" id="ic">Ignore case<br>
     <input type="checkbox" id="global" checked>Global match (more than 1 match possible)
-
-    <h2>Input <button onclick="fromCP()">Get From Clipboard</button></h2>
-    <textarea id="intext" rows="10" cols="150"></textarea><br>
-
-    <h2>Output <button onclick='toCP()'>Copy to Clipboard</button></h2>
-    <textarea id="outtext" rows="10" cols="150" readonly></textarea><br>
-
 </body>
 <script type="module">
     import { gE, gV, gC, doSetup, sErr, sOK } from './js/lib.js';
@@ -56,7 +48,7 @@
             gE("outtext").value = e.name + e.message;
         }
     }
-    doSetup(run);
+    doSetup(run, [10, 150], [10, 150]);
 </script>
 
 </html>

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang=”en”>
-<!-- todo: add some bban format checks and maybe some country code checks -->
+<!-- Todo: add some bban format checks and maybe some country code checks -->
 
 <head>
     <title>BBAN to IBAN</title>
@@ -9,16 +9,9 @@
 
 <body>
     <h1>BBAN to IBAN</h1>
-
     <label for="country">Country: </label><input type="text" id="country" size=2 minlength=2 maxlength=2 value="BE"><br>
     <input type="checkbox" id="ctry"><label for="ctry">Country code in Input text (f.ex. BE 979931653073)</label><br>
     <input type="checkbox" id="human"><label for="human">IBAN in human format</label>
-
-    <h2>Input <button onclick="fromCP()">Get From Clipboard</button></h2>
-    <textarea id="intext" rows="10" cols="100"></textarea><br>
-
-    <h2>Output <button onclick="toCP()">Copy to Clipboard</button></h2>
-    <textarea id="outtext" rows="10" cols="100" readonly></textarea><br>
 </body>
 <script type="module">
     import { gE, gV, gC, doSetup } from './js/lib.js';
@@ -26,11 +19,11 @@
     function run() {
         var c;
         gE("outtext").value = gV("intext").split('\n').map(bban => {
-            gC("ctry") ? (c = bban.substr(0, 2), bban = bban.substr(2)) : c = gV("country");
+            gC("ctry") ? (c = bban.substr(0, 2), bban = bban.substr(2)) : c = gV("country")
             return toIBAN(c, bban, gC("human"))
         }).join("\n");
     }
-    doSetup(run);    
+    doSetup(run, [10, 100], [10, 100]);    
 </script>
 
 </html>
