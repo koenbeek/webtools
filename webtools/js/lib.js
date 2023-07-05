@@ -17,7 +17,7 @@ function ranTxt(len, pool) { var r = '', i = 0; for (; i < len; i++) { r += ran(
 function ranNum(len) { var n = ranTxt(len, '0123456789'); return len < 16 ? parseInt(n) : BigInt(n) } // create random number of length len
 function createEl(typ, attrs) { var el = document.createElement(typ); Object.assign(el, attrs); return el } // create a html document element
 function addChild(typ, attrs, id) { gE(id).appendChild(createEl(typ, attrs)) } // add a child element to an existing html document element
-function doDL() { createEl("a", { href: "data:x-application/text," + escape(gV("outtext")), download: 'output.txt' }).click(); } // download outtext as file
+function doDL() { createEl("a", { href: "data:x-application/text," + escape(gV("outtext")), download: 'output.txt' }).click() } // download outtext as file
 async function doSetup(f, out, inp) { // set up the webpage
     if (inp) { // create the intext text area and related heading and buttons
         document.body.appendChild(createEl("div", {
@@ -27,6 +27,11 @@ async function doSetup(f, out, inp) { // set up the webpage
                 "<input type='file' style='display:none;' id='infile'/></h2>" +
                 "<textarea id='intext' rows='" + inp[0] + "' cols='" + inp[1] + "'></textarea>"
         }))
+        gE("infile").addEventListener("change", function (e) { // add upload file to intext functionality
+            var r = new FileReader()
+            r.onload = e => { gE('intext').value = e.target.result; f() }
+            r.readAsText(gE("infile").files[0])
+        }, false)
     }
     if (out) { // create the outtext text area and related heading and buttons
         document.body.appendChild(createEl("div", {
@@ -49,10 +54,5 @@ async function doSetup(f, out, inp) { // set up the webpage
     })
     f() // do a run at the first setup of the document - f.ex. using default values or values from URL params
     Object.assign(window, { run: f, toCP: toCP, fromCP: fromCP, doDL: doDL, gE: gE }) // make sure document sees the functions
-    gE("infile").addEventListener("change", function (e) { // upload file to intext
-        var r = new FileReader();
-        r.onload = e => { gE('intext').value = e.target.result; f() };
-        r.readAsText(gE("infile").files[0]);
-    }, false);
 }
 export { gE, gV, gC, doSetup, sErr, sOK, ran, ranTxt, ranNum, addChild }
