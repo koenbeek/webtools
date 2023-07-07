@@ -12,7 +12,7 @@ function iso13616Prepare(iban) {
   return iban.split('').map(n => { return (n >= 'A') ? n.charCodeAt(0) - A + 10 : n }).join('')
 }
 function iso7064Mod97_10(iban) { return String(98n - (BigInt(iban) % 97n)).padStart(2, '0'); }
-function toIBAN(ctry, bban, human = false) { // FR = 76 (if numeric bban), PT = 50 but we calculate it anyway ...
+function toIBAN(ctry, bban, human = false) {
   bban = bban.replace(/[^a-zA-Z0-9]/g, '').toUpperCase()
   const cd = iso7064Mod97_10(iso13616Prepare(ctry.toUpperCase() + '00' + bban))
   const iban = ctry + cd + bban

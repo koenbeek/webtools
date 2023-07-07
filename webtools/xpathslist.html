@@ -16,26 +16,21 @@
     &nbsp;acc: $1 balance: $$$2 - $n = nth XPath, $$ = $ <br>
 </body>
 <script type="module">
-    import { gE, gV, doSetup, sErr, sOK, addChild } from './js/lib.js';
-    import { getElByXPath, parseXML } from './js/xml.js';
-    const predre = /\[i\]/;
-    for (let i = 1, id = "xp1"; i < 10; i++, id = "xp" + i) {
-        addChild("div", { id: "div" + id, innerHTML: '<label for="' + id + '">XPath ' + i + ':&nbsp;</label><input type="text" id="' + id + '" size=40 value=""><br>' }, "xps");
-    }
+    import { gE, gV, doSetup, sErr, sOK, addChild, mngAr } from './js/lib.js'
+    import { getElByXPath, parseXML } from './js/xml.js'
+    const xpt = "XPath ", xps = "40", xpm = 3; let nbrxp = xpm
     function run() {
-        sOK(["intext"]);
-        var elt = parseXML(gV("intext")), lines = [], lp = gV("lp");
-
-        if (elt.getElementsByTagName('parsererror').length > 0) {
-            var pe = elt.getElementsByTagName('parsererror');
-            sErr("intext", Error((pe[0].getElementsByTagName('div')[0].innerHTML)));
+        nbrxp = mngAr("xp", nbrxp, xpm, xpt, xps)
+        let elt = parseXML(gV("intext")), lines = []; const lp = gV("lp");
+        if (elt.getElementsByTagName('parsererror').length > 0) { // problem parsing the XML 
+            sErr("intext", Error((elt.getElementsByTagName('parsererror')[0].getElementsByTagName('div')[0].innerHTML)))
             return
         }
-        var first, found = true, v = [];
-        for (let l = 1; found; l++) { // add lines while predicat matches are found
-            found = false;
+        sOK(["intext"]);
+        for (let l = 1, found = true, v = []; found; l++) { // add lines while predicat matches are found in XML
+            found = false
             for (let i = 1; gE("xp" + i) && gV("xp" + i); i++) { // try each XPath match
-                var id = "xp" + i, xp = gV(id).replace(predre, "[" + l + "]"), pred = gV(id) != xp
+                let id = "xp" + i, xp = gV(id).replace(/\[i\]/, "[" + l + "]"), pred = gV(id) != xp
                 sOK(id)
                 try {
                     var els = getElByXPath(xp, elt)
@@ -43,18 +38,18 @@
                     if (pred && els.length > 0) found = true;
                 } catch (e) { sErr(id, e) }
             }
-            var line = lp, xlen = 0, repl, m, re = /\$[0-9$]/gd;
+            let line = lp, xlen = 0, repl, m, re = /\$[0-9$]/gd
             while (m = re.exec(lp)) { // find $$ and $n 
-                repl = m[0][1] == "$" ? "$" : v[Number(m[0][1])]
+                repl = m[0][1] == "$" ? "$" : v[m[0][1]]
                 if (repl == null) continue
                 line = line.substring(0, m.index + xlen) + repl + line.substring(m.index + xlen + 2, line.length)
                 xlen += repl.length - 2
             }
-            if (first || found) lines.push(line);
+            if (found) lines.push(line)
         }
         gE("outtext").value = lines.join("\n")
     }
-    doSetup(run, [10, 100], [10, 100]);
+    nbrxp = (await doSetup(run, [10, 100], [10, 100], [{ id: "xp", txt: "XPath ", siz: "40", min: nbrxp }]))[0]; run()
 </script>
 
 </html>

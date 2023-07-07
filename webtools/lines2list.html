@@ -26,7 +26,7 @@
         lines = lines.map(line => gV("quote") + line + gV("quote"));
         gE("outtext").value = lines.join(gV("sep"));
     }
-    doSetup(run, [1, 100], [10, 100]);
+    await doSetup(run, [1, 100], [10, 100]); run()
 </script>
 
 </html>

@@ -18,7 +18,15 @@ function ranNum(len) { var n = ranTxt(len, '0123456789'); return len < 16 ? pars
 function createEl(typ, attrs) { var el = document.createElement(typ); Object.assign(el, attrs); return el } // create a html document element
 function addChild(typ, attrs, id) { gE(id).appendChild(createEl(typ, attrs)) } // add a child element to an existing html document element
 function doDL() { createEl("a", { href: "data:x-application/text," + escape(gV("outtext")), download: 'output.txt' }).click() } // download outtext as file
-async function doSetup(f, out, inp) { // set up the webpage
+function addArEl(pid, i, txt, siz) { let id = pid + i; addChild("div", { id: "div" + id, innerHTML: '<label for="' + id + '">' + txt + i + ':&nbsp;</label><input type="text" id="' + id + '" size=' + siz + ' oninput="run()"><br>' }, pid + "s") }
+function mngAr(id, nbr, min, txt, siz) {
+    while ((nbr > min) && ((gV(id + nbr) == "") && (gV(id + (nbr - 1)) == ""))) { gE(id + "s").removeChild(gE("div" + id + nbr--)) }
+    if (gV(id + nbr) != '') { addArEl(id, ++nbr, txt, siz) }
+    return nbr
+}
+async function doSetup(f, out, inp, ar = []) { // set up the webpage
+    let ret = []
+    Object.assign(window, { run: f, toCP: toCP, fromCP: fromCP, doDL: doDL, gE: gE }) // make sure document sees the functions
     if (inp) { // create the intext text area and related heading and buttons
         document.body.appendChild(createEl("div", {
             innerHTML: "<h2>Input " +
@@ -46,13 +54,18 @@ async function doSetup(f, out, inp) { // set up the webpage
         const r = await fetch(p.get("paramfile")), params = await r.json()
         Object.keys(params).forEach(k => p.append(k, params[k]))
     }
+    ar.forEach(a => { // handle arrayed input texts - a is like { id: "xp", txt: "XPath ", siz: "40", min: nbrxp }
+        for (var npar = 1; p.has(a.id + (npar++));); // find highest input parameter for this input
+        a.min = Math.max(a.min, npar - 1) // combbine min nbr with nbr from input params
+        ret.push(a.min) // return value to caller
+        for (let i = 1; i <= a.min; i++) { addArEl(a.id, i, a.txt, a.siz) }
+    });
     ["input[type = 'text']", "#intext", "input[type='checkbox']", "select"].forEach(q => {
         document.querySelectorAll(q).forEach(e => {
             if (p.has(e.id)) { e.type === 'checkbox' ? e.checked = (p.get(e.id) == "on") : e.value = p.get(e.id) }
             gE(e.id).addEventListener("input", f) // run run when content changes
         })
     })
-    f() // do a run at the first setup of the document - f.ex. using default values or values from URL params
-    Object.assign(window, { run: f, toCP: toCP, fromCP: fromCP, doDL: doDL, gE: gE }) // make sure document sees the functions
+    return ret
 }
-export { gE, gV, gC, doSetup, sErr, sOK, ran, ranTxt, ranNum, addChild }
+export { gE, gV, gC, doSetup, sErr, sOK, ran, ranTxt, ranNum, addChild, mngAr }

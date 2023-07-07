@@ -29,10 +29,10 @@ see [how some of these tools can be used in practice](Examples.md)
 
 you'll get a CORS error message when accessing the html pages with file:// protocol - i.e. without a web server
 
-one way to solve this is to launch chrome with command line option --allow-file-access-from-files (in windows: do a "⊞-r" and type "chrome.exe --allow-file-access-from-files")
+one way to solve this is to launch chrome with command line option --allow-file-access-from-files (in windows: press "⊞-r" and type "chrome.exe --allow-file-access-from-files")
 
 if possible use a webserver - with python 3 you can start one with "python3 -m http.server" in the webtools folder
 
 ## Styling
 
-These webtools have no styling - I'm not a UX guy and can't be bothered - if you have a good css to use, create an issue or a pull request and I'll include it
+These webtools have no styling - I'm not a UX guy and can't be bothered - if you have a css to use, you're welcome to [create a github issue](https://github.com/koenbeek/koenbeek.github.io/issues/new) and I'll include it in the repo
