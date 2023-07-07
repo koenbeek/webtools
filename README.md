@@ -2,24 +2,24 @@
 
 ## Basic text tools
 
-- [Lines To List](webtools/lines2list.html) - join data on several lines into 1 line with seperators
-- [Sort Lines](webtools/sort.html) - sort lines
+- [Lines To List](https://koenbeek.github.io/webtools/lines2list.html) - join data on several lines into 1 line with seperators
+- [Sort Lines](https://koenbeek.github.io/webtools/sort.html) - sort lines
 
 ## Regular expression text tools
 
-- [Grep](webtools/grep.html) - find lines containing some text pattern
-- [List RE Matches](webtools/matchlist.html) - list certain RegExp matches
-- [REplace](webtools/replace.html) - replace matched text
+- [Grep](https://koenbeek.github.io/webtools/grep.html) - find lines containing some text pattern
+- [List RE Matches](https://koenbeek.github.io/webtools/matchlist.html) - list certain RegExp matches
+- [REplace](https://koenbeek.github.io/webtools/replace.html) - replace matched text
 
 ## XML/XPath tools
 
-- [List XPath Matches](webtools/xpathlist.html) - find elements in an XML document
-- [List Multi-XPath Matches](webtools/xpathslist.html) - extract data from XML using multiple XPaths
+- [List XPath Matches](https://koenbeek.github.io/webtools/xpathlist.html) - find elements in an XML document
+- [List Multi-XPath Matches](https://koenbeek.github.io/webtools/xpathslist.html) - extract data from XML using multiple XPaths
 
 ## Banking related tools
 
-- [BBAN to IBAN](webtools/bban2iban.html) - convert BBAN list to IBAN list (no BBAN format checking)
-- [exampleIBANs](webtools/exampleibans.html) - create list of example IBAN numbers (only a few supported countries)
+- [BBAN to IBAN](https://koenbeek.github.io/webtools/bban2iban.html) - convert BBAN list to IBAN list (no BBAN format checking)
+- [exampleIBANs](https://koenbeek.github.io/webtools/exampleibans.html) - create list of example IBAN numbers (only a few supported countries)
 
 ## Example Uses
 
