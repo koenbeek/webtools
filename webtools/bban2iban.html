@@ -3,27 +3,27 @@
 <!-- Todo: add some bban format checks and maybe some country code checks -->
 
 <head>
-    <title>BBAN to IBAN</title>
-    <meta charset="utf-8">
+  <title>BBAN to IBAN</title>
+  <meta charset="utf-8">
 </head>
 
 <body>
-    <h1>BBAN to IBAN</h1>
-    <label for="country">Country: </label><input type="text" id="country" size=2 minlength=2 maxlength=2 value="BE"><br>
-    <input type="checkbox" id="ctry"><label for="ctry">Country code in Input text (f.ex. BE 979931653073)</label><br>
-    <input type="checkbox" id="human"><label for="human">IBAN in human format</label>
+  <h1>BBAN to IBAN</h1>
+  <label for="country">Country: </label><input type="text" id="country" size=2 minlength=2 maxlength=2 value="BE"><br>
+  <input type="checkbox" id="ctry"><label for="ctry">Country code in Input text (f.ex. BE 979931653073)</label><br>
+  <input type="checkbox" id="human"><label for="human">IBAN in human format</label>
 </body>
 <script type="module">
-    import { gE, gV, gC, doSetup } from './js/lib.js';
-    import { toIBAN } from './js/acc.js';
-    function run() {
-        var c;
-        gE("outtext").value = gV("intext").split('\n').map(bban => {
-            gC("ctry") ? (c = bban.substr(0, 2), bban = bban.substr(2)) : c = gV("country")
-            return toIBAN(c, bban, gC("human"))
-        }).join("\n");
-    }
-    await doSetup(run, [10, 100], [10, 100]); run() 
+  import { gE, gV, gC, doSetup } from './js/lib.js';
+  import { toIBAN } from './js/acc.js';
+  function run() {
+    var c;
+    gE("outtext").value = gV("intext").split('\n').map(bban => {
+      gC("ctry") ? (c = bban.substr(0, 2), bban = bban.substr(2)) : c = gV("country")
+      return toIBAN(c, bban, gC("human"))
+    }).join("\n");
+  }
+  await doSetup(run, [10, 100], [10, 100]); run() 
 </script>
 
 </html>

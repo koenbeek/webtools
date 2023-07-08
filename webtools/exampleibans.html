@@ -2,28 +2,28 @@
 <html lang=”en”>
 
 <head>
-    <title>example IBANs</title>
-    <meta charset="utf-8">
+  <title>example IBANs</title>
+  <meta charset="utf-8">
 </head>
 
 <body>
-    <h1>example IBANs</h1>
-    <label for="countries">Countrylist : </label><input type="text" id="countries" value="BE,ES,FR,IT,NL,PT,PL,LU" size=30><br>
-    <label for="nbr">Number of IBANs : </label><input type="text" id="nbr" size=5 value="15"><br>
-    <input type="checkbox" id="human"><label for="human">IBAN in human format</label>
+  <h1>example IBANs</h1>
+  <label for="countries">Countrylist : </label><input type="text" id="countries" value="BE,ES,FR,IT,NL,PT,PL,LU" size=30><br>
+  <label for="nbr">Number of IBANs : </label><input type="text" id="nbr" size=5 value="15"><br>
+  <input type="checkbox" id="human"><label for="human">IBAN in human format</label>
 </body>
 <script type="module">
-    import { gE, gV, gC, doSetup, ran } from './js/lib.js';
-    import { IBANex } from './js/acc.js';
-    function run() {
-        var ctries = gV("countries").split(","), IBANs = [], human = gC("human"), c;
-        for (let i = 0; i < gV("nbr"); i++) {
-            var iban = IBANex(c = ran(ctries), human);
-            IBANs.push((iban == null) ? "'" + c + "'" + " not supported" : iban);
-        }
-        gE("outtext").value = IBANs.join("\n");
+  import { gE, gV, gC, doSetup, ran } from './js/lib.js';
+  import { IBANex } from './js/acc.js';
+  function run() {
+    var ctries = gV("countries").split(","), IBANs = [], human = gC("human"), c;
+    for (let i = 0; i < gV("nbr"); i++) {
+      var iban = IBANex(c = ran(ctries), human);
+      IBANs.push((iban == null) ? "'" + c + "'" + " not supported" : iban);
     }
-    await doSetup(run, [20, 40]); run()
+    gE("outtext").value = IBANs.join("\n");
+  }
+  await doSetup(run, [20, 40]); run()
 </script>
 
 </html>

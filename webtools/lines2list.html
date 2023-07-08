@@ -2,31 +2,31 @@
 <html lang=”en”>
 
 <head>
-    <title>Lines To List</title>
-    <meta charset="utf-8">
-    <link rel="stylesheet" href="css/main.css">
+  <title>Lines To List</title>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="css/main.css">
 </head>
 
 <body>
-    <h1>Lines To List</h1>
-    <label for="sep">Separator String:&nbsp;</label><input type="text" id="sep" size=4 value=","><br>
-    <label for="quote">Quote Char:&nbsp;</label><input type="text" id="quote" size=1 value="'"><br>
-    <input type="checkbox" id="emptylines" checked>Remove empty lines<br>
-    <input type="checkbox" id="leading" checked>Remove leading whitespace<br>
-    <input type="checkbox" id="trailing" checked>Remove trailing whitespace
+  <h1>Lines To List</h1>
+  <label for="sep">Separator String:&nbsp;</label><input type="text" id="sep" size=4 value=","><br>
+  <label for="quote">Quote Char:&nbsp;</label><input type="text" id="quote" size=1 value="'"><br>
+  <input type="checkbox" id="emptylines" checked>Remove empty lines<br>
+  <input type="checkbox" id="leading" checked>Remove leading whitespace<br>
+  <input type="checkbox" id="trailing" checked>Remove trailing whitespace
 </body>
 <script type="module">
-    import { gE, gV, gC, doSetup, sErr, sOK } from './js/lib.js';
+  import { gE, gV, gC, doSetup, sErr, sOK } from './js/lib.js';
 
-    function run() {
-        var lines = gV("intext").split('\n');
-        if (gC("leading")) { lines = lines.map(line => line.trimLeft()) }
-        if (gC("trailing")) { lines = lines.map(line => line.trimRight()) }
-        if (gC("emptylines")) { lines = lines.filter(line => line.length > 0); }
-        lines = lines.map(line => gV("quote") + line + gV("quote"));
-        gE("outtext").value = lines.join(gV("sep"));
-    }
-    await doSetup(run, [1, 100], [10, 100]); run()
+  function run() {
+    var lines = gV("intext").split('\n');
+    if (gC("leading")) { lines = lines.map(line => line.trimLeft()) }
+    if (gC("trailing")) { lines = lines.map(line => line.trimRight()) }
+    if (gC("emptylines")) { lines = lines.filter(line => line.length > 0); }
+    lines = lines.map(line => gV("quote") + line + gV("quote"));
+    gE("outtext").value = lines.join(gV("sep"));
+  }
+  await doSetup(run, [1, 100], [10, 100]); run()
 </script>
 
 </html>

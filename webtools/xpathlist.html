@@ -2,33 +2,33 @@
 <html lang=”en”>
 
 <head>
-    <title>XPath To List</title>
-    <meta charset="utf-8">
+  <title>XPath To List</title>
+  <meta charset="utf-8">
 </head>
 
 <body>
-    <h1>XPath To List</h1>
-    <label for="xp">XPath:&nbsp;</label><input type="text" id="xp" size=40 value="">
-    <a href="docs/xpath.html" target="_blank">cheatsheet</a><br>
+  <h1>XPath To List</h1>
+  <label for="xp">XPath:&nbsp;</label><input type="text" id="xp" size=40>
+  <a href="docs/xpath.html" target="_blank">cheatsheet</a><br>
 </body>
 <script type="module">
-    import { gE, gV, doSetup, sErr, sOK } from './js/lib.js';
-    import { getElByXPath, parseXML } from './js/xml.js';
+  import { gE, gV, doSetup, sErr, sOK } from './js/lib.js';
+  import { getElByXPath, parseXML } from './js/xml.js';
 
-    function run() {
-        sOK(["xp", "intext"]);
-        var elt = parseXML(gV("intext"))
+  function run() {
+    sOK(["xp", "intext"]);
+    var elt = parseXML(gV("intext"))
 
-        if (elt.getElementsByTagName('parsererror').length > 0) {
-            var pe = elt.getElementsByTagName('parsererror');
-            sErr("intext", Error((pe[0].getElementsByTagName('div')[0].innerHTML)));
-            return
-        }
-        try {
-            gE("outtext").value = getElByXPath(gV("xp"), elt).join("\n");
-        } catch (e) { sErr("xp", e) }
+    if (elt.getElementsByTagName('parsererror').length > 0) {
+      var pe = elt.getElementsByTagName('parsererror');
+      sErr("intext", Error((pe[0].getElementsByTagName('div')[0].innerHTML)));
+      return
     }
-    await doSetup(run, [10, 100], [10, 100]); run()
+    try {
+      gE("outtext").value = getElByXPath(gV("xp"), elt).join("\n");
+    } catch (e) { sErr("xp", e) }
+  }
+  await doSetup(run, [10, 100], [10, 100]); run()
 </script>
 
 </html>

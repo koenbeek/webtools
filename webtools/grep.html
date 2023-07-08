@@ -2,30 +2,30 @@
 <html lang=”en”>
 
 <head>
-    <title>Match Lines</title>
-    <meta charset="utf-8">
+  <title>Match Lines</title>
+  <meta charset="utf-8">
 </head>
 
 <body>
-    <h1>Match Lines</h1>
-    <label for="pat">Pattern: </label><input type="text" id="pat" size=50>
-    <a href="docs/regex.html" target="_blank">cheatsheet</a><br><br>
-    <input type="checkbox" id="invert"><label for="invert">Invert match (only keep non-matching lines)</label><br>
-    <input type="checkbox" id="ic"><label for="ic">Ignore case</label><br>
-    <input type="checkbox" id="match"><label for="match">Only Matching (only keep part that matched)</label>
+  <h1>Match Lines</h1>
+  <label for="pat">Pattern: </label><input type="text" id="pat" size=50>
+  <a href="docs/regex.html" target="_blank">cheatsheet</a><br><br>
+  <input type="checkbox" id="invert"><label for="invert">Invert match (only keep non-matching lines)</label><br>
+  <input type="checkbox" id="ic"><label for="ic">Ignore case</label><br>
+  <input type="checkbox" id="match"><label for="match">Only Matching (only keep part that matched)</label>
 </body>
 <script type="module">
-    import { gE, gV, gC, doSetup, sErr, sOK } from './js/lib.js';
-    function run() {
-        try {
-            var re = new RegExp(gV("pat"), gC("ic") ? "i" : "")
-            var lines = gV("intext").split('\n').filter(line => (line.match(re) != null) != gC("invert"));
-            if (gC("match") && !gC("invert")) { lines = lines.map(line => line.match(re)[0]) }
-            gE("outtext").value = lines.join("\n");
-            sOK("pat");
-        } catch (e) { sErr("pat") }
-    }
-    await doSetup(run, [10, 100], [10, 100]); run()
+  import { gE, gV, gC, doSetup, sErr, sOK } from './js/lib.js';
+  function run() {
+    try {
+      var re = new RegExp(gV("pat"), gC("ic") ? "i" : "")
+      var lines = gV("intext").split('\n').filter(line => (line.match(re) != null) != gC("invert"));
+      if (gC("match") && !gC("invert")) { lines = lines.map(line => line.match(re)[0]) }
+      gE("outtext").value = lines.join("\n");
+      sOK("pat");
+    } catch (e) { sErr("pat") }
+  }
+  await doSetup(run, [10, 100], [10, 100]); run()
 </script>
 
 </html>

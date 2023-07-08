@@ -2,53 +2,53 @@
 <html lang=”en”>
 
 <head>
-    <title>List Matches</title>
-    <meta charset="utf-8">
-    <link rel="stylesheet" href="css/main.css">
+  <title>List Matches</title>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="css/main.css">
 </head>
 
 <body>
-    <h1>List Matches</h1>
-    <label for="matchpat">Match pattern:&nbsp;</label><input type="text" id="matchpat" size=50>
-    <a href="docs/regex.html" target="_blank">cheatsheet</a><br>
-    <label for="listpat">List pattern:&nbsp;</label><input type="text" id="listpat" size=50 value="$&">
-    match: $&amp; - group: $n - named: $&lt;Name&gt;<br>
-    <label for="multiline">Match scope:&nbsp;</label>
-    <select id="multiline">
-        <option value="F">Full (^ and $ on doc level)</option>
-        <option value="M" selected="selected">Full (^ and $ on line level)</option>
-        <option value="L">Line by Line match</option>
-    </select><br>
-    <input type="checkbox" id="ic">Ignore case<br>
-    <input type="checkbox" id="global" checked>Global match (more than 1 match possible)
+  <h1>List Matches</h1>
+  <label for="matchpat">Match pattern:&nbsp;</label><input type="text" id="matchpat" size=50>
+  <a href="docs/regex.html" target="_blank">cheatsheet</a><br>
+  <label for="listpat">List pattern:&nbsp;</label><input type="text" id="listpat" size=50 value="$&">
+  match: $&amp; - group: $n - named: $&lt;Name&gt;<br>
+  <label for="multiline">Match scope:&nbsp;</label>
+  <select id="multiline">
+    <option value="F">Full (^ and $ on doc level)</option>
+    <option value="M" selected="selected">Full (^ and $ on line level)</option>
+    <option value="L">Line by Line match</option>
+  </select><br>
+  <input type="checkbox" id="ic">Ignore case<br>
+  <input type="checkbox" id="global" checked>Global match (more than 1 match possible)
 </body>
 <script type="module">
-    import { gE, gV, gC, doSetup, sErr, sOK } from './js/lib.js';
-    function run() {
-        var pat = gV("matchpat");
-        if (pat == "") { gE("outtext").value = ""; return; }
-        var scope = gV("multiline");
-        var options = (gC("ic") ? "i" : "") + (gC("global") ? "g" : "") + (scope == "M" ? "m" : "")
-        var matches = [];
+  import { gE, gV, gC, doSetup, sErr, sOK } from './js/lib.js';
+  function run() {
+    var pat = gV("matchpat");
+    if (pat == "") { gE("outtext").value = ""; return; }
+    var scope = gV("multiline");
+    var options = (gC("ic") ? "i" : "") + (gC("global") ? "g" : "") + (scope == "M" ? "m" : "")
+    var matches = [];
 
-        // helper function: add all matches in txt to the matches list
-        function addm(txt) {
-            var m = txt.match(re);
-            (m != null) ? gC("global") ? matches = matches.concat(m) : matches.push(m[0]) : 1;
-        };
+    // helper function: add all matches in txt to the matches list
+    function addm(txt) {
+      var m = txt.match(re);
+      (m != null) ? gC("global") ? matches = matches.concat(m) : matches.push(m[0]) : 1;
+    };
 
-        // execute matches on full text or each line depending on scope/multiline setting
-        try {
-            var re = new RegExp(pat, options);
-            if (scope == "L") { gV("intext").split("\n").forEach(l => addm(l)); } else { addm(gV("intext")) }
-            gE("outtext").value = matches.map(m => m.replace(re, gE("listpat").value)).join("\n");
-            sOK("matchpat");
-        } catch (e) {
-            sErr("matchpat");
-            gE("outtext").value = e.name + e.message;
-        }
+    // execute matches on full text or each line depending on scope/multiline setting
+    try {
+      var re = new RegExp(pat, options);
+      if (scope == "L") { gV("intext").split("\n").forEach(l => addm(l)); } else { addm(gV("intext")) }
+      gE("outtext").value = matches.map(m => m.replace(re, gE("listpat").value)).join("\n");
+      sOK("matchpat");
+    } catch (e) {
+      sErr("matchpat");
+      gE("outtext").value = e.name + e.message;
     }
-    await doSetup(run, [10, 150], [10, 150]); run()
+  }
+  await doSetup(run, [10, 150], [10, 150]); run()
 </script>
 
 </html>
