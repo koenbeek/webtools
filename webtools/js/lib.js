@@ -17,55 +17,37 @@ function ranTxt(len, pool) { var r = '', i = 0; for (; i < len; i++) { r += ran(
 function ranNum(len) { var n = ranTxt(len, '0123456789'); return len < 16 ? parseInt(n) : BigInt(n) } // create random number of length len
 function createEl(typ, attrs) { var el = document.createElement(typ); Object.assign(el, attrs); return el } // create a html document element
 function addChild(typ, attrs, id) { gE(id).appendChild(createEl(typ, attrs)) } // add a child element to an existing html document element
-function doDL() { createEl("a", { href: "data:x-application/text," + escape(gV("outtext")), download: 'output.txt' }).click() } // download outtext as file
-function addArEl(pid, i, txt, siz) { let id = pid + i; addChild("div", { id: "div" + id, innerHTML: '<label for="' + id + '">' + txt + i + ':&nbsp;</label><input type="text" id="' + id + '" size=' + siz + ' oninput="run()"><br>' }, pid + "s") }
+function addArEl(pid, i, txt, siz) { let id = pid + i; addChild("div", { id: "div" + id, innerHTML: '<label for="' + id + '">' + txt + i + ':&nbsp;</label><input type="text" id="' + id + '" size=' + siz + ' oninput="run()"><br>' }, pid + "s") } // add html element to array
 function mngAr(id, nbr, txt, siz) { // manage nbr of elements in input array id
   while ((nbr > 1) && ((gV(id + nbr) == "") && (gV(id + (nbr - 1)) == ""))) { gE(id + "s").removeChild(gE("div" + id + nbr--)) }
   if (gV(id + nbr) != '') { addArEl(id, ++nbr, txt, siz) }
   return nbr
 }
+function intxt(i) { return createEl("div", { innerHTML: "<h2>Input <button onclick='fromCP()'>Get From Clipboard</button><button onclick='gE(\"" + "infile" + "\").click()'>Upload File</button><input type='file' style='display:none;' id='infile' onchange='doUL()'/></h2><textarea id='intext' rows='" + i[0] + "' cols='" + i[1] + "'></textarea>" }) }
+function outxt(o) { return createEl("div", { innerHTML: "<h2>Output <button onclick='toCP()'>Copy To Clipboard</button><button onclick='doDL()'>Download</button></h2><textarea id='outtext' rows='" + o[0] + "' cols='" + o[1] + "' readonly></textarea>" }) }
+function doUL() { let r = new FileReader(); r.onload = e => { gE('intext').value = e.target.result; f() }; r.readAsText(gE("infile").files[0]) }
+function doDL() { createEl("a", { href: "data:x-application/text," + escape(gV("outtext")), download: 'output.txt' }).click() } // download outtext as file
 async function doSetup(f, out, inp, ar = []) { // set up the webpage
   let ret = []
-  Object.assign(window, { run: f, toCP: toCP, fromCP: fromCP, doDL: doDL, gE: gE }) // make sure document sees the functions
-  if (inp) { // create the intext text area and related heading and buttons
-    document.body.appendChild(createEl("div", {
-      innerHTML: "<h2>Input " +
-        "<button onclick='fromCP()'>Get From Clipboard</button>" +
-        "<button onclick='gE(\"" + "infile" + "\").click()'>Upload File</button>" +
-        "<input type='file' style='display:none;' id='infile'/></h2>" +
-        "<textarea id='intext' rows='" + inp[0] + "' cols='" + inp[1] + "'></textarea>"
-    }))
-    gE("infile").addEventListener("change", function (e) { // add upload file to intext functionality
-      var r = new FileReader()
-      r.onload = e => { gE('intext').value = e.target.result; f() }
-      r.readAsText(gE("infile").files[0])
-    }, false)
-  }
-  if (out) { // create the outtext text area and related heading and buttons
-    document.body.appendChild(createEl("div", {
-      innerHTML: "<h2>Output " +
-        "<button onclick='toCP()'>Copy To Clipboard</button>" +
-        "<button onclick='doDL()'>Download</button></h2>" +
-        "<textarea id='outtext' rows='" + out[0] + "' cols='" + out[1] + "' readonly></textarea>"
-    }))
-  }
-  const p = new URLSearchParams(document.location.search); // capture URL parameters and apply them to the relevant elements
+  Object.assign(window, { run: f, toCP: toCP, fromCP: fromCP, doDL: doDL, doUL: doUL, gE: gE }) // make sure document sees the functions
+  if (inp) { document.body.appendChild(intxt(inp)) } // create the intext text area and related heading and buttons
+  if (out) { document.body.appendChild(outxt(out)) } // create the outtext text area and related heading and buttons
+  const p = new URLSearchParams(document.location.search) // capture URL parameters and apply them to the relevant elements
   if (p.has("paramfile")) { // get parameters from a parameter file in JSON format
-    const r = await fetch(p.get("paramfile")), params = await r.json()
-    Object.keys(params).forEach(k => p.append(k, params[k]))
+    const r = await fetch(p.get("paramfile")), js = await r.json()
+    Object.keys(js).forEach(k => p.append(k, js[k]))
   }
-  ar.forEach(a => { // handle arrayed input texts - a is like { id: "xp", txt: "XPath ", siz: "40", min: nbrxp }
-    for (var npar = 1; p.has(a.id + (npar++));); // find highest input parameter for this input
-    let nbr = Math.max(1, npar - 1) // combine min nbr with nbr from input params
+  ar.forEach(a => { // handle arrayed input texts - a is like { id: "xp", txt: "XPath ", siz: "40" }
+    for (var nbr = 1; p.has(a.id + (++nbr));); // find highest input parameter for this input but at least 1
     ret.push(nbr) // return value to caller
-    for (let i = 1; i <= nbr; i++) { addArEl(a.id, i, a.txt, a.siz) }
+    for (let i = 1; i <= nbr; i++) { addArEl(a.id, i, a.txt, a.siz) } // add nbr elements to array
   });
   ["input[type = 'text']", "#intext", "input[type='checkbox']", "select"].forEach(q => {
     document.querySelectorAll(q).forEach(e => {
       if (p.has(e.id)) { e.type === 'checkbox' ? e.checked = (p.get(e.id) == "on") : e.value = p.get(e.id) }
-      gE(e.id).addEventListener("input", f) // run run when content changes
+      gE(e.id).addEventListener("input", f) // call run() when content changes
     })
   })
   return ret
 }
-export { gE, gV, gC, doSetup, sErr, sOK, ran, ranTxt, ranNum, addChild, mngAr }
+export { gE, gV, gC, doSetup, sErr, sOK, ran, ranTxt, ranNum, mngAr }

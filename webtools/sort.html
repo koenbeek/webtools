@@ -17,6 +17,7 @@
   <input type="checkbox" id="unique">Unique lines only
 </body>
 <script type="module">
+  // Todo: allow numeric sort on some key f.ex. range : 1,2n,3
   import { gE, gV, gC, doSetup, sErr, sOK } from './js/lib.js';
 
   function run() {
@@ -40,10 +41,10 @@
       if (sep != "") {
         var previd = 0;
         while (match = re.exec(line)) {
-          allkeys.push(line.substr(previd, match.indices[0][0] - previd))
+          allkeys.push(line.slice(previd, match.indices[0][0]))
           previd = match.indices[0][1];
         }
-        allkeys.push(line.substr(previd, line.length + 1 - previd))
+        allkeys.push(line.slice(previd, line.length + 1))
       }
 
       range = range.replace(/[^0-9,-]/g, '');
@@ -57,8 +58,8 @@
           if (dashpos == -1) {
             end = start = parseInt(r);
           } else {
-            start = parseInt(r.substr(0, dashpos));
-            end = parseInt(r.substr(dashpos + 1));
+            start = parseInt(r.slice(0, dashpos));
+            end = parseInt(r.slice(dashpos + 1));
           }
           for (let i = start; i <= end; i++) { linekey += allkeys[i - 1] ?? ""; }
         })

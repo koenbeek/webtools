@@ -8,7 +8,7 @@ import { ran, ranTxt } from './lib.js'
 const A = 'A'.charCodeAt(0)
 
 function iso13616Prepare(iban) {
-  iban = iban.substr(4) + iban.substr(0, 4)
+  iban = iban.slice(4, 0) + iban.slice(0, 4)
   return iban.split('').map(n => { return (n >= 'A') ? n.charCodeAt(0) - A + 10 : n }).join('')
 }
 function iso7064Mod97_10(iban) { return String(98n - (BigInt(iban) % 97n)).padStart(2, '0'); }
@@ -49,7 +49,7 @@ function BBANcd(ctry, bban) {
       return { bban: bban, cd: '' }
     case 'BE': // modulo 97 on first 10 digits - if 00 -> 97
       try {
-        const b = bban.substring(0, 10)
+        const b = bban.slice(0, 10)
         let cd = parseInt(b) % 97
         cd = String((cd == 0) ? 97 : cd).padStart(2, '0')
         return { bban: b + cd, cd: cd }
@@ -62,12 +62,12 @@ function BBANcd(ctry, bban) {
       if (c1 > 9) { c1 = 11 - c1 }
       if (c2 > 9) { c2 = 11 - c2 }
       const cd = String(c1) + String(c2)
-      bban = bban.substring(0, 8) + cd + bban.substring(10, 20)
+      bban = bban.slice(0, 8) + cd + bban.slice(10, 20)
       return { bban: bban, cd: cd }
     } catch (e) { return null }
     case 'FR': // (97 - modulo 97 on full bban using 00 as cd) - convert characters to numbers first
       try {
-        bban = bban.substr(0, 21); // throw away fake cd at the end
+        bban = bban.slice(0, 21); // throw away fake cd at the end
         let t = bban.replace(/[AJ]/, '1').replace(/[BKS]/, '2').replace(/[CLT]/, '3')
         t = t.replace(/[DMU]/, '4').replace(/[ENV]/, '5').replace(/[FOW]/, '6')
         t = t.replace(/[GPX]/, '7').replace(/[HQY]/, '8').replace(/[IRZ]/, '9')
@@ -85,7 +85,7 @@ function BBANcd(ctry, bban) {
           sum += (i % 2 == 1) ? map[n] : n
         }
         const cd = String.fromCharCode(A + (sum % 26))
-        return { bban: cd + bban.substring(1, 23), cd: cd }
+        return { bban: cd + bban.slice(1, 23), cd: cd }
       } catch (e) { return null }
     case 'NL': // acc = 10 digits - 1st digit * 10, 2nd * 9, 3rd * 8 ... 10th * 1 - sum of all should be divisible by 11
       // not sure if this is also OK for Post and Giro accounts - in national format these start with a G or a P
@@ -100,7 +100,7 @@ function BBANcd(ctry, bban) {
       let sum = 0; const weights = [73, 17, 89, 38, 62, 45, 53, 15, 50, 5, 49, 34, 81, 76, 27, 90, 9, 30, 3]
       weights.forEach((w, i) => { sum += w * parseInt(bban[i]) })
       const cd = iso7064Mod97_10(sum)
-      return { bban: bban.substring(0, 19) + cd, cd: cd }
+      return { bban: bban.slice(0, 19) + cd, cd: cd }
     } catch (e) { return null }
     default: return null
   }
@@ -112,8 +112,8 @@ function BBANex(ctry) {
   const f = BBANformats.get(ctry), b = ran(f.blist); let bban = '', acc = ranTxt(f.alen, '01234567890')
   if (ctry == 'NL') { while (!BBANcd('NL', b + acc)) { acc = ranTxt(f.alen, '01234567890') } }
   bban = '0'.repeat(f.len)
-  bban = bban.substring(0, f.bpos) + b + bban.substring(f.bpos + f.blen, f.len)
-  bban = bban.substring(0, f.apos) + acc + bban.substring(f.apos + f.alen, f.len)
+  bban = bban.slice(0, f.bpos) + b + bban.slice(f.bpos + f.blen)
+  bban = bban.slice(0, f.apos) + acc + bban.slice(f.apos + f.alen)
   return BBANcd(ctry, bban).bban
 }
 // create an example IBAN for a certain country

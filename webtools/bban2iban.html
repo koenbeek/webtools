@@ -19,7 +19,7 @@
   function run() {
     var c;
     gE("outtext").value = gV("intext").split('\n').map(bban => {
-      gC("ctry") ? (c = bban.substr(0, 2), bban = bban.substr(2)) : c = gV("country")
+      gC("ctry") ? (c = bban.slice(0, 2), bban = bban.slice(2)) : c = gV("country")
       return toIBAN(c, bban, gC("human"))
     }).join("\n");
   }
