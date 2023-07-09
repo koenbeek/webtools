@@ -17,10 +17,10 @@
 
   function run() {
     sOK(["xp", "intext"]);
-    var elt = parseXML(gV("intext"))
+    let elt = parseXML(gV("intext"))
 
     if (elt.getElementsByTagName('parsererror').length > 0) {
-      var pe = elt.getElementsByTagName('parsererror');
+      let pe = elt.getElementsByTagName('parsererror');
       sErr("intext", Error((pe[0].getElementsByTagName('div')[0].innerHTML)));
       return
     }

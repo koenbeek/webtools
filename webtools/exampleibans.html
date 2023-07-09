@@ -16,9 +16,9 @@
   import { gE, gV, gC, doSetup, ran } from './js/lib.js';
   import { IBANex } from './js/acc.js';
   function run() {
-    var ctries = gV("countries").split(","), IBANs = [], human = gC("human"), c;
+    let ctries = gV("countries").split(","), IBANs = [], human = gC("human"), c;
     for (let i = 0; i < gV("nbr"); i++) {
-      var iban = IBANex(c = ran(ctries), human);
+      let iban = IBANex(c = ran(ctries), human);
       IBANs.push((iban == null) ? "'" + c + "'" + " not supported" : iban);
     }
     gE("outtext").value = IBANs.join("\n");

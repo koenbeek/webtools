@@ -19,7 +19,7 @@
   import { gE, gV, gC, doSetup, sErr, sOK } from './js/lib.js';
 
   function run() {
-    var lines = gV("intext").split('\n');
+    let lines = gV("intext").split('\n');
     if (gC("leading")) { lines = lines.map(line => line.trimLeft()) }
     if (gC("trailing")) { lines = lines.map(line => line.trimRight()) }
     if (gC("emptylines")) { lines = lines.filter(line => line.length > 0); }

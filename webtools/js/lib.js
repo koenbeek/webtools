@@ -13,9 +13,9 @@ function ran(N) { // get a random el from an Array, char from a string or a numb
   else if (typeof N === 'string') { return N.charAt(r(N.length)) }
   else { return r(N) }
 }
-function ranTxt(len, pool) { var r = '', i = 0; for (; i < len; i++) { r += ran(pool); }; return r } // create random string of length len based on chars in pool 
-function ranNum(len) { var n = ranTxt(len, '0123456789'); return len < 16 ? parseInt(n) : BigInt(n) } // create random number of length len
-function createEl(typ, attrs) { var el = document.createElement(typ); Object.assign(el, attrs); return el } // create a html document element
+function ranTxt(len, pool) { let r = '', i = 0; for (; i < len; i++) { r += ran(pool); }; return r } // create random string of length len based on chars in pool 
+function ranNum(len) { let n = ranTxt(len, '0123456789'); return len < 16 ? parseInt(n) : BigInt(n) } // create random number of length len
+function createEl(typ, attrs) { let el = document.createElement(typ); Object.assign(el, attrs); return el } // create a html document element
 function addChild(typ, attrs, id) { gE(id).appendChild(createEl(typ, attrs)) } // add a child element to an existing html document element
 function addArEl(pid, i, txt, siz) { let id = pid + i; addChild("div", { id: "div" + id, innerHTML: '<label for="' + id + '">' + txt + i + ':&nbsp;</label><input type="text" id="' + id + '" size=' + siz + ' oninput="run()"><br>' }, pid + "s") } // add html element to array
 function mngAr(id, nbr, txt, siz) { // manage nbr of elements in input array id
@@ -33,12 +33,9 @@ async function doSetup(f, out, inp, ar = []) { // set up the webpage
   if (inp) { document.body.appendChild(intxt(inp)) } // create the intext text area and related heading and buttons
   if (out) { document.body.appendChild(outxt(out)) } // create the outtext text area and related heading and buttons
   const p = new URLSearchParams(document.location.search) // capture URL parameters and apply them to the relevant elements
-  if (p.has("paramfile")) { // get parameters from a parameter file in JSON format
-    const r = await fetch(p.get("paramfile")), js = await r.json()
-    Object.keys(js).forEach(k => p.append(k, js[k]))
-  }
+  if (p.has("paramfile")) { const js = await (await fetch(p.get("paramfile"))).json(); Object.keys(js).forEach(k => p.append(k, js[k])) } // get parameters from a parameter file in JSON format    
   ar.forEach(a => { // handle arrayed input texts - a is like { id: "xp", txt: "XPath ", siz: "40" }
-    for (var nbr = 1; p.has(a.id + (++nbr));); // find highest input parameter for this input but at least 1
+    for (var nbr = 1; p.has(a.id + (++nbr));); // find highest input parameter for this input type but at least 1
     ret.push(nbr) // return value to caller
     for (let i = 1; i <= nbr; i++) { addArEl(a.id, i, a.txt, a.siz) } // add nbr elements to array
   });
@@ -51,3 +48,4 @@ async function doSetup(f, out, inp, ar = []) { // set up the webpage
   return ret
 }
 export { gE, gV, gC, doSetup, sErr, sOK, ran, ranTxt, ranNum, mngAr }
+// Todo: move use of addArEl completely in lib and avoid caller to need to handle/call this by including it in run() automatically in dosetup

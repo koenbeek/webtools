@@ -25,12 +25,11 @@
 <script type="module">
   import { gE, gV, gC, doSetup, sErr, sOK } from './js/lib.js';
   function run() {
-    var scope = gV("multiline");
-    var options = (gC("ic") ? "i" : "") + (gC("global") ? "g" : "") + (scope == "M" ? "m" : "")
+    let scope = gV("multiline"), options = (gC("ic") ? "i" : "") + (gC("global") ? "g" : "") + (scope == "M" ? "m" : "")
 
     // execute replace on full text or each line depending on scope/multiline setting
     try {
-      var re = new RegExp(gE("matchpat").value, options);
+      let re = new RegExp(gE("matchpat").value, options);
       if (scope == "L") {
         gE("outtext").value = gV("intext").split('\n').map(l => l.replace(re, gV("reppat"))).join("\n");
       } else {

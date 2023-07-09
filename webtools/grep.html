@@ -18,8 +18,8 @@
   import { gE, gV, gC, doSetup, sErr, sOK } from './js/lib.js';
   function run() {
     try {
-      var re = new RegExp(gV("pat"), gC("ic") ? "i" : "")
-      var lines = gV("intext").split('\n').filter(line => (line.match(re) != null) != gC("invert"));
+      let re = new RegExp(gV("pat"), gC("ic") ? "i" : "")
+      let lines = gV("intext").split('\n').filter(line => (line.match(re) != null) != gC("invert"));
       if (gC("match") && !gC("invert")) { lines = lines.map(line => line.match(re)[0]) }
       gE("outtext").value = lines.join("\n");
       sOK("pat");

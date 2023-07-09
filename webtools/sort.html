@@ -21,9 +21,7 @@
   import { gE, gV, gC, doSetup, sErr, sOK } from './js/lib.js';
 
   function run() {
-    var lines = [], re;
-    var key = gV("key"), sep = gV("sep"), range = gV("range");
-    var reopt = gC("ic") ? "igd" : "gd";
+    let lines = [], re, key = gV("key"), sep = gV("sep"), range = gV("range"), reopt = gC("ic") ? "igd" : "gd";
 
     // basic input value checks
     if (key != "" && sep != "") { sErr(["key", "sep"]); return; }
@@ -33,13 +31,13 @@
     if (sep != "") { try { re = new RegExp(sep, reopt); } catch (e) { sErr("sep"); return; }; };
 
     // determine key values for each line -> lines array
-    var alllines = gV("intext").split('\n');
+    let alllines = gV("intext").split('\n');
     if (gC("unique")) { alllines = [... new Set(alllines)] }
     alllines.map(line => {
-      var allkeys = [], linekey = "", match;
+      let allkeys = [], linekey = "", match;
       if (key != "") { allkeys = line.match(re) || []; };
       if (sep != "") {
-        var previd = 0;
+        let previd = 0;
         while (match = re.exec(line)) {
           allkeys.push(line.slice(previd, match.indices[0][0]))
           previd = match.indices[0][1];
@@ -52,9 +50,9 @@
       if (range == "") {
         (key == "" && sep == "") ? linekey = line : linekey = allkeys.join('');
       } else {
-        var end, start;
+        let end, start;
         range.split(",").forEach(r => {
-          var dashpos = r.indexOf("-");
+          let dashpos = r.indexOf("-");
           if (dashpos == -1) {
             end = start = parseInt(r);
           } else {
@@ -70,7 +68,7 @@
 
     // sort lines based on key k in lines array
     gE("outtext").value = lines.sort(function (a, b) {
-      var x = a.k, y = b.k;
+      let x = a.k, y = b.k;
       if (gC("inverse")) { [x, y] = [y, x] };
       return ((x < y) ? -1 : ((x > y) ? 1 : 0));
     }).map(l => l.l).join("\n");

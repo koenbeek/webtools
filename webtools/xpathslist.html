@@ -33,7 +33,7 @@
         let id = "xp" + i, xp = gV(id).replace(/\[i\]/, "[" + l + "]"), pred = gV(id) != xp
         sOK(id)
         try {
-          var els = getElByXPath(xp, elt)
+          let els = getElByXPath(xp, elt)
           v[i] = els[0] || ""
           if (pred && els.length > 0) found = true;
         } catch (e) { sErr(id, e) }
