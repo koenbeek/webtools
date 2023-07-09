@@ -19,12 +19,11 @@
   import { gE, gV, gC, doSetup, sErr, sOK } from './js/lib.js';
 
   function run() {
-    let lines = gV("intext").split('\n');
-    if (gC("leading")) { lines = lines.map(line => line.trimLeft()) }
-    if (gC("trailing")) { lines = lines.map(line => line.trimRight()) }
-    if (gC("emptylines")) { lines = lines.filter(line => line.length > 0); }
-    lines = lines.map(line => gV("quote") + line + gV("quote"));
-    gE("outtext").value = lines.join(gV("sep"));
+    let t = gV("intext").split('\n'), q = gV("quote")
+    if (gC("leading")) { t = t.map(l => l.trimLeft()) }
+    if (gC("trailing")) { t = t.map(l => l.trimRight()) }
+    if (gC("emptylines")) { t = t.filter(l => l.length > 0); }
+    gE("outtext").value = t.map(l => q + l + q).join(gV("sep"));
   }
   await doSetup(run, [1, 100], [10, 100]); run()
 </script>

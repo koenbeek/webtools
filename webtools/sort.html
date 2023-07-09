@@ -18,46 +18,46 @@
 </body>
 <script type="module">
   // Todo: allow numeric sort on some key f.ex. range : 1,2n,3
-  import { gE, gV, gC, doSetup, sErr, sOK } from './js/lib.js';
+  import { gE, gV, gC, doSetup, sErr, sOK } from './js/lib.js'
 
   function run() {
-    let lines = [], re, key = gV("key"), sep = gV("sep"), range = gV("range"), reopt = gC("ic") ? "igd" : "gd";
+    let lines = [], re, key = gV("key"), sep = gV("sep"), range = gV("range"), reopt = gC("ic") ? "igd" : "gd"
 
     // basic input value checks
-    if (key != "" && sep != "") { sErr(["key", "sep"]); return; }
+    if (key != "" && sep != "") { sErr(["key", "sep"]); return }
     sOK(["key", "sep"])
-    if (range != "" && sep == "" && key == "") { key = "." };
-    if (key != "") { try { re = new RegExp(key, reopt); } catch (e) { sErr("key"); return; }; };
-    if (sep != "") { try { re = new RegExp(sep, reopt); } catch (e) { sErr("sep"); return; }; };
+    if (range != "" && sep == "" && key == "") { key = "." }
+    if (key != "") { try { re = new RegExp(key, reopt); } catch (e) { sErr("key"); return; }; }
+    if (sep != "") { try { re = new RegExp(sep, reopt); } catch (e) { sErr("sep"); return; }; }
 
     // determine key values for each line -> lines array
-    let alllines = gV("intext").split('\n');
+    let alllines = gV("intext").split('\n')
     if (gC("unique")) { alllines = [... new Set(alllines)] }
     alllines.map(line => {
-      let allkeys = [], linekey = "", match;
-      if (key != "") { allkeys = line.match(re) || []; };
+      let allkeys = [], linekey = "", match
+      if (key != "") { allkeys = line.match(re) || []; }
       if (sep != "") {
-        let previd = 0;
+        let previd = 0
         while (match = re.exec(line)) {
           allkeys.push(line.slice(previd, match.indices[0][0]))
-          previd = match.indices[0][1];
+          previd = match.indices[0][1]
         }
         allkeys.push(line.slice(previd, line.length + 1))
       }
 
-      range = range.replace(/[^0-9,-]/g, '');
-      linekey = "";
+      range = range.replace(/[^0-9,-]/g, '')
+      linekey = ""
       if (range == "") {
-        (key == "" && sep == "") ? linekey = line : linekey = allkeys.join('');
+        (key == "" && sep == "") ? linekey = line : linekey = allkeys.join('')
       } else {
-        let end, start;
+        let end, start
         range.split(",").forEach(r => {
-          let dashpos = r.indexOf("-");
+          let dashpos = r.indexOf("-")
           if (dashpos == -1) {
-            end = start = parseInt(r);
+            end = start = parseInt(r)
           } else {
-            start = parseInt(r.slice(0, dashpos));
-            end = parseInt(r.slice(dashpos + 1));
+            start = parseInt(r.slice(0, dashpos))
+            end = parseInt(r.slice(dashpos + 1))
           }
           for (let i = start; i <= end; i++) { linekey += allkeys[i - 1] ?? ""; }
         })
@@ -68,10 +68,10 @@
 
     // sort lines based on key k in lines array
     gE("outtext").value = lines.sort(function (a, b) {
-      let x = a.k, y = b.k;
-      if (gC("inverse")) { [x, y] = [y, x] };
-      return ((x < y) ? -1 : ((x > y) ? 1 : 0));
-    }).map(l => l.l).join("\n");
+      let x = a.k, y = b.k
+      if (gC("inverse")) { [x, y] = [y, x] }
+      return ((x < y) ? -1 : ((x > y) ? 1 : 0))
+    }).map(l => l.l).join("\n")
   }
   await doSetup(run, [10, 100], [10, 100]); run()
 </script>

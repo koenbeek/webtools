@@ -8,7 +8,7 @@ import { ran, ranTxt } from './lib.js'
 const A = 'A'.charCodeAt(0)
 
 function iso13616Prepare(iban) {
-  iban = iban.slice(4, 0) + iban.slice(0, 4)
+  iban = iban.slice(4) + iban.slice(0, 4)
   return iban.split('').map(n => { return (n >= 'A') ? n.charCodeAt(0) - A + 10 : n }).join('')
 }
 function iso7064Mod97_10(iban) { return String(98n - (BigInt(iban) % 97n)).padStart(2, '0'); }

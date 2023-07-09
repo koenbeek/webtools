@@ -12,20 +12,20 @@
   <a href="docs/xpath.html" target="_blank">cheatsheet</a><br>
 </body>
 <script type="module">
-  import { gE, gV, doSetup, sErr, sOK } from './js/lib.js';
-  import { getElByXPath, parseXML } from './js/xml.js';
+  import { gE, gV, doSetup, sErr, sOK } from './js/lib.js'
+  import { getElByXPath, parseXML } from './js/xml.js'
 
   function run() {
-    sOK(["xp", "intext"]);
+    sOK(["xp", "intext"])
     let elt = parseXML(gV("intext"))
 
     if (elt.getElementsByTagName('parsererror').length > 0) {
-      let pe = elt.getElementsByTagName('parsererror');
-      sErr("intext", Error((pe[0].getElementsByTagName('div')[0].innerHTML)));
+      let pe = elt.getElementsByTagName('parsererror')
+      sErr("intext", Error((pe[0].getElementsByTagName('div')[0].innerHTML)))
       return
     }
     try {
-      gE("outtext").value = getElByXPath(gV("xp"), elt).join("\n");
+      gE("outtext").value = getElByXPath(gV("xp"), elt).join("\n")
     } catch (e) { sErr("xp", e) }
   }
   await doSetup(run, [10, 100], [10, 100]); run()
