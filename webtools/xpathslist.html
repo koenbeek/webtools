@@ -16,11 +16,9 @@
   &nbsp;f.ex: acc: ${1} balance: $$${2} -- ${n} = nth XPath, $$ = $ <br>
 </body>
 <script type="module">
-  import { gE, gV, doSetup, sErr, sOK, mngAr } from './js/lib.js'
+  import { gE, gV, doSetup, sErr, sOK } from './js/lib.js'
   import { getElByXPath, parseXML } from './js/xml.js'
-  const xpt = "XPath ", xps = "40"
   function run() {
-    nbrxp = mngAr("xp", nbrxp, xpt, xps)
     let elt = parseXML(gV("intext")), lines = []; const lp = gV("lp");
     if (elt.getElementsByTagName('parsererror').length > 0) { // problem parsing the XML 
       sErr("intext", Error((elt.getElementsByTagName('parsererror')[0].getElementsByTagName('div')[0].innerHTML)))
@@ -49,7 +47,7 @@
     }
     gE("outtext").value = lines.join("\n")
   }
-  let nbrxp = (await doSetup(run, [10, 100], [10, 100], [{ id: "xp", t: xpt, s: xps }]))[0]; run()
+  await doSetup(run, [10, 100], [10, 100], [{ i: "xp", t: "XPath ", s: "40" }]); run()
 </script>
 
 </html>
