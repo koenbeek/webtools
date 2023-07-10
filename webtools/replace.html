@@ -25,20 +25,14 @@
 <script type="module">
   import { gE, gV, gC, doSetup, sErr, sOK } from './js/lib.js'
   function run() {
-    let scope = gV("multiline"), opt = (gC("ic") ? "i" : "") + (gC("global") ? "g" : "") + (scope == "M" ? "m" : "")
-
+    let ml = gV("multiline"), opt = (gC("ic") ? "i" : "") + (gC("global") ? "g" : "") + (ml == "M" ? "m" : "")
     // execute replace on full text or each line depending on scope/multiline setting
     try {
       let re = new RegExp(gE("matchpat").value, opt)
-      if (scope == "L") {
-        gE("outtext").value = gV("intext").split('\n').map(l => l.replace(re, gV("reppat"))).join("\n")
-      } else {
-        gE("outtext").value = gV("intext").replace(re, gV("reppat"))
-      }
+      gE("outtext").value = (ml == "L") ? gV("intext").split('\n').map(l => l.replace(re, gV("reppat"))).join("\n") : gV("intext").replace(re, gV("reppat"))
       sOK("matchpat")
     } catch (e) {
-      sErr("matchpat")
-      gE("outtext").value = e.name + e.message
+      sErr("matchpat"); gE("outtext").value = e.name + e.message
     }
   }
   await doSetup(run, [10, 150], [10, 150]); run()

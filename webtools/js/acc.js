@@ -88,11 +88,8 @@ function BBANcd(ctry, bban) {
         return { bban: cd + bban.slice(1, 23), cd: cd }
       } catch (e) { return null }
     case 'NL': // acc = 10 digits - 1st digit * 10, 2nd * 9, 3rd * 8 ... 10th * 1 - sum of all should be divisible by 11
-      // not sure if this is also OK for Post and Giro accounts - in national format these start with a G or a P
-      //  but these probably follow the same rules in BBAN format
-      // Todo: make sure P and G accounts are correctly handled by this code
       try {
-        let tot = 0; let i = 0
+        let tot = 0, i = 0
         for (; i < 10; i++) { tot += parseInt(bban[4 + i]) * (10 - i) }
         if (tot % 11 == 0) { return { bban: bban, cd: '' } } else { return null }
       } catch (e) { return null }

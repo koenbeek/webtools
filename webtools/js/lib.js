@@ -16,7 +16,7 @@ function addChild(typ, attrs, id) { gE(id).appendChild(createEl(typ, attrs)) } /
 function addArEl(pid, i, txt, siz) { let id = pid + i; addChild("div", { id: "div" + id, innerHTML: '<label for="' + id + '">' + txt + i + ':&nbsp;</label><input type="text" id="' + id + '" size=' + siz + ' oninput="run()"><br>' }, pid + "s") } // add html element to array
 function intxt(i) { return createEl("div", { innerHTML: "<h2>Input <button onclick='fromCP()'>Get From Clipboard</button><button onclick='gE(\"" + "infile" + "\").click()'>Upload File</button><input type='file' style='display:none;' id='infile' onchange='doUL()'/></h2><textarea id='intext' rows='" + i[0] + "' cols='" + i[1] + "'></textarea>" }) }
 function outxt(o) { return createEl("div", { innerHTML: "<h2>Output <button onclick='toCP()'>Copy To Clipboard</button><button onclick='doDL()'>Download</button></h2><textarea id='outtext' rows='" + o[0] + "' cols='" + o[1] + "' readonly></textarea>" }) }
-function doUL() { let r = new FileReader(); r.onload = e => { gE('intext').value = e.target.result; f() }; r.readAsText(gE("infile").files[0]) } // upload file as intext
+function doUL() { let r = new FileReader(); r.onload = e => { gE('intext').value = e.target.result; window.run() }; r.readAsText(gE("infile").files[0]) } // upload file as intext
 function doDL() { createEl("a", { href: "data:x-application/text," + escape(gV("outtext")), download: 'output.txt' }).click() } // download outtext as file
 function mngAr(ars) { // manage nbr of elements in input arrays
   let ar = ars
