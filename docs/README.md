@@ -27,11 +27,12 @@ see [how some of these tools can be used in practice](Examples.md)
 
 ## Using the webtools locally without a web server
 
-you'll get a CORS error message when accessing the html pages with file:// protocol - i.e. without a web server
+These webtools don't need/use the internet - everyting is done on the pc of the browser - the webserver only serves static html/js/css files
 
-one way to solve this is to launch chrome with command line option --allow-file-access-from-files (in windows: press "⊞-r" and type "chrome.exe --allow-file-access-from-files")
+Ideally these webtools should be served via a webserver - If that's not possible and you can only access them via local access (file:// protocol) you can use the html files that don't use any js modules in the webtool**z** folder [here](https://github.com/koenbeek/koenbeek.github.io/tree/main/webtoolz) - else you'll get a CORS error message
 
-if possible use a webserver - with python 3 you can start one with "python3 -m http.server" in the webtools folder
+another way to solve this CORS error is to launch chrome with command line option --allow-file-access-from-files (in windows: press "⊞-r" and type "chrome.exe --allow-file-access-from-files")
+
 
 ## Styling
 
