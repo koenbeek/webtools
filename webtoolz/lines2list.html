@@ -71,6 +71,7 @@ async function doSetup(f, out, inp, ar = []) { // set up the webpage
       gE(e.id).addEventListener("input", f) // call run() when content changes
     })
   })
+  window.run()
 }
 // info about country specific BBAN checkdigits from
 //     - https://docs.oracle.com/cd/E18727_01/doc.121/e13483/T359831T498954.htm
@@ -195,7 +196,7 @@ function IBANex(ctry, human = false) {
 // END OF LIB CODE INCLUDE - lib.js and acc.js
 
 
-  await doSetup(run, [1, 100], [10, 100]); run()
+  await doSetup(run, [1, 100], [10, 100])
 </script>
 
 </html>

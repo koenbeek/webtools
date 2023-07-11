@@ -16,7 +16,7 @@
   <input type="checkbox" id="trailing" checked>Remove trailing whitespace
 </body>
 <script type="module">
-  import { gE, gV, gC, doSetup, sErr, sOK } from './js/lib.js';
+  import { gE, gV, gC, doSetup } from './js/lib.js';
 
   function run() {
     let t = gV("intext").split('\n'), q = gV("quote")
@@ -25,7 +25,7 @@
     if (gC("emptylines")) { t = t.filter(l => l.length > 0); }
     gE("outtext").value = t.map(l => q + l + q).join(gV("sep"));
   }
-  await doSetup(run, [1, 100], [10, 100]); run()
+  await doSetup(run, [1, 100], [10, 100])
 </script>
 
 </html>

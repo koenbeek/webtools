@@ -41,5 +41,6 @@ async function doSetup(f, out, inp, ar = []) { // set up the webpage
       gE(e.id).addEventListener("input", f) // call run() when content changes
     })
   })
+  window.run()
 }
 export { gE, gV, gC, doSetup, sErr, sOK, ran, ranTxt, ranNum }
