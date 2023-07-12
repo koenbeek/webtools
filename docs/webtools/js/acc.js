@@ -26,7 +26,7 @@ const BBANformats = new Map([
   ['FR', { re: /^[0-9]{10}[0-9A-Z]{11}[0-9]{2}$/, len: 23, bpos: 0, blen: 10, apos: 10, alen: 11, cdpos: 21, cdlen: 2, blist: ['3000600001', '2004101005', '3000400003', '3000100794'] }],
   ['IT', { re: /^[A-Z]{1}[0-9]{10}[0-9A-Z]{12}$/, len: 23, bpos: 1, blen: 10, apos: 11, alen: 12, cdpos: 0, cdlen: 1, blist: ['0542811101', '0306909606', '0853872440', '0200823803'] }],
   ['LU', { re: /^[0-9]{3}[0-9A-Z]{13}$/, len: 16, bpos: 0, blen: 3, apos: 3, alen: 13, cdpos: 0, cdlen: 0, blist: ['001', '010'] }],
-  ['NL', { re: /^[A-z0-9]{4}[0-9]{10}$/, len: 14, bpos: 0, blen: 4, apos: 4, alen: 10, cdpos: 0, cdlen: 0, blist: ['ABNA', 'RABO', 'INGB'] }],
+  ['NL', { re: /^[A-Z0-9]{4}[0-9]{10}$/, len: 14, bpos: 0, blen: 4, apos: 4, alen: 10, cdpos: 0, cdlen: 0, blist: ['ABNA', 'RABO', 'INGB'] }],
   ['PL', { re: /^[0-9]{24}$/, len: 24, bpos: 0, blen: 8, apos: 8, alen: 16, cdpos: 0, cdlen: 0, blist: ['61109010', '10901014', '10500099'] }],
   ['PT', { re: /^[0-9]{21}$/, len: 21, bpos: 0, blen: 8, apos: 8, alen: 11, cdpos: 19, cdlen: 2, blist: ['00020123', '00270000'] }],
 ])
