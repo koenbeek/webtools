@@ -5,6 +5,7 @@
   <title>Sort Lines</title>
   <meta charset="utf-8">
   <link rel="stylesheet" href="css/main.css">
+  <script src="js/lib.js"></script>
 </head>
 
 <body>
@@ -16,10 +17,8 @@
   <input type="checkbox" id="ic">Ignore case<br>
   <input type="checkbox" id="unique">Unique lines only
 </body>
-<script type="module">
+<script>
   // Todo: allow numeric sort on some key f.ex. range : 1,2n,3
-  import { gE, gV, gC, doSetup, sErr, sOK } from './js/lib.js'
-
   function run() {
     let lines = [], re, key = gV("key"), sep = gV("sep"), range = gV("range"), reopt = gC("ic") ? "igd" : "gd"
 
@@ -73,7 +72,7 @@
       return ((x < y) ? -1 : ((x > y) ? 1 : 0))
     }).map(l => l.l).join("\n")
   }
-  await doSetup(run, [10, 100], [10, 100])
+  doSetup(run, [10, 100], [10, 100])
 </script>
 
 </html>

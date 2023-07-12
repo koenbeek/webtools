@@ -5,6 +5,7 @@
   <title>List Matches</title>
   <meta charset="utf-8">
   <link rel="stylesheet" href="css/main.css">
+  <script src="js/lib.js"></script>
 </head>
 
 <body>
@@ -22,8 +23,7 @@
   <input type="checkbox" id="ic">Ignore case<br>
   <input type="checkbox" id="global" checked>Global match (more than 1 match possible)
 </body>
-<script type="module">
-  import { gE, gV, gC, doSetup, sErr, sOK } from './js/lib.js'
+<script>
   function run() {
     let pat = gV("matchpat")
     if (pat == "") { gE("outtext").value = ""; return }
@@ -46,7 +46,7 @@
       gE("outtext").value = e.name + e.message
     }
   }
-  await doSetup(run, [10, 150], [10, 150])
+  doSetup(run, [10, 150], [10, 150])
 </script>
 
 </html>

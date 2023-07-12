@@ -5,6 +5,8 @@
 <head>
   <title>BBAN to IBAN</title>
   <meta charset="utf-8">
+  <script src="js/lib.js"></script>
+  <script src="js/acc.js"></script>
 </head>
 
 <body>
@@ -13,14 +15,12 @@
   <input type="checkbox" id="ctry"><label for="ctry">Country code in Input text (f.ex. BE 979931653073)</label><br>
   <input type="checkbox" id="human"><label for="human">IBAN in human format</label>
 </body>
-<script type="module">
-  import { gE, gV, gC, doSetup } from './js/lib.js';
-  import { toIBAN } from './js/acc.js';
+<script>
   function run() {
     const c = gC("ctry"), h = gC("human"), ct = gV("country")
     gE("outtext").value = gV("intext").split('\n').map(l => { return toIBAN(c ? l.slice(0, 2) : ct, c ? l.slice(2) : l, h) }).join("\n");
   }
-  await doSetup(run, [10, 100], [10, 100])
+  doSetup(run, [10, 100], [10, 100])
 </script>
 
 </html>

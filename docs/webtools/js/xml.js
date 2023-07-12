@@ -11,4 +11,3 @@ function getElByXPath(xpath, elt) { // return elements in array matching xpath e
 function parseXML(xml) { // Todo: handle namespaces correctly iso just removing it
   return (new DOMParser()).parseFromString(xml.replace(/xmlns="[^"]+"/g, ""), "text/xml")
 }
-export { getElByXPath, parseXML }

@@ -4,6 +4,7 @@
 <head>
   <title>Match Lines</title>
   <meta charset="utf-8">
+  <script src="js/lib.js"></script>
 </head>
 
 <body>
@@ -14,8 +15,7 @@
   <input type="checkbox" id="ic"><label for="ic">Ignore case</label><br>
   <input type="checkbox" id="match"><label for="match">Only Matching (only keep part that matched)</label>
 </body>
-<script type="module">
-  import { gE, gV, gC, doSetup, sErr, sOK } from './js/lib.js';
+<script>
   function run() {
     try {
       let re = new RegExp(gV("pat"), gC("ic") ? "i" : "")
@@ -25,7 +25,7 @@
       sOK("pat");
     } catch (e) { sErr("pat") }
   }
-  await doSetup(run, [10, 100], [10, 100])
+  doSetup(run, [10, 100], [10, 100])
 </script>
 
 </html>

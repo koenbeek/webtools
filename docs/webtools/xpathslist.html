@@ -5,6 +5,8 @@
   <title>Multiple XPaths To List</title>
   <meta charset="utf-8">
   <link rel="stylesheet" href="css/main.css">
+  <script src="js/lib.js"></script>
+  <script src="js/xml.js"></script>
 </head>
 
 <body>
@@ -15,9 +17,7 @@
   <label for="lp">List Pattern :&nbsp;</label><input type="text" id="lp" size=40>
   &nbsp;f.ex: acc: ${1} balance: $$${2} -- ${n} = nth XPath, $$ = $ <br>
 </body>
-<script type="module">
-  import { gE, gV, doSetup, sErr, sOK } from './js/lib.js'
-  import { getElByXPath, parseXML } from './js/xml.js'
+<script>
   function run() {
     let elt = parseXML(gV("intext")), lines = []; const lp = gV("lp");
     if (elt.getElementsByTagName('parsererror').length > 0) { // problem parsing the XML 
@@ -47,7 +47,7 @@
     }
     gE("outtext").value = lines.join("\n")
   }
-  await doSetup(run, [10, 100], [10, 100], [{ i: "xp", t: "XPath ", s: "40" }])
+  doSetup(run, [10, 100], [10, 100], [{ i: "xp", t: "XPath ", s: "40" }])
 </script>
 
 </html>

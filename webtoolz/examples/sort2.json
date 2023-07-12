@@ -1,9 +1,0 @@
-{
-  "key": "[^,; ]+",
-  "sep": "",
-  "range": "2",
-  "inverse": "off",
-  "ic": "on",
-  "unique": "on",
-  "intext": "booker12,9012;Rachel Booker\ngrey07,2070,Laura Grey\njenkins81;4081;Zog Jenkins\njenkins46,9346,Mary Jenkins\nsmith79;5079,Jamie Smith"
-}

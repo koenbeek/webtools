@@ -4,7 +4,7 @@
 // and - https://github.com/globalcitizen/php-iban/issues/39
 // and - https://www.ecbs.org/iban.htm
 // not all countries are supported for BBAN checkdigits - see BBANformats & BBANcd
-import { ran, ranTxt } from './lib.js'
+//import { ran, ranTxt } from './lib.js'
 const A = 'A'.charCodeAt(0)
 
 function iso13616Prepare(iban) {
@@ -119,4 +119,3 @@ function IBANex(ctry, human = false) {
   const bban = BBANex(ctry)
   return bban ? toIBAN(ctry, bban, human) : null
 }
-export { toIBAN, BBANcd, BBANok, BBANex, IBANex }

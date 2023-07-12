@@ -4,6 +4,8 @@
 <head>
   <title>example IBANs</title>
   <meta charset="utf-8">
+  <script src="js/lib.js"></script>
+  <script src="js/acc.js"></script>
 </head>
 
 <body>
@@ -12,14 +14,12 @@
   <label for="nbr">Number of IBANs : </label><input type="text" id="nbr" size=5 value="15"><br>
   <input type="checkbox" id="human"><label for="human">IBAN in human format</label>
 </body>
-<script type="module">
-  import { gE, gV, gC, doSetup, ran } from './js/lib.js'
-  import { IBANex } from './js/acc.js'
+<script>
   function run() {
     let ctries = gV("countries").split(","), IBANs = [], c;
     gE("outtext").value = [...Array(Number(gV("nbr")))].map(e => IBANex(c = ran(ctries), gC("human")) || ("'" + c + "'" + " not supported")).join("\n")
   }
-  await doSetup(run, [20, 40])
+  doSetup(run, [20, 40])
 </script>
 
 </html>

@@ -5,6 +5,7 @@
   <title>Lines To List</title>
   <meta charset="utf-8">
   <link rel="stylesheet" href="css/main.css">
+  <script src="js/lib.js"></script>
 </head>
 
 <body>
@@ -15,9 +16,7 @@
   <input type="checkbox" id="leading" checked>Remove leading whitespace<br>
   <input type="checkbox" id="trailing" checked>Remove trailing whitespace
 </body>
-<script type="module">
-  import { gE, gV, gC, doSetup } from './js/lib.js';
-
+<script>
   function run() {
     let t = gV("intext").split('\n'), q = gV("quote")
     if (gC("leading")) { t = t.map(l => l.trimLeft()) }
@@ -25,7 +24,7 @@
     if (gC("emptylines")) { t = t.filter(l => l.length > 0); }
     gE("outtext").value = t.map(l => q + l + q).join(gV("sep"));
   }
-  await doSetup(run, [1, 100], [10, 100])
+  doSetup(run, [1, 100], [10, 100])
 </script>
 
 </html>

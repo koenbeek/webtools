@@ -4,6 +4,8 @@
 <head>
   <title>XPath To List</title>
   <meta charset="utf-8">
+  <script src="js/lib.js"></script>
+  <script src="js/xml.js"></script>
 </head>
 
 <body>
@@ -11,10 +13,7 @@
   <label for="xp">XPath:&nbsp;</label><input type="text" id="xp" size=40>
   <a href="docs/xpath.html" target="_blank">cheatsheet</a><br>
 </body>
-<script type="module">
-  import { gE, gV, doSetup, sErr, sOK } from './js/lib.js'
-  import { getElByXPath, parseXML } from './js/xml.js'
-
+<script>
   function run() {
     sOK(["xp", "intext"])
     let elt = parseXML(gV("intext"))
@@ -28,7 +27,7 @@
       gE("outtext").value = getElByXPath(gV("xp"), elt).join("\n")
     } catch (e) { sErr("xp", e) }
   }
-  await doSetup(run, [10, 100], [10, 100])
+  doSetup(run, [10, 100], [10, 100])
 </script>
 
 </html>
