@@ -21,9 +21,9 @@ function doDL() { createEl("a", { href: "data:x-application/text," + escape(gV("
 function mngAr(ars) { // manage nbr of elements in input arrays
   let ar = ars
   return () => { // return closure
-    ar.forEach(a => { // for each array : remove last array elements if empty, leave 1 empty array element at end
+    ar.forEach(a => { // for each array : leave at most 1 empty array element at end
       while ((a.n > 1) && ((gV(a.i + a.n) == "") && (gV(a.i + (a.n - 1)) == ""))) { gE(a.i + "s").removeChild(gE("div" + a.i + a.n--)) }
-      if (gV(a.i + a.n) != '') { addArEl(a.i, ++a.n, a.t, a.s) }
+      if (gV(a.i + a.n) != '') { addArEl(a.i, ++a.n, a.t, a.s) } // add element at end if last is not empty
     })
   }
 }

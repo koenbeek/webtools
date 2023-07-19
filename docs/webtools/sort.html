@@ -12,13 +12,17 @@
   <h1>Sort Lines</h1>
   <label for="key">Key RegExp:&nbsp;</label><input type="text" id="key" size=50>ex.: keyvalue:[A-Z0-9]{16}<br>
   <label for="sep">Seperator RegExp:&nbsp;</label><input type="text" id="sep" size=50>ex.: [,;]<br>
-  <label for="range">Key Range:&nbsp;</label><input type="text" id="range" size=50>ex.: 4,5-7,1<br>
+  <label for="range">Key Range:&nbsp;</label><input type="text" id="range" size=50>ex.: 4n,5-7n,1<br>
+  <label for="comma">Numeric comma:&nbsp;</label>
+  <select id="comma">
+    <option value="," selected="selected">European (,)</option>
+    <option value=".">American (.)</option>
+  </select><br>
   <input type="checkbox" id="inverse">Inverse order<br>
   <input type="checkbox" id="ic">Ignore case<br>
   <input type="checkbox" id="unique">Unique lines only
 </body>
 <script>
-  // Todo: allow numeric sort on some key f.ex. range : 1,2n,3
   function run() {
     let lines = [], re, key = gV("key"), sep = gV("sep"), range = gV("range"), reopt = gC("ic") ? "igd" : "gd"
 
@@ -44,21 +48,30 @@
         allkeys.push(line.slice(previd, line.length + 1))
       }
 
-      range = range.replace(/[^0-9,-]/g, '')
+      range = range.replace(/[^0-9,-n]/g, '')
       linekey = ""
       if (range == "") {
         (key == "" && sep == "") ? linekey = line : linekey = allkeys.join('')
       } else {
         let end, start
         range.split(",").forEach(r => {
-          let dashpos = r.indexOf("-")
+          let dashpos = r.indexOf("-"), num = (r.slice(-1) == "n")
           if (dashpos == -1) {
-            end = start = parseInt(r)
+            end = start = parseInt(r.slice(0, num ? -1 : 10000))
           } else {
             start = parseInt(r.slice(0, dashpos))
-            end = parseInt(r.slice(dashpos + 1))
+            end = parseInt(r.slice(dashpos + 1, num ? -1 : 10000))
           }
-          for (let i = start; i <= end; i++) { linekey += allkeys[i - 1] ?? ""; }
+          for (let i = start; i <= end; i++) {
+            let key = allkeys[i - 1] ?? ""
+            if (num) { // numerify the field -> remove all non numeric stuff (except "comma") - then add zeroes to start so we have 30 digits up to end or first "comma"
+              key = key.replace(/[^0-9,.]/g, '') // only digits and , and .
+              key = (gV("comma") == ",") ? key.replace(/\./g, '') : key.replace(/,/g, '')
+              compos = key.indexOf(gV("comma"))
+              key = '0'.repeat(Math.max(0, 30 - ((compos == -1) ? key.length : compos))) + key
+            }
+            linekey += key
+          }
         })
       }
       if (gC("ic")) { linekey = linekey.toUpperCase() }
