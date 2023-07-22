@@ -3,26 +3,23 @@
 
 <head>
   <title>Lines To List</title>
-  <meta charset="utf-8">
-  <link rel="stylesheet" href="css/main.css">
   <script src="js/lib.js"></script>
 </head>
 
 <body>
   <h1>Lines To List</h1>
-  <label for="sep">Separator String:&nbsp;</label><input type="text" id="sep" size=4 value=","><br>
-  <label for="quote">Quote Char:&nbsp;</label><input type="text" id="quote" size=1 value="'"><br>
-  <input type="checkbox" id="emptylines" checked>Remove empty lines<br>
-  <input type="checkbox" id="leading" checked>Remove leading whitespace<br>
-  <input type="checkbox" id="trailing" checked>Remove trailing whitespace
+  <label>Separator String:&nbsp;<input type="text" id="sep" size=4 value=","></label><br>
+  <label>Quote Char:&nbsp;<input type="text" id="quote" size=1 value="'"></label><br>
+  <label><input type="checkbox" id="empty" checked>Remove empty lines</label><br>
+  <label><input type="checkbox" id="lead" checked>Remove leading whitespace</label><br>
+  <label><input type="checkbox" id="trail" checked>Remove trailing whitespace</label>
 </body>
 <script>
   function run() {
-    let t = gV("intext").split('\n'), q = gV("quote")
-    if (gC("leading")) { t = t.map(l => l.trimLeft()) }
-    if (gC("trailing")) { t = t.map(l => l.trimRight()) }
-    if (gC("emptylines")) { t = t.filter(l => l.length > 0); }
-    gE("outtext").value = t.map(l => q + l + q).join(gV("sep"));
+    let t = gV("itxt").split('\n'), q = gV("quote")
+    t = t.map(l => gC("lead") ? l.trimLeft() : l).map(l => gC("trail") ? l.trimEnd() : l)
+    if (gC("empty")) { t = t.filter(l => l.length > 0) }
+    gE("otxt").value = t.map(l => q + l + q).join(gV("sep"))
   }
   doSetup(run, [1, 100], [10, 100])
 </script>

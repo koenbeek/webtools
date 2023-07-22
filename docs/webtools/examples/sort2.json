@@ -5,5 +5,7 @@
   "inverse": "off",
   "ic": "on",
   "unique": "on",
-  "intext": "booker12,9012;Rachel Booker\ngrey07,2070,Laura Grey\njenkins81;4081;Zog Jenkins\njenkins46,9346,Mary Jenkins\nsmith79;5079,Jamie Smith"
+  "itxt": "booker12,9012;Rachel Booker\ngrey07,2070,Laura Grey\njenkins81;4081;Zog Jenkins\njenkins46,9346,Mary Jenkins\nsmith79;5079,Jamie Smith",
+  "_tool": "sort",
+  "_otxt": "grey07,2070,Laura Grey\njenkins81;4081;Zog Jenkins\nsmith79;5079,Jamie Smith\nbooker12,9012;Rachel Booker\njenkins46,9346,Mary Jenkins"
 }

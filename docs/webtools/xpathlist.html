@@ -3,29 +3,20 @@
 
 <head>
   <title>XPath To List</title>
-  <meta charset="utf-8">
   <script src="js/lib.js"></script>
   <script src="js/xml.js"></script>
 </head>
 
 <body>
   <h1>XPath To List</h1>
-  <label for="xp">XPath:&nbsp;</label><input type="text" id="xp" size=40>
-  <a href="docs/xpath.html" target="_blank">cheatsheet</a><br>
+  <label>XPath:&nbsp;<input type="text" id="xp" size=40></label><a href="docs/xpath.html" target="_blank">cheatsheet</a><br>
 </body>
 <script>
   function run() {
-    sOK(["xp", "intext"])
-    let elt = parseXML(gV("intext"))
-
-    if (elt.getElementsByTagName('parsererror').length > 0) {
-      let pe = elt.getElementsByTagName('parsererror')
-      sErr("intext", Error((pe[0].getElementsByTagName('div')[0].innerHTML)))
-      return
-    }
-    try {
-      gE("outtext").value = getElByXPath(gV("xp"), elt).join("\n")
-    } catch (e) { sErr("xp", e) }
+    sOK(["xp", "itxt"])
+    let elt = parseXML(gV("itxt"))
+    if (elt.getElementsByTagName('parsererror').length > 0) { sErr("itxt", Error((elt.getElementsByTagName('parsererror')[0].getElementsByTagName('div')[0].innerHTML))); return }
+    try { gE("otxt").value = getElByXPath(gV("xp"), elt).join("\n") } catch (e) { sErr("xp", e) }
   }
   doSetup(run, [10, 100], [10, 100])
 </script>

@@ -1,24 +1,22 @@
 <!DOCTYPE html>
 <html lang=”en”>
-<!-- Todo: add some bban format checks and maybe some country code checks -->
 
 <head>
   <title>BBAN to IBAN</title>
-  <meta charset="utf-8">
   <script src="js/lib.js"></script>
   <script src="js/acc.js"></script>
 </head>
 
 <body>
   <h1>BBAN to IBAN</h1>
-  <label for="country">Country: </label><input type="text" id="country" size=2 minlength=2 maxlength=2 value="BE"><br>
-  <input type="checkbox" id="ctry"><label for="ctry">Country code in Input text (f.ex. BE 979931653073)</label><br>
-  <input type="checkbox" id="human"><label for="human">IBAN in human format</label>
+  <label>Country: <input type="text" id="ctry" size=2 minlength=2 maxlength=2 value="BE"></label><br>
+  <label><input type="checkbox" id="c">Country code in Input text (f.ex. BE 979931653073)</label><br>
+  <label><input type="checkbox" id="hum">IBAN in human format</label>
 </body>
 <script>
   function run() {
-    const c = gC("ctry"), h = gC("human"), ct = gV("country")
-    gE("outtext").value = gV("intext").split('\n').map(l => { return toIBAN(c ? l.slice(0, 2) : ct, c ? l.slice(2) : l, h) }).join("\n");
+    const c = gC("c"), h = gC("hum"), ct = gV("ctry")
+    gE("otxt").value = gV("itxt").split('\n').map(l => { return toIBAN(c ? l.slice(0, 2) : ct, c ? l.slice(2) : l, h) }).join("\n");
   }
   doSetup(run, [10, 100], [10, 100])
 </script>

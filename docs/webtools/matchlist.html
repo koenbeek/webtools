@@ -3,48 +3,34 @@
 
 <head>
   <title>List Matches</title>
-  <meta charset="utf-8">
-  <link rel="stylesheet" href="css/main.css">
   <script src="js/lib.js"></script>
 </head>
 
 <body>
   <h1>List Matches</h1>
-  <label for="matchpat">Match pattern:&nbsp;</label><input type="text" id="matchpat" size=50>
-  <a href="docs/regex.html" target="_blank">cheatsheet</a><br>
-  <label for="listpat">List pattern:&nbsp;</label><input type="text" id="listpat" size=50 value="$&">
-  match: $&amp; - group: $n - named: $&lt;Name&gt;<br>
-  <label for="multiline">Match scope:&nbsp;</label>
-  <select id="multiline">
-    <option value="F">Full (^ and $ on doc level)</option>
-    <option value="M" selected="selected">Full (^ and $ on line level)</option>
-    <option value="L">Line by Line match</option>
-  </select><br>
-  <input type="checkbox" id="ic">Ignore case<br>
-  <input type="checkbox" id="global" checked>Global match (more than 1 match possible)
+  <label>Match pattern:&nbsp;<input type="text" id="match" size=50></label><a href="docs/regex.html" target="_blank">cheatsheet</a><br>
+  <label>List pattern:&nbsp;<input type="text" id="list" size=50 value="$&"></label>match: $&amp; - group: $n - named: $&lt;Name&gt;<br>
+  <label>Match scope:&nbsp;
+    <select id="sc">
+      <option value="F">Full (^ and $ on doc level)</option>
+      <option value="M" selected="selected">Full (^ and $ on line level)</option>
+      <option value="L">Line by Line match</option>
+    </select>
+  </label><br>
+  <label><input type="checkbox" id="ic">Ignore case</label><br>
+  <label><input type="checkbox" id="glob" checked>Global match (more than 1 match possible)</label>
 </body>
 <script>
   function run() {
-    let pat = gV("matchpat")
-    if (pat == "") { gE("outtext").value = ""; return }
-    let scope = gV("multiline"), options = (gC("ic") ? "i" : "") + (gC("global") ? "g" : "") + (scope == "M" ? "m" : ""), matches = []
-
-    // helper function: add all matches in txt to the matches list
-    function addm(txt) {
-      let m = txt.match(re);
-      (m != null) ? gC("global") ? matches = matches.concat(m) : matches.push(m[0]) : 1
-    };
-
-    // execute matches on full text or each line depending on scope/multiline setting
-    try {
-      let re = new RegExp(pat, options)
-      if (scope == "L") { gV("intext").split("\n").forEach(l => addm(l)); } else { addm(gV("intext")) }
-      gE("outtext").value = matches.map(m => m.replace(re, gE("listpat").value)).join("\n")
-      sOK("matchpat")
-    } catch (e) {
-      sErr("matchpat")
-      gE("outtext").value = e.name + e.message
-    }
+    const pat = gV("match"), s = gV("sc"); let ms = []
+    sOK("match")
+    if (pat == "") { gE("otxt").value = ""; return }
+    function addm(txt) { let m = txt.match(re); (m != null) ? gC("glob") ? ms = ms.concat(m) : ms.push(m[0]) : 1 } // helper: add all matches in txt to the matches list
+    try { // execute matches on full text or each line depending on scope (sc) setting
+      var re = new RegExp(pat, (gC("ic") ? "i" : "") + (gC("glob") ? "g" : "") + (s == "M" ? "m" : ""))
+      if (s == "L") { gV("itxt").split("\n").forEach(l => addm(l)); } else { addm(gV("itxt")) }
+      gE("otxt").value = ms.map(m => m.replace(re, gE("list").value)).join("\n")
+    } catch (e) { sErr("match", e) }
   }
   doSetup(run, [10, 150], [10, 150])
 </script>

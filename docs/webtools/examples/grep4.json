@@ -1,0 +1,9 @@
+{
+  "pat": "[a-z]{5} ",
+  "inv": "off",
+  "ic": "off",
+  "match": "off",
+  "itxt": "If he were living, I would try him yet.\nLend me an arm; the rest have worn me out\nWith several applications; nature and sickness\nDebate it at their leisure. Welcome, count;\nMy son’s no dearer.",
+  "_tool": "grep",
+  "_otxt": "If he were living, I would try him yet.\nWith several applications; nature and sickness\nDebate it at their leisure. Welcome, count;"
+}

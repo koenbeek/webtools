@@ -1,0 +1,10 @@
+{
+  "sep": ",",
+  "quote": "'",
+  "lead": "off",
+  "trail": "on",
+  "empty": "on",
+  "itxt": "1\n 2\n 3 \n\n4 ",
+  "_tool": "lines2list",
+  "_otxt": "'1',' 2',' 3','4'"
+}

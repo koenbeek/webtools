@@ -3,37 +3,31 @@
 
 <head>
   <title>REplace text</title>
-  <meta charset="utf-8">
-  <link rel="stylesheet" href="css/main.css">
   <script src="js/lib.js"></script>
 </head>
 
 <body>
   <h1>REplace text</h1>
-  <label for="matchpat">Match pattern:&nbsp;</label><input type="text" id="matchpat" size=50>
-  <a href="docs/regex.html" target="_blank">cheatsheet</a><br>
-  <label for="reppat">Replace pattern:&nbsp;</label><input type="text" id="reppat" size=50>
-  match: $&amp; - precedes: $`- follows: $' - group: $n - named: $&lt;Name&gt;<br>
-  <label for="multiline">Match scope:&nbsp;</label>
-  <select id="multiline">
-    <option value="F">Full (^ and $ on doc level)</option>
-    <option value="M" selected="selected">Full (^ and $ on line level)</option>
-    <option value="L">Line by Line match</option>
-  </select><br>
-  <input type="checkbox" id="ic">Ignore case<br>
-  <input type="checkbox" id="global" checked>Global match (more than 1 match possible)
+  <label>Match pattern:&nbsp;<input type="text" id="m" size=50></label><a href="docs/regex.html" target="_blank">cheatsheet</a><br>
+  <label>Replace pattern:&nbsp;<input type="text" id="r" size=50></label>match: $&amp; - precedes: $`- follows: $' - group: $n - named: $&lt;Name&gt;<br>
+  <label>Match scope:&nbsp;
+    <select id="sc">
+      <option value="F">Full (^ and $ on doc level)</option>
+      <option value="M" selected="selected">Full (^ and $ on line level)</option>
+      <option value="L">Line by Line match</option>
+    </select>
+  </label><br>
+  <label><input type="checkbox" id="ic">Ignore case</label><br>
+  <label><input type="checkbox" id="gl" checked>Global match (more than 1 match possible)</label>
 </body>
-<script type="module">
+<script>
   function run() {
-    let ml = gV("multiline"), opt = (gC("ic") ? "i" : "") + (gC("global") ? "g" : "") + (ml == "M" ? "m" : "")
-    // execute replace on full text or each line depending on scope/multiline setting
+    const s = gV("sc"), r = gV("r")
     try {
-      let re = new RegExp(gE("matchpat").value, opt)
-      gE("outtext").value = (ml == "L") ? gV("intext").split('\n').map(l => l.replace(re, gV("reppat"))).join("\n") : gV("intext").replace(re, gV("reppat"))
-      sOK("matchpat")
-    } catch (e) {
-      sErr("matchpat"); gE("outtext").value = e.name + e.message
-    }
+      let re = new RegExp(gE("m").value, (gC("ic") ? "i" : "") + (gC("gl") ? "g" : "") + (s == "M" ? "m" : ""))
+      gE("otxt").value = (s == "L") ? gV("itxt").split('\n').map(l => l.replace(re, r)).join("\n") : gV("itxt").replace(re, r)
+      sOK("m")
+    } catch (e) { sErr("m", e) }
   }
   doSetup(run, [10, 150], [10, 150])
 </script>

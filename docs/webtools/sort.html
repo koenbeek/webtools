@@ -3,24 +3,23 @@
 
 <head>
   <title>Sort Lines</title>
-  <meta charset="utf-8">
-  <link rel="stylesheet" href="css/main.css">
   <script src="js/lib.js"></script>
 </head>
 
 <body>
   <h1>Sort Lines</h1>
-  <label for="key">Key RegExp:&nbsp;</label><input type="text" id="key" size=50>ex.: keyvalue:[A-Z0-9]{16}<br>
-  <label for="sep">Seperator RegExp:&nbsp;</label><input type="text" id="sep" size=50>ex.: [,;]<br>
-  <label for="range">Key Range:&nbsp;</label><input type="text" id="range" size=50>ex.: 4n,5-7n,1<br>
-  <label for="comma">Numeric comma:&nbsp;</label>
-  <select id="comma">
-    <option value="," selected="selected">European (,)</option>
-    <option value=".">American (.)</option>
-  </select><br>
-  <input type="checkbox" id="inverse">Inverse order<br>
-  <input type="checkbox" id="ic">Ignore case<br>
-  <input type="checkbox" id="unique">Unique lines only
+  <label>Key RegExp:&nbsp;<input type="text" id="key" size=50>ex.: keyvalue:[A-Z0-9]{16}</label><br>
+  <label>Seperator RegExp:&nbsp;<input type="text" id="sep" size=50>ex.: [,;]</label><br>
+  <label>Key Range:&nbsp;<input type="text" id="range" size=50>ex.: 4n,5-7n,1</label><br>
+  <label>Numeric comma:&nbsp;
+    <select id="comma">
+      <option value="," selected="selected">European (,)</option>
+      <option value=".">American (.)</option>
+    </select>
+  </label><br>
+  <label><input type="checkbox" id="inverse">Inverse order<br></label>
+  <label><input type="checkbox" id="ic">Ignore case<br></label>
+  <label><input type="checkbox" id="unique">Unique lines only</label>
 </body>
 <script>
   function run() {
@@ -29,14 +28,14 @@
     // basic input value checks
     if (key != "" && sep != "") { sErr(["key", "sep"]); return }
     sOK(["key", "sep"])
-    if (range != "" && sep == "" && key == "") { key = "." }
-    if (key != "") { try { re = new RegExp(key, reopt); } catch (e) { sErr("key"); return; }; }
-    if (sep != "") { try { re = new RegExp(sep, reopt); } catch (e) { sErr("sep"); return; }; }
+    if (range != "" && sep == "" && key == "") { key = ".*" }
+    if (key != "") { try { re = new RegExp(key, reopt); } catch (e) { sErr("key", e); return; }; }
+    if (sep != "") { try { re = new RegExp(sep, reopt); } catch (e) { sErr("sep", e); return; }; }
 
     // determine key values for each line -> lines array
-    let alllines = gV("intext").split('\n')
-    if (gC("unique")) { alllines = [... new Set(alllines)] }
-    alllines.map(line => {
+    let inlines = gV("itxt").split('\n')
+    if (gC("unique")) { inlines = [... new Set(inlines)] }
+    inlines.map(line => { // for each input line ...
       let allkeys = [], linekey = "", match
       if (key != "") { allkeys = line.match(re) || []; }
       if (sep != "") {
@@ -54,7 +53,7 @@
         (key == "" && sep == "") ? linekey = line : linekey = allkeys.join('')
       } else {
         let end, start
-        range.split(",").forEach(r => {
+        range.split(",").forEach(r => { // for each keyrange
           let dashpos = r.indexOf("-"), num = (r.slice(-1) == "n")
           if (dashpos == -1) {
             end = start = parseInt(r.slice(0, num ? -1 : 10000))
@@ -62,7 +61,7 @@
             start = parseInt(r.slice(0, dashpos))
             end = parseInt(r.slice(dashpos + 1, num ? -1 : 10000))
           }
-          for (let i = start; i <= end; i++) {
+          for (let i = start; i <= end; i++) { // for each key
             let key = allkeys[i - 1] ?? ""
             if (num) { // numerify the field -> remove all non numeric stuff (except "comma") - then add zeroes to start so we have 30 digits up to end or first "comma"
               key = key.replace(/[^0-9,.]/g, '') // only digits and , and .
@@ -74,12 +73,11 @@
           }
         })
       }
-      if (gC("ic")) { linekey = linekey.toUpperCase() }
-      lines.push({ l: line, k: linekey })
+      lines.push({ l: line, k: gC("ic") ? linekey.toUpperCase() : linekey })
     });
 
     // sort lines based on key k in lines array
-    gE("outtext").value = lines.sort(function (a, b) {
+    gE("otxt").value = lines.sort(function (a, b) {
       let x = a.k, y = b.k
       if (gC("inverse")) { [x, y] = [y, x] }
       return ((x < y) ? -1 : ((x > y) ? 1 : 0))

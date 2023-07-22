@@ -1,0 +1,10 @@
+{
+  "match": "^[a-z]+",
+  "list": "$&",
+  "sc": "F",
+  "ic": "on",
+  "glob": "on",
+  "itxt": "Ah, Luciana, did he tempt Thee so?\nMightst thou perceive austerely in his eye\nThat he did plead in earnest? yea or no?\nLook’d he or red or pale, or sad or merrily?\nWhat observation madest thou in this case\nOf his heart’s meteors tilting in his face?",
+  "_tool": "matchlist",
+  "_otxt": "Ah"
+}
