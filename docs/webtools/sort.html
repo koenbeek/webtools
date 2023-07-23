@@ -47,7 +47,7 @@
         allkeys.push(line.slice(previd, line.length + 1))
       }
 
-      range = range.replace(/[^0-9,-n]/g, '')
+      range = range.replace(/[^0-9,n-]/g, '')
       linekey = ""
       if (range == "") {
         (key == "" && sep == "") ? linekey = line : linekey = allkeys.join('')

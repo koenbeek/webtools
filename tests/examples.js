@@ -16,6 +16,8 @@ async function checkOtxt(params, file) {
     console.log("difference for", file);
     console.log("'" + params._otxt.replace(/\n/g, "\\n") + "'" + "\n<->\n" + "'" + value.replace(/\n/g, "\\n") + "'")
     process.exitCode = 1
+  } else {
+    console.log(file, "OK");
   }
   await driver.quit();
 }
