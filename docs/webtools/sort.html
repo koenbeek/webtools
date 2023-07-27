@@ -23,58 +23,48 @@
 </body>
 <script>
   function run() {
-    let lines = [], re, key = gV("key"), sep = gV("sep"), range = gV("range"), reopt = gC("ic") ? "igd" : "gd"
+    let lines = [], re, key = gV("key"), sep = gV("sep"), range = gV("range"), comma = gV("comma"), reopt = gC("ic") ? "igd" : "gd"
 
     // basic input value checks
     if (key != "" && sep != "") { sErr(["key", "sep"]); return }
     sOK(["key", "sep"])
     if (range != "" && sep == "" && key == "") { key = ".*" }
-    if (key != "") { try { re = new RegExp(key, reopt); } catch (e) { sErr("key", e); return; }; }
-    if (sep != "") { try { re = new RegExp(sep, reopt); } catch (e) { sErr("sep", e); return; }; }
+    try { re = new RegExp(key != "" ? key : sep, reopt) } catch (e) { sErr(key != "" ? "key" : "sep", e); return }
+
 
     // determine key values for each line -> lines array
     let inlines = gV("itxt").split('\n')
     if (gC("unique")) { inlines = [... new Set(inlines)] }
-    inlines.map(line => { // for each input line ...
-      let allkeys = [], linekey = "", match
-      if (key != "") { allkeys = line.match(re) || []; }
-      if (sep != "") {
-        let previd = 0
-        while (match = re.exec(line)) {
-          allkeys.push(line.slice(previd, match.indices[0][0]))
-          previd = match.indices[0][1]
-        }
-        allkeys.push(line.slice(previd, line.length + 1))
-      }
+    inlines.map(l => { // for each input line ...
+      let allkeys = [], m // determine all the key values for this line l based on sep or key regex
+      if (key != "") { allkeys = l.match(re) || [] }
+      if (sep != "") { for (var s = 0; m = re.exec(l); allkeys.push(l.slice(s, m.indices[0][0])), s = m.indices[0][1]); allkeys.push(l.slice(s)) }
 
-      range = range.replace(/[^0-9,n-]/g, '')
-      linekey = ""
-      if (range == "") {
-        (key == "" && sep == "") ? linekey = line : linekey = allkeys.join('')
+      range = range.replace(/[^0-9,n-]/g, '') // remove invalid characters from range
+      let sortkey = "" // this "key" will be used to sort the lines on
+      if (range == "") { // no range -> take all keys from 1 to end or full line value if no keys (i.e. no key nor sep regex specified)
+        (key == "" && sep == "") ? sortkey = l : sortkey = allkeys.join('')
       } else {
-        let end, start
+        let start, end
         range.split(",").forEach(r => { // for each keyrange
-          let dashpos = r.indexOf("-"), num = (r.slice(-1) == "n")
-          if (dashpos == -1) {
-            end = start = parseInt(r.slice(0, num ? -1 : 10000))
-          } else {
-            start = parseInt(r.slice(0, dashpos))
-            end = parseInt(r.slice(dashpos + 1, num ? -1 : 10000))
-          }
-          for (let i = start; i <= end; i++) { // for each key
-            let key = allkeys[i - 1] ?? ""
-            if (num) { // numerify the field -> remove all non numeric stuff (except "comma") - then add zeroes to start so we have 30 digits up to end or first "comma"
-              key = key.replace(/[^0-9,.]/g, '') // only digits and , and .
-              key = (gV("comma") == ",") ? key.replace(/\./g, '') : key.replace(/,/g, '')
-              compos = key.indexOf(gV("comma"))
-              key = '0'.repeat(Math.max(0, 30 - ((compos == -1) ? key.length : compos))) + key
+          let dash = r.indexOf("-"), num = (r.slice(-1) == "n")
+          if (dash == -1) { end = start = parseInt(r.slice(0, num ? -1 : 99999)) } // no range just 1 key -> start = end
+          else { start = parseInt(r.slice(0, dash)); end = parseInt(r.slice(dash + 1, num ? -1 : 99999)) } // range start-end
+          for (let k = start; k <= end; k++) { // for each key in the range - add keyvalue to sortkey
+            let key = allkeys[k - 1] ?? ""
+            if (num) { // numerify the field -> remove all non numeric stuff (except "comma") - then add zeroes to start and end 
+              key = key.replace(/[^0-9,.]/g, '').replace(comma == "," ? "." : ",", '') // only digits and our "comma"
+              c = key.indexOf(comma)
+              prefix = '0'.repeat(Math.max(0, 30 - ((c == -1) ? key.length : c))) // 30 digits before "comma"
+              postfix = c == -1 ? comma + '0'.repeat(30) : '0'.repeat(Math.max(0, 31 - key.length + c)) // 30 digits after "comma"
+              key = prefix + key + postfix // align comma for all numbers so we can compare as a text string // Todo: correct numeric sort - now we use 30 digits before comma and 30 after comma and treat as text - should be better handled
             }
-            linekey += key
+            sortkey += key + "\0"
           }
         })
       }
-      lines.push({ l: line, k: gC("ic") ? linekey.toUpperCase() : linekey })
-    });
+      lines.push({ l: l, k: gC("ic") ? sortkey.toUpperCase() : sortkey })
+    })
 
     // sort lines based on key k in lines array
     gE("otxt").value = lines.sort(function (a, b) {

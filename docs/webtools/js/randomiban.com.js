@@ -1,5 +1,10 @@
-// If you can get ahold of this, it is free to use.
 // code from randomiban.com
+// code not used by webtools - just here for info and possible later use
+// ..
+// ..
+
+
+// If you can get ahold of this, it is free to use.
 
 //JSONs
 var iso_abbreviations = { Andorra: "AD", Albania: "AL", Austria: "AT", Azerbaijan: "AZ", Bahrain: "BH", Belgium: "BE", Bosnia: "BA", Brazil: "BR", Bulgaria: "BG", Costa_rica: "CR", Croatia: "HR", Cyprus: "CY", Czechia: "CZ", Denmark: "DK", Dominicana: "DO", Estonia: "EE", Faroe_Islands: "FO", Finland: "FI", France: "FR", Georgia: "GE", Germany: "DE", Gibraltar: "GI", Greece: "GR", Greenland: "GL", Guatemala: "GT", Hungary: "HU", Iceland: "IS", Ireland: "IE", Israel: "IL", Italy: "IT", Jordan: "JO", Kazakhstan: "KZ", Kuwait: "KW", Latvia: "LV", Lebanon: "LB", Liechtenstein: "LI", Lithuania: "LT", Luxembourg: "LU", Macedonia: "MK", Malta: "MT", Mauritania: "MR", Mauritius: "MU", Moldova: "MD", Monaco: "MC", Montenegro: "ME", Netherlands: "NL", Norway: "NO", Pakistan: "PK", Poland: "PL", Palestine: "PS", Portugal: "PT", Qatar: "QA", Kosovo: "XK", Romania: "RO", Saint_Lucia: "LC", San_Marino: "SM", Sao_Tome_Principe: "ST", Saudi: "SA", Serbia: "RS", Seychelles: "SC", Slovakia: "SK", Slovenia: "SI", Spain: "ES", Sweden: "SE", Switzerland: "CH", Timor_Leste: "TL", Tunisia: "TN", Turkey: "TR", Ukraine: "UA", UAE: "AE", UK: "GB", Virgin_Islands: "VG", Test1: "YY", Test2: "ZZ", Algeria: "DZ", Angola: "AO", Benin: "BJ", Burkina_Faso: "BF", Burundi: "BI", Cameroon: "CM", Cape_Verde: "CV", Iran: "IR", Ivory_Coast: "CI", Madagascar: "MG", Mali: "ML", Mozambique: "MZ", Senegal: "SN", Comoros: "KM", Chad: "TD", Congo: "CG", Egypt: "EG", Gabon: "GA", Honduras: "HN", Morocco: "MA", Nicuragua: "NI", Niger: "NE", Togo: "TG" };
@@ -39,87 +44,87 @@ var Portugal_sort = ["00350651"]
 
 
 function num_gen3(span) {
-    var num2 = chance.string({ length: span, pool: '123456789' });
-    return num2;
+  var num2 = chance.string({ length: span, pool: '123456789' });
+  return num2;
 }
 
 function estoniaCheckDigit(account_number) {
 
-    eArray = [7, 3, 1];
-    eLen = account_number.length;
-    st = account_number.length;
-    tot = 0;
-    while (eLen > 0 && account_number.substr(--eLen, 1) >= 0) {
-        tot += account_number.substr((st - 1) - eLen, 1) * eArray[(eLen % 3)];
-    }
-    cNum = ((Math.ceil((tot / 10)) * 10) - tot);
-    return cNum;
+  eArray = [7, 3, 1];
+  eLen = account_number.length;
+  st = account_number.length;
+  tot = 0;
+  while (eLen > 0 && account_number.substr(--eLen, 1) >= 0) {
+    tot += account_number.substr((st - 1) - eLen, 1) * eArray[(eLen % 3)];
+  }
+  cNum = ((Math.ceil((tot / 10)) * 10) - tot);
+  return cNum;
 }
 
 function char_gen(span) {
-    var char2 = chance.string({ length: span, pool: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' })
-    return char2;
+  var char2 = chance.string({ length: span, pool: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' })
+  return char2;
 }
 
 String.prototype.bankAccountKey = function () {
-    var str = this.toString(), deb, rst;
-    while (deb = str.substr(0, 12), str = str.substr(12)) { str = (deb % 97).toString() + str; }
-    rst = 98 - deb % 97;
-    return rst < 10 ? '0' + rst : '' + rst;
+  var str = this.toString(), deb, rst;
+  while (deb = str.substr(0, 12), str = str.substr(12)) { str = (deb % 97).toString() + str; }
+  rst = 98 - deb % 97;
+  return rst < 10 ? '0' + rst : '' + rst;
 }
 
 function randomElelment(array) {
-    return array[Math.floor(Math.random() * array.length)]
+  return array[Math.floor(Math.random() * array.length)]
 }
 
 function randomChar(n) {
-    var characterArray = 'QWERTYUIOPLKJHGFDSAZXCVBNM'.split('')
-    var result = '';
-    for (var i = 0; i < n; i++) {
-        result += randomElelment(characterArray)
-    }
-    return result;
+  var characterArray = 'QWERTYUIOPLKJHGFDSAZXCVBNM'.split('')
+  var result = '';
+  for (var i = 0; i < n; i++) {
+    result += randomElelment(characterArray)
+  }
+  return result;
 }
 
 function luhnCheck(input) {
-    var chekk = '';
-    var digi = 0;
-    var b = true;
-    for (var n = input.length - 1; n >= 0; n--) {
-        var dig = input.charAt(n), digi = parseInt(dig, 10);
-        if (b) {
-            if ((digi *= 2) > 9) digi -= 9;
-        }
-
-        dig += digi;
-        b = !b;
+  var chekk = '';
+  var digi = 0;
+  var b = true;
+  for (var n = input.length - 1; n >= 0; n--) {
+    var dig = input.charAt(n), digi = parseInt(dig, 10);
+    if (b) {
+      if ((digi *= 2) > 9) digi -= 9;
     }
-    return (1000 - dig) % 10;
+
+    dig += digi;
+    b = !b;
+  }
+  return (1000 - dig) % 10;
 }
 
 var d = [
-    [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
-    [1, 2, 3, 4, 0, 6, 7, 8, 9, 5],
-    [2, 3, 4, 0, 1, 7, 8, 9, 5, 6],
-    [3, 4, 0, 1, 2, 8, 9, 5, 6, 7],
-    [4, 0, 1, 2, 3, 9, 5, 6, 7, 8],
-    [5, 9, 8, 7, 6, 0, 4, 3, 2, 1],
-    [6, 5, 9, 8, 7, 1, 0, 4, 3, 2],
-    [7, 6, 5, 9, 8, 2, 1, 0, 4, 3],
-    [8, 7, 6, 5, 9, 3, 2, 1, 0, 4],
-    [9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
+  [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+  [1, 2, 3, 4, 0, 6, 7, 8, 9, 5],
+  [2, 3, 4, 0, 1, 7, 8, 9, 5, 6],
+  [3, 4, 0, 1, 2, 8, 9, 5, 6, 7],
+  [4, 0, 1, 2, 3, 9, 5, 6, 7, 8],
+  [5, 9, 8, 7, 6, 0, 4, 3, 2, 1],
+  [6, 5, 9, 8, 7, 1, 0, 4, 3, 2],
+  [7, 6, 5, 9, 8, 2, 1, 0, 4, 3],
+  [8, 7, 6, 5, 9, 3, 2, 1, 0, 4],
+  [9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
 ];
 
 // permutation table p
 var p = [
-    [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
-    [1, 5, 7, 6, 2, 8, 3, 0, 9, 4],
-    [5, 8, 0, 3, 7, 9, 6, 1, 4, 2],
-    [8, 9, 1, 6, 0, 4, 3, 5, 2, 7],
-    [9, 4, 5, 3, 1, 2, 6, 8, 7, 0],
-    [4, 2, 8, 6, 5, 7, 3, 9, 0, 1],
-    [2, 7, 9, 3, 8, 0, 6, 4, 1, 5],
-    [7, 0, 4, 6, 9, 1, 3, 2, 5, 8]
+  [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+  [1, 5, 7, 6, 2, 8, 3, 0, 9, 4],
+  [5, 8, 0, 3, 7, 9, 6, 1, 4, 2],
+  [8, 9, 1, 6, 0, 4, 3, 5, 2, 7],
+  [9, 4, 5, 3, 1, 2, 6, 8, 7, 0],
+  [4, 2, 8, 6, 5, 7, 3, 9, 0, 1],
+  [2, 7, 9, 3, 8, 0, 6, 4, 1, 5],
+  [7, 0, 4, 6, 9, 1, 3, 2, 5, 8]
 ];
 
 // inverse table inv
@@ -128,474 +133,474 @@ var inv = [0, 4, 3, 2, 1, 5, 6, 7, 8, 9];
 // converts string or number to an array and inverts it
 function invArray(array) {
 
-    if (Object.prototype.toString.call(array) == "[object Number]") {
-        array = String(array);
-    }
+  if (Object.prototype.toString.call(array) == "[object Number]") {
+    array = String(array);
+  }
 
-    if (Object.prototype.toString.call(array) == "[object String]") {
-        array = array.split("").map(Number);
-    }
-    return array.reverse();
+  if (Object.prototype.toString.call(array) == "[object String]") {
+    array = array.split("").map(Number);
+  }
+  return array.reverse();
 
 }
 
 // generates checksum
 function generateV(array) {
 
-    var c = 0;
-    var invertedArray = invArray(array);
-    for (var i = 0; i < invertedArray.length; i++) {
-        c = d[c][p[((i + 1) % 8)][invertedArray[i]]];
-    }
+  var c = 0;
+  var invertedArray = invArray(array);
+  for (var i = 0; i < invertedArray.length; i++) {
+    c = d[c][p[((i + 1) % 8)][invertedArray[i]]];
+  }
 
-    return inv[c];
+  return inv[c];
 }
 
 function buildX(n, country) {
-    l = {};
-    var i = 0;
-    l[i] = [];
-    if (n < 1)
-        return "n must be greater than 1";
-    if (n > 100)
-        return "n is too large, limit 100"
-    for (var i = 0; i < n; i++) {
-        k = buildIban(country)
-        l[i] = k;
-    }
-    return JSON.stringify(l);
+  l = {};
+  var i = 0;
+  l[i] = [];
+  if (n < 1)
+    return "n must be greater than 1";
+  if (n > 100)
+    return "n is too large, limit 100"
+  for (var i = 0; i < n; i++) {
+    k = buildIban(country)
+    l[i] = k;
+  }
+  return JSON.stringify(l);
 }
 
 // validates checksum
 function validateV(array) {
 
-    var c = 0;
-    var invertedArray = invArray(array);
+  var c = 0;
+  var invertedArray = invArray(array);
 
-    for (var i = 0; i < invertedArray.length; i++) {
-        c = d[c][p[(i % 8)][invertedArray[i]]];
-    }
+  for (var i = 0; i < invertedArray.length; i++) {
+    c = d[c][p[(i % 8)][invertedArray[i]]];
+  }
 
-    return (c === 0);
+  return (c === 0);
 }
 
 function replaceChars(conv_string) {
-    for (i = 0; i < conv_string.length; i++) {
-        var conv_char = conv_string[i];
-        if (conv_char in letter_map) {
-            var IBAN_conv = letter_map[conv_char];
-            conv_string = conv_string.replace(conv_char, IBAN_conv.toString());
-        }
+  for (i = 0; i < conv_string.length; i++) {
+    var conv_char = conv_string[i];
+    if (conv_char in letter_map) {
+      var IBAN_conv = letter_map[conv_char];
+      conv_string = conv_string.replace(conv_char, IBAN_conv.toString());
     }
-    return conv_string;
+  }
+  return conv_string;
 }
 
 var conv_array = { A: 1, B: 2, C: 3, D: 4, E: 5, F: 6, G: 7, H: 8, I: 9, J: 1, K: 2, L: 3, M: 4, N: 5, O: 6, P: 7, Q: 8, R: 9, S: 2, T: 3, U: 4, V: 5, W: 6, X: 7, Y: 8, Z: 9 }
 function replaceChars2(input) {
-    for (i = 0; i < input.length; i++) {
-        var conv_char = input[i];
-        if (conv_char in conv_array) {
-            var j = conv_array[conv_char];
-            input = input.replace(conv_char, j.toString());
-        }
+  for (i = 0; i < input.length; i++) {
+    var conv_char = input[i];
+    if (conv_char in conv_array) {
+      var j = conv_array[conv_char];
+      input = input.replace(conv_char, j.toString());
     }
-    return input;
+  }
+  return input;
 }
 
 function calcChecksum(countryCode, randomPart) {
-    var checkString = randomPart + countryCode + "00";
-    checkString = replaceChars(checkString);
-    var checksum = checkString.bankAccountKey();
-    var checkCheck = randomPart + countryCode + checksum;
-    checkCheck = replaceChars(checkCheck);
-    return countryCode + checksum.toString() + randomPart;
+  var checkString = randomPart + countryCode + "00";
+  checkString = replaceChars(checkString);
+  var checksum = checkString.bankAccountKey();
+  var checkCheck = randomPart + countryCode + checksum;
+  checkCheck = replaceChars(checkCheck);
+  return countryCode + checksum.toString() + randomPart;
 }
 
 function addChecksum(IBAN, checksum) {
-    IBAN = IBAN.substring(0, IBAN.length - 2);
-    IBAN += checksum;
-    return IBAN;
+  IBAN = IBAN.substring(0, IBAN.length - 2);
+  IBAN += checksum;
+  return IBAN;
 }
 
 function ribCheck(input, inp, iny) {
-    var rib_cand2 = replaceChars2(iny);
-    var t = 97 - ((89 * input + 15 * inp + 3 * rib_cand2) % 97);
-    return t
+  var rib_cand2 = replaceChars2(iny);
+  var t = 97 - ((89 * input + 15 * inp + 3 * rib_cand2) % 97);
+  return t
 
 }
 
 var table = [
-    [0, 3, 1, 7, 5, 9, 8, 6, 4, 2],
-    [7, 0, 9, 2, 1, 5, 4, 8, 6, 3],
-    [4, 2, 0, 6, 8, 7, 1, 3, 5, 9],
-    [1, 7, 5, 0, 9, 8, 3, 4, 2, 6],
-    [6, 1, 2, 3, 0, 4, 5, 9, 7, 8],
-    [3, 6, 7, 4, 2, 0, 9, 5, 8, 1],
-    [5, 8, 6, 9, 7, 2, 0, 1, 3, 4],
-    [8, 9, 4, 5, 3, 6, 2, 0, 1, 7],
-    [9, 4, 3, 8, 6, 1, 7, 2, 0, 5],
-    [2, 5, 8, 1, 4, 3, 6, 7, 9, 0]
+  [0, 3, 1, 7, 5, 9, 8, 6, 4, 2],
+  [7, 0, 9, 2, 1, 5, 4, 8, 6, 3],
+  [4, 2, 0, 6, 8, 7, 1, 3, 5, 9],
+  [1, 7, 5, 0, 9, 8, 3, 4, 2, 6],
+  [6, 1, 2, 3, 0, 4, 5, 9, 7, 8],
+  [3, 6, 7, 4, 2, 0, 9, 5, 8, 1],
+  [5, 8, 6, 9, 7, 2, 0, 1, 3, 4],
+  [8, 9, 4, 5, 3, 6, 2, 0, 1, 7],
+  [9, 4, 3, 8, 6, 1, 7, 2, 0, 5],
+  [2, 5, 8, 1, 4, 3, 6, 7, 9, 0]
 ];
 
 function calcDamm(basenumber) {
-    var s, damm;
-    damm = 0;
-    s = String(basenumber);
-    for (var i = 0; i < s.length; ++i) {
-        damm = table[damm][s.charAt(i)];
-    }
-    return damm;
+  var s, damm;
+  damm = 0;
+  s = String(basenumber);
+  for (var i = 0; i < s.length; ++i) {
+    damm = table[damm][s.charAt(i)];
+  }
+  return damm;
 }
 
 function checkDamm(number) {
-    return calcDamm(number) == 0;
+  return calcDamm(number) == 0;
 }
 
 function rearrange(iban) {
-    IBAN_prefix = IBAN.substring(IBAN.length - 4, IBAN.length);
-    IBAN = IBAN.substring(0, IBAN - 4);
-    IBAN_prefix += IBAN;
-    return IBAN;
+  IBAN_prefix = IBAN.substring(IBAN.length - 4, IBAN.length);
+  IBAN = IBAN.substring(0, IBAN - 4);
+  IBAN_prefix += IBAN;
+  return IBAN;
 }
 
 function mod11_2(input) {
-    var modu = 11;
-    var rad = 2;
-    var output_val = '0123456789X';
-    var p = 0;
+  var modu = 11;
+  var rad = 2;
+  var output_val = '0123456789X';
+  var p = 0;
 
-    for (var i = 0; i < input.length; i++) {
-        var valu = output_val.indexOf(input.substr(i, 1));
-        p = ((p + valu) * rad) % modu;
-    }
-    var checksum = (modu - p + 1) % modu;
-    return output_val.substr(checksum, 1);
+  for (var i = 0; i < input.length; i++) {
+    var valu = output_val.indexOf(input.substr(i, 1));
+    p = ((p + valu) * rad) % modu;
+  }
+  var checksum = (modu - p + 1) % modu;
+  return output_val.substr(checksum, 1);
 
 }
 
 
 // Bosnia and others?
 function mod97_10(input) {
-    var a1 = 1;
-    var ch = input.charCodeAt(0) - 48;
-    var check = ch;
-    for (var i = (input.length - 2); i >= 0; i--) {
-        ch = input.charCodeAt(i) - 48;
-        a1 = (a1 * 10) % 97;
-        check += (a1 * (Number(ch)));
-    }
-    var x = (98 - (check % 97));
-    if (x < 10) {
-        x = "0" + x;
-    }
-    return x;
+  var a1 = 1;
+  var ch = input.charCodeAt(0) - 48;
+  var check = ch;
+  for (var i = (input.length - 2); i >= 0; i--) {
+    ch = input.charCodeAt(i) - 48;
+    a1 = (a1 * 10) % 97;
+    check += (a1 * (Number(ch)));
+  }
+  var x = (98 - (check % 97));
+  if (x < 10) {
+    x = "0" + x;
+  }
+  return x;
 }
 
 function mod11(input) {
-    var cifras = [1, 2, 4, 8, 5, 10, 9, 7, 3, 6];
-    cheqeo = 0;
-    for (var i = 0; i < 10; i++) {
-        cheqeo += Number(input[i]) * Number(cifras[i]);
-    }
-    cheqeo = 11 - (cheqeo % 11);
-    if (cheqeo == 11) cheqeo = 0;
-    if (cheqeo == 10) cheqeo = 1;
-    return cheqeo;
+  var cifras = [1, 2, 4, 8, 5, 10, 9, 7, 3, 6];
+  cheqeo = 0;
+  for (var i = 0; i < 10; i++) {
+    cheqeo += Number(input[i]) * Number(cifras[i]);
+  }
+  cheqeo = 11 - (cheqeo % 11);
+  if (cheqeo == 11) cheqeo = 0;
+  if (cheqeo == 10) cheqeo = 1;
+  return cheqeo;
 }
 
 function norwayCheck(input) {
-    var fact = [5, 4, 3, 2, 7, 6, 5, 4, 3, 2]
-    var tot = 0;
-    var account_num = input;
-    for (var i = 0; i < 10; i++) {
-        tot += account_num[i] * fact[i];
-    }
-    var rem = tot % 11;
-    if (((11 - rem) % 11) == 10) {
-    }
-    return (11 - rem) % 11;
+  var fact = [5, 4, 3, 2, 7, 6, 5, 4, 3, 2]
+  var tot = 0;
+  var account_num = input;
+  for (var i = 0; i < 10; i++) {
+    tot += account_num[i] * fact[i];
+  }
+  var rem = tot % 11;
+  if (((11 - rem) % 11) == 10) {
+  }
+  return (11 - rem) % 11;
 }
 
 function spanishCheck() {
-    var bnb = _.sample(Spanish_sort) + num_gen3(4);
-    var bnb2 = "00" + bnb;
-    var account_num = num_gen3(10);
-    var first_digit = mod11(bnb2);
-    var second_digit = mod11(account_num);
-    var spainCheck = bnb2.substr(2, 8) + first_digit + second_digit + account_num;
-    return spainCheck;
+  var bnb = _.sample(Spanish_sort) + num_gen3(4);
+  var bnb2 = "00" + bnb;
+  var account_num = num_gen3(10);
+  var first_digit = mod11(bnb2);
+  var second_digit = mod11(account_num);
+  var spainCheck = bnb2.substr(2, 8) + first_digit + second_digit + account_num;
+  return spainCheck;
 }
 
 function portugalCheck(input) {
-    var sum = 0;
-    var port = [73, 17, 89, 38, 62, 45, 53, 15, 50, 5, 49, 34, 81, 76, 27, 90, 9, 30, 3]
-    for (var i = 0; i < 19; i++) {
-        sum += input[i] * port[i];
-    }
-    var x = 97 - (sum % 97);
-    if (x < 10) {
-        x = "0" + x;
-    }
-    return x;
+  var sum = 0;
+  var port = [73, 17, 89, 38, 62, 45, 53, 15, 50, 5, 49, 34, 81, 76, 27, 90, 9, 30, 3]
+  for (var i = 0; i < 19; i++) {
+    sum += input[i] * port[i];
+  }
+  var x = 97 - (sum % 97);
+  if (x < 10) {
+    x = "0" + x;
+  }
+  return x;
 }
 
 function buildIbans(country_input) {
-    var ISO = iso_abbreviations[country_input];
-    var IBAN_length = country_length[country_input];
-    var middle_characters = character_countries[country_input];
-    switch (country_input) {
+  var ISO = iso_abbreviations[country_input];
+  var IBAN_length = country_length[country_input];
+  var middle_characters = character_countries[country_input];
+  switch (country_input) {
 
-        case "Netherlands":
-            var NL_Banks = ["ABNA", "RABO", "INGB"];
-            var NL_BIC = _.sample(NL_Banks)
-            var NL_numeric_part = _.sample(NL_Accounts)
-            var NL_cand = NL_BIC + NL_numeric_part + "";
-            var NL_IBAN = calcChecksum(ISO, NL_cand);
-            return NL_IBAN;
+    case "Netherlands":
+      var NL_Banks = ["ABNA", "RABO", "INGB"];
+      var NL_BIC = _.sample(NL_Banks)
+      var NL_numeric_part = _.sample(NL_Accounts)
+      var NL_cand = NL_BIC + NL_numeric_part + "";
+      var NL_IBAN = calcChecksum(ISO, NL_cand);
+      return NL_IBAN;
 
-        case "UK":
-            var UK_BIC = "BARC";// _.sample(UK_Banks); // lets brute force some first
-            var UK_numeric_suffix = IBAN_length - 4 - middle_characters;
-            var UK_numeric_part = "" + _.sample(BARCLAYS_sort) + num_gen3(UK_numeric_suffix - 6);
-            var UK_cand = UK_BIC + UK_numeric_part + "";
-            var UK_IBAN = calcChecksum(ISO, UK_cand);
-            return UK_IBAN;
+    case "UK":
+      var UK_BIC = "BARC";// _.sample(UK_Banks); // lets brute force some first
+      var UK_numeric_suffix = IBAN_length - 4 - middle_characters;
+      var UK_numeric_part = "" + _.sample(BARCLAYS_sort) + num_gen3(UK_numeric_suffix - 6);
+      var UK_cand = UK_BIC + UK_numeric_part + "";
+      var UK_IBAN = calcChecksum(ISO, UK_cand);
+      return UK_IBAN;
 
-        case "Brazil":
-            var BR_numeric_suffix = IBAN_length - 6;
-            var BR_randomPart = num_gen3(BR_numeric_suffix);
-            BR_randomPart += randomChar(1);
-            BR_randomPart += num_gen3(1);
-            var BR_IBAN = calcChecksum(ISO, BR_randomPart);
-            return BR_IBAN;
+    case "Brazil":
+      var BR_numeric_suffix = IBAN_length - 6;
+      var BR_randomPart = num_gen3(BR_numeric_suffix);
+      BR_randomPart += randomChar(1);
+      BR_randomPart += num_gen3(1);
+      var BR_IBAN = calcChecksum(ISO, BR_randomPart);
+      return BR_IBAN;
 
-        case "Seychelles":
+    case "Seychelles":
 
-            var SY_numeric_suffix = IBAN_length - 7;
-            var SY_randomPart = num_gen3(SY_numeric_suffix);
-            SY_randomPart += randomChar(3);
-            var SY_IBAN = calcChecksum(ISO, SY_randomPart);
-            return SY_IBAN;
+      var SY_numeric_suffix = IBAN_length - 7;
+      var SY_randomPart = num_gen3(SY_numeric_suffix);
+      SY_randomPart += randomChar(3);
+      var SY_IBAN = calcChecksum(ISO, SY_randomPart);
+      return SY_IBAN;
 
-        case "Switzerland":
-            var CH_numeric_suffix = IBAN_length - 9;
-            var CH_really = "" + "89144" + num_gen3(CH_numeric_suffix);
-            var CH_IBAN = calcChecksum(ISO, CH_really);
-            return CH_IBAN;
+    case "Switzerland":
+      var CH_numeric_suffix = IBAN_length - 9;
+      var CH_really = "" + "89144" + num_gen3(CH_numeric_suffix);
+      var CH_IBAN = calcChecksum(ISO, CH_really);
+      return CH_IBAN;
 
-        case "Mauritius":
+    case "Mauritius":
 
-            var MA_BIC = char_gen(middle_characters);
-            var MA_numeric_suffix = IBAN_length - 11;
-            var MA_randomPart = num_gen3(MA_numeric_suffix);
-            MA_randomPart += randomChar(3);
-            var MA_cand = MA_BIC + MA_randomPart + "";
-            var MA_IBAN = calcChecksum(ISO, MA_cand);
-            return MA_IBAN;
+      var MA_BIC = char_gen(middle_characters);
+      var MA_numeric_suffix = IBAN_length - 11;
+      var MA_randomPart = num_gen3(MA_numeric_suffix);
+      MA_randomPart += randomChar(3);
+      var MA_cand = MA_BIC + MA_randomPart + "";
+      var MA_IBAN = calcChecksum(ISO, MA_cand);
+      return MA_IBAN;
 
-        case "Albania":
-            var ALB_numeric_suffix = IBAN_length - 12;
-            var ALB_numeric_part = "" + _.sample(Albania_sort) + num_gen3(ALB_numeric_suffix);
-            var ALB_IBAN = calcChecksum(ISO, ALB_numeric_part);
-            return ALB_IBAN;
+    case "Albania":
+      var ALB_numeric_suffix = IBAN_length - 12;
+      var ALB_numeric_part = "" + _.sample(Albania_sort) + num_gen3(ALB_numeric_suffix);
+      var ALB_IBAN = calcChecksum(ISO, ALB_numeric_part);
+      return ALB_IBAN;
 
-        case "Belgium":
+    case "Belgium":
 
-            var BM_numeric_part = "" + _.sample(Belgium_sort_code) + num_gen3(IBAN_length - 9);
-            var how = (Number(BM_numeric_part) % 97 + "");
-            if (how < 10) {
-                how = "0" + how;
-            }
-            var BM_randomPart = BM_numeric_part + how;
-            var BM_IBAN = calcChecksum(ISO, BM_randomPart);
-            return BM_IBAN;
+      var BM_numeric_part = "" + _.sample(Belgium_sort_code) + num_gen3(IBAN_length - 9);
+      var how = (Number(BM_numeric_part) % 97 + "");
+      if (how < 10) {
+        how = "0" + how;
+      }
+      var BM_randomPart = BM_numeric_part + how;
+      var BM_IBAN = calcChecksum(ISO, BM_randomPart);
+      return BM_IBAN;
 
-        case "Bosnia":
+    case "Bosnia":
 
-            var BS_numeric_part = "102" + num_gen3(IBAN_length - 7);
-            var BS_randomPart = BS_numeric_part;
-            var BS_IBAN = calcChecksum(ISO, BS_randomPart);
-            return BS_IBAN;
+      var BS_numeric_part = "102" + num_gen3(IBAN_length - 7);
+      var BS_randomPart = BS_numeric_part;
+      var BS_IBAN = calcChecksum(ISO, BS_randomPart);
+      return BS_IBAN;
 
-        case "Estonia":
+    case "Estonia":
 
-            var ES_numeric_part = num_gen3(IBAN_length - 7);
-            var ES_randomPart = "12" + ES_numeric_part + estoniaCheckDigit(ES_numeric_part);
-            var ES_IBAN = calcChecksum(ISO, ES_randomPart);                        // checksum == x % 31 ?     // x % 62?
-            return ES_IBAN;
+      var ES_numeric_part = num_gen3(IBAN_length - 7);
+      var ES_randomPart = "12" + ES_numeric_part + estoniaCheckDigit(ES_numeric_part);
+      var ES_IBAN = calcChecksum(ISO, ES_randomPart);                        // checksum == x % 31 ?     // x % 62?
+      return ES_IBAN;
 
-        case "Czechia":
+    case "Czechia":
 
-            var CZ_numeric_part = "5051" + num_gen3(IBAN_length - 8); // 0100
-            var CZ_randomPart = CZ_numeric_part;
-            var CZ_IBAN = calcChecksum(ISO, CZ_randomPart);
-            return CZ_IBAN;
+      var CZ_numeric_part = "5051" + num_gen3(IBAN_length - 8); // 0100
+      var CZ_randomPart = CZ_numeric_part;
+      var CZ_IBAN = calcChecksum(ISO, CZ_randomPart);
+      return CZ_IBAN;
 
-        case "Greece":
-            var GR_numeric_part = _.sample(Greek_sort) + num_gen3(IBAN_length - 7);
-            var interIBAN = calcChecksum(ISO, GR_numeric_part);
-            return interIBAN;
+    case "Greece":
+      var GR_numeric_part = _.sample(Greek_sort) + num_gen3(IBAN_length - 7);
+      var interIBAN = calcChecksum(ISO, GR_numeric_part);
+      return interIBAN;
 
-        case "Germany":
-            var DE_randomPart = "50010517" + num_gen3(IBAN_length - 12);
-            var DE_IBAN = calcChecksum(ISO, DE_randomPart);
-            return DE_IBAN;
-        // Method C1, Variant 2, Account 5559749181, Bank Code 50010517, Check digit 1 is at position 10, expected check digit: 1. Overview of the calculation: Take the digits in positions 1 to 9 - here: 555974918 -, Multiply them from the left to the right by the weights 1,2,1,2,1,2,1,2,1, add the transverse sums of the products, form the remainder of the division by 11, subtract the result from 10, Result modulo 11 is the expected reference number.
-        case "Denmark":
-            var DK_randomPart = "5051" + num_gen3(IBAN_length - 8);
-            var DK_IBAN = calcChecksum(ISO, DK_randomPart);
-            return DK_IBAN;
+    case "Germany":
+      var DE_randomPart = "50010517" + num_gen3(IBAN_length - 12);
+      var DE_IBAN = calcChecksum(ISO, DE_randomPart);
+      return DE_IBAN;
+    // Method C1, Variant 2, Account 5559749181, Bank Code 50010517, Check digit 1 is at position 10, expected check digit: 1. Overview of the calculation: Take the digits in positions 1 to 9 - here: 555974918 -, Multiply them from the left to the right by the weights 1,2,1,2,1,2,1,2,1, add the transverse sums of the products, form the remainder of the division by 11, subtract the result from 10, Result modulo 11 is the expected reference number.
+    case "Denmark":
+      var DK_randomPart = "5051" + num_gen3(IBAN_length - 8);
+      var DK_IBAN = calcChecksum(ISO, DK_randomPart);
+      return DK_IBAN;
 
-        case "Italy":
-            var numeric_part = "0300203280" + num_gen3(IBAN_length - 15);
-            var Italy_map = { 0: "1", 1: "0", 2: "5", 3: "7", 4: "9", 5: "13", 6: "15", 7: "17", 8: "19", 9: "21" }
-            var Italy_CIN = { 0: "A", 1: "B", 2: "C", 3: "D", 4: "E", 5: "F", 6: "G", 7: "H", 8: "I", 9: "J", 10: "K", 11: "L", 12: "M", 13: "N", 14: "O", 15: "P", 16: "Q", 17: "R", 18: "S", 19: "T", 20: "U", 21: "V", 22: "W", 23: "X", 24: "Y", 25: "Z" }
-            var yy = 0;
-            var xx = 0;
-            for (var i = 1; i < 22; i += 2) {
-                yy += Number(numeric_part.charAt(i));
+    case "Italy":
+      var numeric_part = "0300203280" + num_gen3(IBAN_length - 15);
+      var Italy_map = { 0: "1", 1: "0", 2: "5", 3: "7", 4: "9", 5: "13", 6: "15", 7: "17", 8: "19", 9: "21" }
+      var Italy_CIN = { 0: "A", 1: "B", 2: "C", 3: "D", 4: "E", 5: "F", 6: "G", 7: "H", 8: "I", 9: "J", 10: "K", 11: "L", 12: "M", 13: "N", 14: "O", 15: "P", 16: "Q", 17: "R", 18: "S", 19: "T", 20: "U", 21: "V", 22: "W", 23: "X", 24: "Y", 25: "Z" }
+      var yy = 0;
+      var xx = 0;
+      for (var i = 1; i < 22; i += 2) {
+        yy += Number(numeric_part.charAt(i));
 
-            }
-            for (var j = 0; j < 22; j += 2) {
-                jj = Number(numeric_part.charAt(j));
-                ii = Italy_map[jj];
-                xx += Number(ii);
-            }
-            uu = xx + yy;
-            ll = uu % 26;
-            kk = Italy_CIN[ll];
-            var randomPart = kk + numeric_part;
-            var interIBAN = calcChecksum(ISO, randomPart);
-            return interIBAN;
+      }
+      for (var j = 0; j < 22; j += 2) {
+        jj = Number(numeric_part.charAt(j));
+        ii = Italy_map[jj];
+        xx += Number(ii);
+      }
+      uu = xx + yy;
+      ll = uu % 26;
+      kk = Italy_CIN[ll];
+      var randomPart = kk + numeric_part;
+      var interIBAN = calcChecksum(ISO, randomPart);
+      return interIBAN;
 
-        case "Luxembourg":
-            var LX_numeric_part = "010" + num_gen3(IBAN_length - 7);
-            var LX_IBAN = calcChecksum(ISO, LX_numeric_part);
-            return LX_IBAN;
+    case "Luxembourg":
+      var LX_numeric_part = "010" + num_gen3(IBAN_length - 7);
+      var LX_IBAN = calcChecksum(ISO, LX_numeric_part);
+      return LX_IBAN;
 
-        case "Liechtenstein":
-            var LC_numeric_part = "08800" + num_gen3(IBAN_length - 9);
-            var LC_IBAN = calcChecksum(ISO, LC_numeric_part);
-            return LC_IBAN;
+    case "Liechtenstein":
+      var LC_numeric_part = "08800" + num_gen3(IBAN_length - 9);
+      var LC_IBAN = calcChecksum(ISO, LC_numeric_part);
+      return LC_IBAN;
 
-        case "Ireland":
-            var IR_numeric_part = num_gen3(IBAN_length - 16);
-            var IR_randomPart = "BOFI900017" + IR_numeric_part;
-            var IR_IBAN = calcChecksum(ISO, IR_randomPart);
-            return IR_IBAN;
+    case "Ireland":
+      var IR_numeric_part = num_gen3(IBAN_length - 16);
+      var IR_randomPart = "BOFI900017" + IR_numeric_part;
+      var IR_IBAN = calcChecksum(ISO, IR_randomPart);
+      return IR_IBAN;
 
-        case "Poland":
-            var PL_numeric_part = "10902402" + num_gen3(IBAN_length - 12);
-            var PL_IBAN = calcChecksum(ISO, PL_numeric_part);
-            return PL_IBAN;
+    case "Poland":
+      var PL_numeric_part = "10902402" + num_gen3(IBAN_length - 12);
+      var PL_IBAN = calcChecksum(ISO, PL_numeric_part);
+      return PL_IBAN;
 
-        case "Austria":
-            var AU_numeric_part = _.sample(Austria_sort) + num_gen3(IBAN_length - 9);
-            var AU_IBAN = calcChecksum(ISO, AU_numeric_part);
-            return AU_IBAN;
-        // 54000
-        case "Croatia":
-            var CRT_numeric_part = _.sample(Croatia_sort) + num_gen3(IBAN_length - 11);
-            var CRT_IBAN = calcChecksum(ISO, CRT_numeric_part);
-            return CRT_IBAN;
+    case "Austria":
+      var AU_numeric_part = _.sample(Austria_sort) + num_gen3(IBAN_length - 9);
+      var AU_IBAN = calcChecksum(ISO, AU_numeric_part);
+      return AU_IBAN;
+    // 54000
+    case "Croatia":
+      var CRT_numeric_part = _.sample(Croatia_sort) + num_gen3(IBAN_length - 11);
+      var CRT_IBAN = calcChecksum(ISO, CRT_numeric_part);
+      return CRT_IBAN;
 
-        case "Kosovo":
-            var KV_numeric_part = "11" + num_gen3(IBAN_length - 6);
-            var KV_IBAN = calcChecksum(ISO, KV_numeric_part);
-            return KV_IBAN;
+    case "Kosovo":
+      var KV_numeric_part = "11" + num_gen3(IBAN_length - 6);
+      var KV_IBAN = calcChecksum(ISO, KV_numeric_part);
+      return KV_IBAN;
 
-        case "San_Marino":
-            var SM_numeric_part = "0322509800" + num_gen3(IBAN_length - 14);
-            var interIBAN = calcChecksum(ISO, SM_numeric_part);
-            return interIBAN;
-        // 0322509800
-        case "Hungary":
-            var HG_numeric_part = _.sample(Hungray_sort) + num_gen3(IBAN_length - 12);
-            var HG_IBAN = calcChecksum(ISO, HG_numeric_part);
-            return HG_IBAN;
+    case "San_Marino":
+      var SM_numeric_part = "0322509800" + num_gen3(IBAN_length - 14);
+      var interIBAN = calcChecksum(ISO, SM_numeric_part);
+      return interIBAN;
+    // 0322509800
+    case "Hungary":
+      var HG_numeric_part = _.sample(Hungray_sort) + num_gen3(IBAN_length - 12);
+      var HG_IBAN = calcChecksum(ISO, HG_numeric_part);
+      return HG_IBAN;
 
-        case "UAE":
-            var UA_numeric_part = _.sample(UAE_sort) + num_gen3(IBAN_length - 7);
-            var UA_IBAN = calcChecksum(ISO, UA_numeric_part);
-            return UA_IBAN;
+    case "UAE":
+      var UA_numeric_part = _.sample(UAE_sort) + num_gen3(IBAN_length - 7);
+      var UA_IBAN = calcChecksum(ISO, UA_numeric_part);
+      return UA_IBAN;
 
-        case "Bulgaria":
-            var BG_numeric_part = _.sample(Bulgaria_sort) + num_gen3(IBAN_length - 12);
-            var BG_IBAN = calcChecksum(ISO, BG_numeric_part);
-            return BG_IBAN;
+    case "Bulgaria":
+      var BG_numeric_part = _.sample(Bulgaria_sort) + num_gen3(IBAN_length - 12);
+      var BG_IBAN = calcChecksum(ISO, BG_numeric_part);
+      return BG_IBAN;
 
-        case "Spain":
-            var SP_randomPart = spanishCheck();
-            var SP_IBAN = calcChecksum(ISO, SP_randomPart);
-            return SP_IBAN;
+    case "Spain":
+      var SP_randomPart = spanishCheck();
+      var SP_IBAN = calcChecksum(ISO, SP_randomPart);
+      return SP_IBAN;
 
-        case "Turkey":
-            var TR_numeric_part = "00062" + num_gen3(IBAN_length - 9);
-            var TR_IBAN = calcChecksum(ISO, TR_numeric_part);
-            return TR_IBAN;
+    case "Turkey":
+      var TR_numeric_part = "00062" + num_gen3(IBAN_length - 9);
+      var TR_IBAN = calcChecksum(ISO, TR_numeric_part);
+      return TR_IBAN;
 
-        case "Norway":
-            var NR_numeric_part = num_gen3(IBAN_length - 5);
-            var chek = norwayCheck(numeric_part);
-            while (chek == 10) {
-                NR_numeric_part = num_gen3(IBAN_length - 5);
-                chek = norwayCheck(numeric_part);
-            }
-            var NR_randomPart = NR_numeric_part + chek;
-            var NR_IBAN = calcChecksum(ISO, NR_randomPart);
-            return NR_IBAN;
+    case "Norway":
+      var NR_numeric_part = num_gen3(IBAN_length - 5);
+      var chek = norwayCheck(numeric_part);
+      while (chek == 10) {
+        NR_numeric_part = num_gen3(IBAN_length - 5);
+        chek = norwayCheck(numeric_part);
+      }
+      var NR_randomPart = NR_numeric_part + chek;
+      var NR_IBAN = calcChecksum(ISO, NR_randomPart);
+      return NR_IBAN;
 
-        case "Monaco":
-            var MN_numeric_part = Number(_.sample(Monaco_sort));
-            var y = _.sample(Monaco_sort1)
-            var z = num_gen3(10) + randomChar(1);
-            var x = ribCheck(MN_numeric_part, y, z);
-            if (x < 10) {
-                x = "0" + x;
-            }
-            var MN_randomPart = MN_numeric_part + y + z + x;
-            var MN_IBAN = calcChecksum(ISO, MN_randomPart);
-            return MN_IBAN;
+    case "Monaco":
+      var MN_numeric_part = Number(_.sample(Monaco_sort));
+      var y = _.sample(Monaco_sort1)
+      var z = num_gen3(10) + randomChar(1);
+      var x = ribCheck(MN_numeric_part, y, z);
+      if (x < 10) {
+        x = "0" + x;
+      }
+      var MN_randomPart = MN_numeric_part + y + z + x;
+      var MN_IBAN = calcChecksum(ISO, MN_randomPart);
+      return MN_IBAN;
 
-        case "France":
-            var FR_numeric_part = Number(_.sample(Monaco_sort));
-            var y = _.sample(Monaco_sort1)
-            var z = num_gen3(10) + randomChar(1);
-            var x = ribCheck(FR_numeric_part, y, z);
-            if (x < 10) {
-                x = "0" + x;
-            }
-            var FR_randomPart = FR_numeric_part + y + z + x;
-            var FR_IBAN = calcChecksum(ISO, FR_randomPart);
-            return FR_IBAN;
+    case "France":
+      var FR_numeric_part = Number(_.sample(Monaco_sort));
+      var y = _.sample(Monaco_sort1)
+      var z = num_gen3(10) + randomChar(1);
+      var x = ribCheck(FR_numeric_part, y, z);
+      if (x < 10) {
+        x = "0" + x;
+      }
+      var FR_randomPart = FR_numeric_part + y + z + x;
+      var FR_IBAN = calcChecksum(ISO, FR_randomPart);
+      return FR_IBAN;
 
-        case "Romania":
-            var RM_numeric_part = num_gen3(IBAN_length - 8);
-            var RM_randomPart = _.sample(Romania_sort) + RM_numeric_part;
-            var RM_IBAN = calcChecksum(ISO, RM_randomPart);
-            return RM_IBAN;
+    case "Romania":
+      var RM_numeric_part = num_gen3(IBAN_length - 8);
+      var RM_randomPart = _.sample(Romania_sort) + RM_numeric_part;
+      var RM_IBAN = calcChecksum(ISO, RM_randomPart);
+      return RM_IBAN;
 
-        case "Costa_rica":
-            var CR_numeric_part = num_gen3(IBAN_length - 5)
-            var nb = "0" + CR_numeric_part;
-            var CR_IBAN = calcChecksum(ISO, nb);
-            return CR_IBAN;
+    case "Costa_rica":
+      var CR_numeric_part = num_gen3(IBAN_length - 5)
+      var nb = "0" + CR_numeric_part;
+      var CR_IBAN = calcChecksum(ISO, nb);
+      return CR_IBAN;
 
-        case "Portugal":
-            var PT_numeric_part = _.sample(Portugal_sort) + num_gen3(IBAN_length - 14);
-            var PT_randomPart = PT_numeric_part + mod97_10(PT_numeric_part);
-            var PT_IBAN = calcChecksum(ISO, PT_randomPart);
-            return PT_IBAN;
+    case "Portugal":
+      var PT_numeric_part = _.sample(Portugal_sort) + num_gen3(IBAN_length - 14);
+      var PT_randomPart = PT_numeric_part + mod97_10(PT_numeric_part);
+      var PT_IBAN = calcChecksum(ISO, PT_randomPart);
+      return PT_IBAN;
 
-        default:
-            var ISO = iso_abbreviations[country_input];
-            var IBAN_length = country_length[country_input];
-            var middle_characters = character_countries[country_input];
-            var numeric_suffix = Number(IBAN_length - 4 - middle_characters);
-            var numeric_part = num_gen3(numeric_suffix);
-            var BIC = char_gen(middle_characters);
-            var randomPart = BIC + numeric_part + "";
-            var interIBAN = calcChecksum(ISO, randomPart);
-            return interIBAN;
-    }
+    default:
+      var ISO = iso_abbreviations[country_input];
+      var IBAN_length = country_length[country_input];
+      var middle_characters = character_countries[country_input];
+      var numeric_suffix = Number(IBAN_length - 4 - middle_characters);
+      var numeric_part = num_gen3(numeric_suffix);
+      var BIC = char_gen(middle_characters);
+      var randomPart = BIC + numeric_part + "";
+      var interIBAN = calcChecksum(ISO, randomPart);
+      return interIBAN;
+  }
 }

@@ -1,0 +1,12 @@
+{
+  "key": "",
+  "sep": "[,;]",
+  "range": "2n,3",
+  "inverse": "off",
+  "ic": "on",
+  "unique": "on",
+  "comma": ".",
+  "itxt": "booker12,901.2;Rachel Booker\nsmith79;004081.8,Jamie Smith\ngrey07,2070,Laura Grey\njenkins81;4081.3;Zog Jenkins\njenkins46,9346,Mary Jenkins\nsmith79;04081.32,Jamie Smith\ngrey07,2070,Laura Gray",
+  "_tool": "sort",
+  "_otxt": "booker12,901.2;Rachel Booker\ngrey07,2070,Laura Gray\ngrey07,2070,Laura Grey\njenkins81;4081.3;Zog Jenkins\nsmith79;04081.32,Jamie Smith\nsmith79;004081.8,Jamie Smith\njenkins46,9346,Mary Jenkins"
+}

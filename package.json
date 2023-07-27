@@ -1,4 +1,7 @@
 {
+  "scripts": {
+    "test": "node tests/examples.js"
+  },
   "dependencies": {
     "chromedriver": "^114.0.3",
     "geckodriver": "^4.0.5",
