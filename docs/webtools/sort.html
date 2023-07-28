@@ -17,7 +17,7 @@
       <option value=".">American (.)</option>
     </select>
   </label><br>
-  <label><input type="checkbox" id="inverse">Inverse order<br></label>
+  <label><input type="checkbox" id="inv">Inverse order<br></label>
   <label><input type="checkbox" id="ic">Ignore case<br></label>
   <label><input type="checkbox" id="unique">Unique lines only</label>
 </body>
@@ -26,11 +26,9 @@
     let lines = [], re, key = gV("key"), sep = gV("sep"), range = gV("range"), comma = gV("comma"), reopt = gC("ic") ? "igd" : "gd"
 
     // basic input value checks
-    if (key != "" && sep != "") { sErr(["key", "sep"]); return }
-    sOK(["key", "sep"])
-    if (range != "" && sep == "" && key == "") { key = ".*" }
+    if (key != "" && sep != "") { sErr(["key", "sep"]); return }; sOK(["key", "sep"]) // can't have key and sep regexp at same time
+    if (range != "" && sep == "" && key == "") { key = "." } // no key nor sep but a range is specified ? -> each character is a key
     try { re = new RegExp(key != "" ? key : sep, reopt) } catch (e) { sErr(key != "" ? "key" : "sep", e); return }
-
 
     // determine key values for each line -> lines array
     let inlines = gV("itxt").split('\n')
@@ -40,16 +38,16 @@
       if (key != "") { allkeys = l.match(re) || [] }
       if (sep != "") { for (var s = 0; m = re.exec(l); allkeys.push(l.slice(s, m.indices[0][0])), s = m.indices[0][1]); allkeys.push(l.slice(s)) }
 
-      range = range.replace(/[^0-9,n-]/g, '') // remove invalid characters from range
-      let sortkey = "" // this "key" will be used to sort the lines on
+      range = range.replace(/[^0-9,n-]/g, '') // remove invalid characters from range input
+      let sortkey = "" // this "key" will be used to sort the lines on (it's actually just a string composed of all keys seperated by & null char)
       if (range == "") { // no range -> take all keys from 1 to end or full line value if no keys (i.e. no key nor sep regex specified)
-        (key == "" && sep == "") ? sortkey = l : sortkey = allkeys.join('')
-      } else {
+        (key == "" && sep == "") ? sortkey = l : sortkey = allkeys.join("\0")
+      } else { // determine start and end key nbrs for each key sort range (seperated by dashes '-') and determine sort options : n = numeric
         let start, end
         range.split(",").forEach(r => { // for each keyrange
-          let dash = r.indexOf("-"), num = (r.slice(-1) == "n")
+          let dash = r.indexOf("-"), num = (r.slice(-1) == "n") // '-' position and numeric sort flag
           if (dash == -1) { end = start = parseInt(r.slice(0, num ? -1 : 99999)) } // no range just 1 key -> start = end
-          else { start = parseInt(r.slice(0, dash)); end = parseInt(r.slice(dash + 1, num ? -1 : 99999)) } // range start-end
+          else { start = parseInt(r.slice(0, dash)); end = parseInt(r.slice(dash + 1, num ? -1 : 99999)) } // range of keys from start to end
           for (let k = start; k <= end; k++) { // for each key in the range - add keyvalue to sortkey
             let key = allkeys[k - 1] ?? ""
             if (num) { // numerify the field -> remove all non numeric stuff (except "comma") - then add zeroes to start and end 
@@ -57,21 +55,18 @@
               c = key.indexOf(comma)
               prefix = '0'.repeat(Math.max(0, 30 - ((c == -1) ? key.length : c))) // 30 digits before "comma"
               postfix = c == -1 ? comma + '0'.repeat(30) : '0'.repeat(Math.max(0, 31 - key.length + c)) // 30 digits after "comma"
-              key = prefix + key + postfix // align comma for all numbers so we can compare as a text string // Todo: correct numeric sort - now we use 30 digits before comma and 30 after comma and treat as text - should be better handled
+              key = prefix + key + postfix // align comma for all numbers so we can compare as a text string 
+              // Todo: correct numeric sort "hack" - now we use 30 digits before comma and 30 after comma and treat as text - should ideally be better handled
             }
             sortkey += key + "\0"
-          }
-        })
-      }
+          } // end for each key in range
+        }) // end for each keyrange
+      } // sortkey filled in
       lines.push({ l: l, k: gC("ic") ? sortkey.toUpperCase() : sortkey })
     })
 
     // sort lines based on key k in lines array
-    gE("otxt").value = lines.sort(function (a, b) {
-      let x = a.k, y = b.k
-      if (gC("inverse")) { [x, y] = [y, x] }
-      return ((x < y) ? -1 : ((x > y) ? 1 : 0))
-    }).map(l => l.l).join("\n")
+    gE("otxt").value = lines.sort((a, b) => { let x = a.k, y = b.k; if (gC("inv")) { [x, y] = [y, x] }; return ((x < y) ? -1 : ((x > y) ? 1 : 0)) }).map(l => l.l).join("\n")
   }
   doSetup(run, [10, 100], [10, 100])
 </script>

@@ -1,5 +1,5 @@
 function gE(id) { return document.getElementById(id) } // get an Element by ID
-function gV(id) { return gE(id).value } // get an Element value by ID
+function gV(id) { return gE(id).type !== "checkbox" ? gE(id).value : gC(id) ? "on" : "off" } // get an Element value by ID - on/off for checkbox
 function gC(id) { return gE(id).checked } // get checked status of a checkbox by ID
 function fromCP() { navigator.clipboard.readText().then((t) => { gE("itxt").value = t; window.run() }); } // read clipboard and use kit for itxt textarea content
 function toCP() { navigator.clipboard.writeText(gV("otxt")) } // copy otxt textarea content to clipboard
@@ -14,7 +14,7 @@ function ranNum(len) { let n = ranTxt(len, '0123456789'); return len < 16 ? pars
 function createEl(typ, attrs) { let el = document.createElement(typ); Object.assign(el, attrs); return el } // create a html document element
 function addChild(typ, attrs, id) { gE(id).appendChild(createEl(typ, attrs)) } // add a child element to an existing html document element
 function addArEl(pid, i, txt, siz) { let id = pid + i; addChild("div", { id: "div" + id, innerHTML: '<label>' + txt + i + ':&nbsp;<input type="text" id="' + id + '" size=' + siz + ' oninput="run()"></label><br>' }, pid + "s") } // add html element to array
-function intxt(i) { return createEl("div", { innerHTML: "<h2>Input <button onclick='fromCP()'>Get From Clipboard</button><button onclick='gE(\"" + "infile" + "\").click()'>Upload File</button><input type='file' style='display:none;' id='infile' onchange='doUL()'/></h2><textarea id='itxt' rows='" + i[0] + "' cols='" + i[1] + "'></textarea>" }) }
+function intxt(i) { return createEl("div", { innerHTML: "<h2>Input <button onclick='fromCP()'>Get From Clipboard</button><button onclick='gE(\"" + "infile" + "\").click()'>Upload File</button><input type='file' style='display:none;' id='infile' onchange='doUL()'/> - <button onclick='goURL()'>make parameter URL</button></h2><textarea id='itxt' rows='" + i[0] + "' cols='" + i[1] + "'></textarea>" }) }
 function outxt(o) { return createEl("div", { innerHTML: "<h2>Output <button onclick='toCP()'>Copy To Clipboard</button><button onclick='doDL()'>Download</button></h2><textarea id='otxt' rows='" + o[0] + "' cols='" + o[1] + "' readonly></textarea>" }) }
 function doUL() { let r = new FileReader(); r.onload = e => { gE('itxt').value = e.target.result; window.run() }; r.readAsText(gE("infile").files[0]) } // upload file as itxt
 function doDL() { createEl("a", { href: "data:x-application/text," + escape(gV("otxt")), download: 'output.txt' }).click() } // download otxt as file
@@ -34,12 +34,14 @@ async function doSetup(f, out, inp, ar = []) { // set up the webpage
   const p = new URLSearchParams(document.location.search) // capture URL parameters and apply them to the relevant elements
   if (p.has("paramfile")) { try { const js = await (await fetch(p.get("paramfile"))).json(); Object.keys(js).forEach(k => p.append(k, js[k])) } catch (e) { } } // get parameters from a parameter file in JSON format 
   ar.forEach(a => { let i = 1; do { addArEl(a.i, i, a.t, a.s) } while (p.has(a.i + (i++))); a.n = --i; }); // handle arrayed input texts - a is like { i: "xp", t: "XPath ", s: "40" }
-  let mngArs = mngAr(ar); window.run = () => { mngArs(); f(); }
+  let mngArs = mngAr(ar), ids = []; window.run = () => { mngArs(); f(); }
   ["input[type = 'text']", "#itxt", "input[type='checkbox']", "select"].forEach(q => { // set input field value to parameter value
     document.querySelectorAll(q).forEach(e => {
       if (p.has(e.id)) { e.type === 'checkbox' ? e.checked = (p.get(e.id) == "on") : e.value = p.get(e.id) }
       gE(e.id).addEventListener("input", f) // call run() when content changes
+      if (e.id != "itxt") ids.push(e.id)
     })
   })
+  window.goURL = () => { let p = {}, url = ""; ids.forEach(id => p[id] = gV(id)); url = new URLSearchParams(p).toString(); window.open(window.location.pathname + '?' + url) }
   window.run()
 }
