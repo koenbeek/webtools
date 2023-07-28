@@ -14,7 +14,7 @@ function ranNum(len) { let n = ranTxt(len, '0123456789'); return len < 16 ? pars
 function createEl(typ, attrs) { let el = document.createElement(typ); Object.assign(el, attrs); return el } // create a html document element
 function addChild(typ, attrs, id) { gE(id).appendChild(createEl(typ, attrs)) } // add a child element to an existing html document element
 function addArEl(pid, i, txt, siz) { let id = pid + i; addChild("div", { id: "div" + id, innerHTML: '<label>' + txt + i + ':&nbsp;<input type="text" id="' + id + '" size=' + siz + ' oninput="run()"></label><br>' }, pid + "s") } // add html element to array
-function intxt(i) { return createEl("div", { innerHTML: "<h2>Input <button onclick='fromCP()'>Get From Clipboard</button><button onclick='gE(\"" + "infile" + "\").click()'>Upload File</button><input type='file' style='display:none;' id='infile' onchange='doUL()'/> - <button onclick='goURL()'>make parameter URL</button></h2><textarea id='itxt' rows='" + i[0] + "' cols='" + i[1] + "'></textarea>" }) }
+function intxt(i) { return createEl("div", { innerHTML: "<h2>Input <button onclick='fromCP()'>Get From Clipboard</button><button onclick='gE(\"" + "infile" + "\").click()'>Upload File</button><input type='file' style='display:none;' id='infile' onchange='doUL()'/></h2><textarea id='itxt' rows='" + i[0] + "' cols='" + i[1] + "'></textarea>" }) }
 function outxt(o) { return createEl("div", { innerHTML: "<h2>Output <button onclick='toCP()'>Copy To Clipboard</button><button onclick='doDL()'>Download</button></h2><textarea id='otxt' rows='" + o[0] + "' cols='" + o[1] + "' readonly></textarea>" }) }
 function doUL() { let r = new FileReader(); r.onload = e => { gE('itxt').value = e.target.result; window.run() }; r.readAsText(gE("infile").files[0]) } // upload file as itxt
 function doDL() { createEl("a", { href: "data:x-application/text," + escape(gV("otxt")), download: 'output.txt' }).click() } // download otxt as file
@@ -42,6 +42,7 @@ async function doSetup(f, out, inp, ar = []) { // set up the webpage
       if (e.id != "itxt") ids.push(e.id)
     })
   })
-  window.goURL = () => { let p = {}, url = ""; ids.forEach(id => p[id] = gV(id)); url = new URLSearchParams(p).toString(); window.open(window.location.pathname + '?' + url) }
+  let goURL = () => { let p = {}, url = ""; ids.forEach(id => p[id] = gV(id)); url = new URLSearchParams(p).toString(); window.open(window.location.pathname + '?' + url) }
+  document.body.appendChild(createEl("button", { onclick: goURL, innerHTML: "make parameter URL" }))
   window.run()
 }
