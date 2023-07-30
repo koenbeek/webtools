@@ -18,25 +18,25 @@ function intxt(i) { return createEl("div", { innerHTML: "<h2>Input <button oncli
 function outxt(o) { return createEl("div", { innerHTML: "<h2>Output <button onclick='toCP()'>Copy To Clipboard</button><button onclick='doDL()'>Download</button></h2><textarea id='otxt' rows='" + o[0] + "' cols='" + o[1] + "' readonly></textarea>" }) }
 function doUL() { let r = new FileReader(); r.onload = e => { gE('itxt').value = e.target.result; window.run() }; r.readAsText(gE("infile").files[0]) } // upload file as itxt
 function doDL() { createEl("a", { href: "data:x-application/text," + escape(gV("otxt")), download: 'output.txt' }).click() } // download otxt as file
-function InEls(f) { ["input[type = 'text']", "input[type='checkbox']", "select"].forEach(q => { document.querySelectorAll(q).forEach(f) }) } // for each input element do f
-function mngAr(ars) { // manage nbr of elements in input arrays
+function InEls(f) { ["input[type = 'text']", "#itxt", "input[type='checkbox']", "select"].forEach(q => { document.querySelectorAll(q).forEach(f) }) } // for each input element do f
+function mngAr(ars) { // manage nbr of elements in dynamic input arrays
   return () => { // return closure
-    ars.forEach(a => { // for each array : leave at most 1 empty array element at end - a is like { i: "xp", t: "XPath ", s: "40", n: 5 } - A.n is the current nbr of input fields active
-      while ((a.n > 1) && ((gV(a.i + a.n) == "") && (gV(a.i + (a.n - 1)) == ""))) { gE(a.i + "s").removeChild(gE("div" + a.i + a.n--)) }
+    ars.forEach(a => { // for each array : a is like { i: "xp", t: "XPath ", s: "40", n: 5 } - A.n is the current nbr of input fields active
+      while ((a.n > 1) && ((gV(a.i + a.n) == "") && (gV(a.i + (a.n - 1)) == ""))) { gE(a.i + "s").removeChild(gE("div" + a.i + a.n--)) } // leave at most 1 empty array element at end
       if (gV(a.i + a.n) != '') { addArEl(a.i, ++a.n, a.t, a.s) } // add element at end if last is not empty
     })
   }
 }
 async function doSetup(f, out, inp, ar = []) { // set up the webpage
-  Object.assign(window, { run: f, toCP: toCP, fromCP: fromCP, doDL: doDL, doUL: doUL, gE: gE }) // make sure document sees the functions
+  Object.assign(window, { toCP: toCP, fromCP: fromCP, doDL: doDL, doUL: doUL, gE: gE }) // make sure document sees the functions
   if (inp) { document.body.appendChild(intxt(inp)) } // create the itxt text area and related heading and buttons
   if (out) { document.body.appendChild(outxt(out)) } // create the otxt text area and related heading and buttons
   const p = new URLSearchParams(document.location.search) // capture URL parameters
   if (p.has("paramfile")) { try { const js = await (await fetch(p.get("paramfile"))).json(); Object.keys(js).forEach(k => p.append(k, js[k])) } catch (e) { } } // get parameters from a parameter file in JSON format 
   ar.forEach(a => { let i = 1; do { addArEl(a.i, i, a.t, a.s) } while (p.has(a.i + (i++))); a.n = --i; }); // handle arrayed input texts - a is like { i: "xp", t: "XPath ", s: "40" }
-  let mngArs = mngAr(ar); window.run = () => { mngArs(); f() }
+  let mngArs = mngAr(ar); window.run = () => { mngArs(); f() } // add dynamic array management in run function
   InEls((e => { if (p.has(e.id)) { e.type === 'checkbox' ? e.checked = (p.get(e.id) == "on") : e.value = p.get(e.id) }; gE(e.id).addEventListener("input", f) })) // for each input : set value from parameter and set onclick to call run() when content changes 
-  let goURL = () => { let p = {}; InEls(e => p[e.id] = gV(e.id)); window.open(window.location.pathname + '?' + new URLSearchParams(p).toString()) } // fucntionused to make URL with params = current params
+  let goURL = () => { let p = {}; InEls(e => { if (e.id != "itxt") p[e.id] = gV(e.id) }); window.open(window.location.pathname + '?' + new URLSearchParams(p).toString()) } // fucntionused to make URL with params = current params
   document.body.appendChild(createEl("button", { onclick: goURL, innerHTML: "make parameter URL link" })) // button for param URL at end of body
   window.run() // run the page's function once at the start
 }
