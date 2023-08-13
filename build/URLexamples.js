@@ -4,7 +4,7 @@ const path = require('path')
 const baseFilePath = path.join(__dirname, '..', 'docs', 'Examples.md')
 const newFilePath = path.join(__dirname, '..', 'docs', 'webtools', '_Examples.html')
 const dirPath = path.join(__dirname, '..', 'docs', 'webtools', 'examples')
-let urlRE = new RegExp('https:\/\/koenbeek\.github\.io\/webtools\/([^.]+)\.html\\?paramfile=examples\/([^.]+.json)', 'g')
+let urlRE = new RegExp('https:\/\/koenbeek\\.github\\.io\/webtools\/([^.]+)\\.html\\?paramfile=examples\/([^.]+.json)', 'g')
 let introRE = new RegExp('^# [\\s\\S]*?^##', 'gm')
 var introTxt = `# Examples
 
@@ -26,6 +26,7 @@ fs.readFile(baseFilePath, 'utf8', function (err, data) {
 
   let result = data.replace(urlRE, replaceF)
   result = result.replace(introRE, introTxt)
+  result = result.replace("https:\/\/koenbeek.github.io\/webtools", ".")
 
   let converter = new showdown.Converter()
   let html = converter.makeHtml(result)
