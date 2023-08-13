@@ -3,7 +3,7 @@ function gV(id) { return gE(id).type !== "checkbox" ? gE(id).value : gC(id) ? "o
 function gC(id) { return gE(id).checked } // get checked status of a checkbox by ID
 function fromCP() { navigator.clipboard.readText().then((t) => { gE("itxt").value = t; window.run() }); } // read clipboard and use kit for itxt textarea content
 function toCP() { navigator.clipboard.writeText(gV("otxt")) } // copy otxt textarea content to clipboard
-function setErr(id, e) { gE(id).style.borderColor = "red"; gE(id).style.color = "red"; if (e) gE("otxt").value = e.name + e.message } // set an element as in error
+function setErr(id, e) { gE(id).style.borderColor = "red"; gE(id).style.color = "red"; if (e) gE("otxt").value = e.name + ': ' + e.message } // set an element as in error
 function setOK(id) { gE(id).style.borderColor = "inherit"; gE(id).style.color = "inherit"; } // set an element as OK
 function sErr(ids, e) { if (Array.isArray(ids)) { ids.forEach(id => setErr(id, e)) } else { setErr(ids, e) } } // set elements as in error
 function sOK(ids) { if (Array.isArray(ids)) { ids.forEach(id => setOK(id)) } else { setOK(ids) } } // set elements as OK
@@ -36,7 +36,7 @@ async function doSetup(f, out, inp, ar = []) { // set up the webpage
   ar.forEach(a => { let i = 1; do { addArEl(a.i, i, a.t, a.s) } while (p.has(a.i + (i++))); a.n = --i; }); // handle arrayed input texts - a is like { i: "xp", t: "XPath ", s: "40" }
   let mngArs = mngAr(ar); window.run = () => { mngArs(); f() } // add dynamic array management in run function
   InEls((e => { if (p.has(e.id)) { e.type === 'checkbox' ? e.checked = (p.get(e.id) == "on") : e.value = p.get(e.id) }; gE(e.id).addEventListener("input", f) })) // for each input : set value from parameter and set onclick to call run() when content changes 
-  let goURL = () => { let p = {}; InEls(e => { if (e.id != "itxt") p[e.id] = gV(e.id) }); window.open(window.location.pathname + '?' + new URLSearchParams(p).toString()) } // fucntionused to make URL with params = current params
+  let goURL = () => { let p = {}; InEls(e => { if (e.id != "itxt") p[e.id] = gV(e.id) }); window.open(window.location.pathname + '?' + new URLSearchParams(p).toString()) } // function used to make URL with params = current params
   document.body.appendChild(createEl("button", { onclick: goURL, innerHTML: "make parameter URL link" })) // button for param URL at end of body
   window.run() // run the page's function once at the start
 }

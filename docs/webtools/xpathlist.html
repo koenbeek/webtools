@@ -14,8 +14,8 @@
 <script>
   function run() {
     sOK(["xp", "itxt"])
-    let elt = parseXML(gV("itxt"))
-    if (elt.getElementsByTagName('parsererror').length > 0) { sErr("itxt", Error((elt.getElementsByTagName('parsererror')[0].getElementsByTagName('div')[0].innerHTML))); return }
+    let elt = parseXML(gV("itxt")) // parse XML
+    if (XMLerr(elt)) return // stop if parse error
     try { gE("otxt").value = getElByXPath(gV("xp"), elt).join("\n") } catch (e) { sErr("xp", e) }
   }
   doSetup(run, [10, 100], [10, 100])

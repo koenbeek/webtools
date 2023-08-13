@@ -8,6 +8,5 @@ function getElByXPath(xpath, elt) { // return elements in array matching xpath e
   }
   return r;
 }
-function parseXML(xml) { // Todo: handle namespaces correctly iso just removing it
-  return (new DOMParser()).parseFromString(xml.replace(/xmlns="[^"]+"/g, ""), "text/xml")
-}
+function parseXML(xml) { return (new DOMParser()).parseFromString(xml.replace(/xmlns="[^"]+"/g, ""), "text/xml") } // Todo: handle namespaces correctly iso just removing it
+function XMLerr(e) { if (e.getElementsByTagName('parsererror').length > 0) { sErr("itxt", Error((e.getElementsByTagName('parsererror')[0].getElementsByTagName('div')[0].innerHTML))); return true } else { return false } }

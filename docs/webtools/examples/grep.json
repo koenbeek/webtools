@@ -1,5 +1,5 @@
 {
-  "pat": "(?<=\\. )[a-zA-Z]+|^[a-zA-Z]+",
+  "pat": "^[a-zA-Z]+",
   "inv": "off",
   "ic": "off",
   "match": "on",

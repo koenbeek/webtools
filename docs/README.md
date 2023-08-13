@@ -23,7 +23,7 @@
 
 ## Example Uses
 
-see [how some of these tools can be used in practice](Examples.md)
+see how some of these tools can be used in practice : [with paramfiles](Examples.md) or [with URL parameters](webtools/_Examples.html)
 
 ## Styling
 

@@ -15,23 +15,17 @@
 <script>
   function run() {
     let elt = parseXML(gV("itxt")), lines = []; const lp = gV("lp")
-    if (elt.getElementsByTagName('parsererror').length > 0) { sErr("itxt", Error((elt.getElementsByTagName('parsererror')[0].getElementsByTagName('div')[0].innerHTML))); return }
+    if (XMLerr(elt)) return
     sOK(["itxt"]);
     for (let l = 1, found = true, v = []; found; l++) { // add lines while predicat matches are found in XML
       found = false
-      for (let i = 1; gE("xp" + i) && gV("xp" + i); i++) { // try each XPath match
-        let id = "xp" + i, xp = gV(id).replace(/\[i\]/, "[" + l + "]"), pred = gV(id) != xp
-        sOK(id)
-        try {
-          let els = getElByXPath(xp, elt)
-          v[i] = els[0] || ""
-          if (pred && els.length > 0) found = true;
-        } catch (e) { sErr(id, e) }
+      for (let i = 1; gE("xp" + i) && gV("xp" + i); i++) { // try each XPath match -> fill in v array
+        let id = "xp" + i, xp = gV(id).replace(/\[i\]/, "[" + l + "]"), pred = gV(id) != xp; sOK(id)
+        try { let els = getElByXPath(xp, elt); v[i] = els[0] || ""; if (pred && els.length > 0) found = true; } catch (e) { sErr(id, e) }
       }
       let line = lp, xlen = 0, repl, m, re = /\$\$|\${[0-9]+}/gd
-      while (m = re.exec(lp)) { // find $$ and $n 
-        repl = m[0][1] == "$" ? "$" : v[m[0].slice(2, -1)]
-        if (repl == null) continue
+      while (m = re.exec(lp)) { // find $$ and $n and replace it with $ or nth Xpath match
+        if ((repl = m[0][1] == "$" ? "$" : v[m[0].slice(2, -1)]) == null) continue
         line = line.slice(0, m.index + xlen) + repl + line.slice(m.index + xlen + m[0].length)
         xlen += repl.length - m[0].length
       }
