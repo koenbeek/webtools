@@ -9,3 +9,7 @@ These webtools are hosted by github at this address: <https://koenbeek.github.io
 Recommended/Tested browser is chrome
 
 Check out the [docs README](docs/README.md)
+
+Tests can be executed with "`npm t`"
+
+Build can be executed with "`npm run build`"

@@ -28,3 +28,7 @@ see how some of these tools can be used in practice : [with paramfiles](Examples
 ## Styling
 
 These webtools have no styling - I'm not a UX guy and can't be bothered - if you have a css to use, you're welcome to [create a github issue](https://github.com/koenbeek/koenbeek.github.io/issues/new) and I'll include it in the repo
+
+## Github Code and Webhosting
+
+github hosts these pages from [here](https://github.com/koenbeek/koenbeek.github.io/tree/main/docs) - main code of the site can be found [in the webtools folder](https://github.com/koenbeek/koenbeek.github.io/tree/main/docs/webtools)
