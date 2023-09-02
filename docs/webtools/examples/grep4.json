@@ -1,9 +1,9 @@
 {
-  "pat": "[a-zA-Z]{7}",
-  "inv": "off",
-  "ic": "off",
-  "match": "off",
-  "itxt": "If he were living, I would try him yet.\nLend me an arm; the rest have worn me out\nWith several applications; nature and sickness\nDebate it at their leisure. Welcome, count;\nMy son’s no dearer.",
-  "_tool": "grep",
-  "_otxt": "With several applications; nature and sickness\nDebate it at their leisure. Welcome, count;"
+  "tool1": "grep",
+  "t1_pat": "[a-zA-Z]{7}",
+  "t1_inv": "off",
+  "t1_ic": "off",
+  "t1_match": "off",
+  "txt0": "If he were living, I would try him yet.\nLend me an arm; the rest have worn me out\nWith several applications; nature and sickness\nDebate it at their leisure. Welcome, count;\nMy son’s no dearer.",
+  "_txt1": "With several applications; nature and sickness\nDebate it at their leisure. Welcome, count;"
 }

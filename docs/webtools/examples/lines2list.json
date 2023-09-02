@@ -1,10 +1,10 @@
 {
-  "sep": ",",
-  "quote": "'",
-  "lead": "on",
-  "trail": "on",
-  "empty": "on",
-  "itxt": "1\n 2\n 3 \n\n4 ",
-  "_tool": "lines2list",
-  "_otxt": "'1','2','3','4'"
+  "tool1": "lines2list",
+  "t1_sep": ",",
+  "t1_quote": "'",
+  "t1_lead": "on",
+  "t1_trail": "on",
+  "t1_empty": "on",
+  "txt0": "1\n 2\n 3 \n\n4 ",
+  "_txt1": "'1','2','3','4'"
 }
