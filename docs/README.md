@@ -7,7 +7,7 @@
 
 ## Regular expression text tools
 
-- [Grep](https://koenbeek.github.io/webtools/tools.html?tool1=tools?tool1=grep) - find lines containing some text pattern
+- [Grep](https://koenbeek.github.io/webtools/tools.html?tool1=grep) - find lines containing some text pattern
 - [List RE Matches](https://koenbeek.github.io/webtools/tools.html?tool1=matchlist) - list certain RegExp matches
 - [REplace](https://koenbeek.github.io/webtools/tools.html?tool1=replace) - replace matched text
 
