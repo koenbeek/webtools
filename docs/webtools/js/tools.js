@@ -81,7 +81,7 @@ tools.set('matchlist', {
   run: (n) => {
     const pf = "t" + n + "_", pat = gV(pf + "match"), s = gV(pf + "sc"); let ms = []
     sOK(pf + "match")
-    if (pat == "") { gE("txt" + (n - 1)).value = ""; return }
+    if (pat == "") { gE("txt" + n).value = ""; return }
     function addm(txt) { let m = txt.match(re); (m != null) ? gC(pf + "glob") ? ms = ms.concat(m) : ms.push(m[0]) : 1 } // helper: add all matches in txt to the matches list
     try { // execute matches on full text or each line depending on scope (sc) setting
       var re = new RegExp(pat, (gC(pf + "ic") ? "i" : "") + (gC(pf + "glob") ? "g" : "") + (s == "M" ? "m" : ""))
@@ -103,7 +103,7 @@ tools.set('matchlist', {
       ]
     },
     { id: 'ic', typ: 'checkbox', val: false, lbl: "Ignore case" },
-    { id: 'glob', typ: 'checkbox', val: true, lbl: "lobal match (more than 1 match possible)" },
+    { id: 'glob', typ: 'checkbox', val: true, lbl: "Global match (more than 1 match possible)" },
   ]
 })
 

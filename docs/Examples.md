@@ -12,7 +12,7 @@ Or you can use the [examples that put all the parameters in the URL](webtools/_E
 - BBAN to IBAN format
     - [For several countries](https://koenbeek.github.io/webtools/tools.html?paramfile=examples/BBAN2IBAN.json)
     - [BE accounts to human IBAN format](https://koenbeek.github.io/webtools/tools.html?paramfile=examples/BBAN2IBAN2.json)
-- [List a random set of IBAN numbers](https://koenbeek.github.io/webtools/tools.html)
+- [List a random set of IBAN numbers](https://koenbeek.github.io/webtools/tools.html?tool1=exampleibans)
 
 
 ## XML files
