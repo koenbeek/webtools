@@ -26,7 +26,7 @@ async function checkResult(params, file) {
       console.log(file, "OK");
     }
   })
-  */
+  */ //Todo: handle other results than txt1 -> could be txt2 or higher
 
   let element = driver.findElement(By.id("txt1"));
   let value = await element.getAttribute("value");
@@ -38,7 +38,6 @@ async function checkResult(params, file) {
   } else {
     console.log(file, "OK");
   }
-
 
   await driver.quit();
 }
