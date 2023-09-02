@@ -1,6 +1,6 @@
 {
-  "xp": "//language[position() > 1]",
-  "itxt": "<languages>\n <language id=\"1\" type=\"JIT\">Javascript</language>\n <language id=\"2\" type=\"interpreted\">Python</language>\n <language id=\"3\" type=\"compiled\">Golang</language>\n</languages>",
-  "_tool": "xpathlist",
-  "_otxt": "<language id=\"2\" type=\"interpreted\">Python</language>\n<language id=\"3\" type=\"compiled\">Golang</language>"
+  "tool1": "xpathlist",
+  "t1_xp": "//language[position() > 1]",
+  "txt0": "<languages>\n <language id=\"1\" type=\"JIT\">Javascript</language>\n <language id=\"2\" type=\"interpreted\">Python</language>\n <language id=\"3\" type=\"compiled\">Golang</language>\n</languages>",
+  "_txt1": "<language id=\"2\" type=\"interpreted\">Python</language>\n<language id=\"3\" type=\"compiled\">Golang</language>"
 }

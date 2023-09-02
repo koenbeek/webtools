@@ -1,10 +1,10 @@
 {
-  "match": "[a-z]+",
-  "list": "$&",
-  "sc": "L",
-  "ic": "on",
-  "glob": "on",
-  "itxt": "Ah, Luciana, did he tempt Thee so?\nMightst thou perceive austerely in his eye\nThat he did plead in earnest? yea or no?\nLook’d he or red or pale, or sad or merrily?\nWhat observation madest thou in this case\nOf his heart’s meteors tilting in his face?",
-  "_tool": "matchlist",
-  "_otxt": "Ah\nLuciana\ndid\nhe\ntempt\nThee\nso\nMightst\nthou\nperceive\nausterely\nin\nhis\neye\nThat\nhe\ndid\nplead\nin\nearnest\nyea\nor\nno\nLook\nd\nhe\nor\nred\nor\npale\nor\nsad\nor\nmerrily\nWhat\nobservation\nmadest\nthou\nin\nthis\ncase\nOf\nhis\nheart\ns\nmeteors\ntilting\nin\nhis\nface"
+  "tool1": "matchlist",
+  "t1_match": "[a-z]+",
+  "t1_list": "$&",
+  "t1_sc": "L",
+  "t1_ic": "on",
+  "t1_glob": "on",
+  "txt0": "Ah, Luciana, did he tempt Thee so?\nMightst thou perceive austerely in his eye\nThat he did plead in earnest? yea or no?\nLook’d he or red or pale, or sad or merrily?\nWhat observation madest thou in this case\nOf his heart’s meteors tilting in his face?",
+  "_txt1": "Ah\nLuciana\ndid\nhe\ntempt\nThee\nso\nMightst\nthou\nperceive\nausterely\nin\nhis\neye\nThat\nhe\ndid\nplead\nin\nearnest\nyea\nor\nno\nLook\nd\nhe\nor\nred\nor\npale\nor\nsad\nor\nmerrily\nWhat\nobservation\nmadest\nthou\nin\nthis\ncase\nOf\nhis\nheart\ns\nmeteors\ntilting\nin\nhis\nface"
 }

@@ -9,4 +9,4 @@ function getElByXPath(xpath, elt) { // return elements in array matching xpath e
   return r;
 }
 function parseXML(xml) { return (new DOMParser()).parseFromString(xml.replace(/xmlns="[^"]+"/g, ""), "text/xml") } // Todo: handle namespaces correctly iso just removing it
-function XMLerr(e) { if (e.getElementsByTagName('parsererror').length > 0) { sErr("itxt", Error((e.getElementsByTagName('parsererror')[0].getElementsByTagName('div')[0].innerHTML))); return true } else { return false } }
+function XMLerr(e, id, txt) { if (e.getElementsByTagName('parsererror').length > 0) { sErr(id, Error((e.getElementsByTagName('parsererror')[0].getElementsByTagName('div')[0].innerHTML)), txt); return true } else { return false } }

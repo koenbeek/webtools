@@ -1,9 +1,9 @@
 {
-  "pat": "(?<=\\s|^)[a-z]{4}(?=\\s|$)",
-  "inv": "off",
-  "ic": "off",
-  "match": "on",
-  "itxt": "If he were living, I would try him yet.\nLend me an arm; the rest have worn me out\nWith several applications; nature and sickness\nDebate it at their leisure. Welcome, count;\nMy son’s no dearer.",
-  "_tool": "grep",
-  "_otxt": "were\nrest"
+  "tool1": "grep",
+  "t1_pat": "(?<=\\s|^)[a-z]{4}(?=\\s|$)",
+  "t1_inv": "off",
+  "t1_ic": "off",
+  "t1_match": "on",
+  "txt0": "If he were living, I would try him yet.\nLend me an arm; the rest have worn me out\nWith several applications; nature and sickness\nDebate it at their leisure. Welcome, count;\nMy son’s no dearer.",
+  "_txt1": "were\nrest"
 }

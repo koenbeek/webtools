@@ -1,11 +1,11 @@
 {
-  "key": "[^,; ]+",
-  "sep": "",
-  "range": "2",
-  "inv": "off",
-  "ic": "on",
-  "unique": "on",
-  "itxt": "booker12,9012;Rachel Booker\ngrey07,2070,Laura Grey\njenkins81;4081;Zog Jenkins\njenkins46,9346,Mary Jenkins\nsmith79;5079,Jamie Smith",
-  "_tool": "sort",
-  "_otxt": "grey07,2070,Laura Grey\njenkins81;4081;Zog Jenkins\nsmith79;5079,Jamie Smith\nbooker12,9012;Rachel Booker\njenkins46,9346,Mary Jenkins"
+  "tool1": "sort",
+  "t1_key": "[^,; ]+",
+  "t1_sep": "",
+  "t1_range": "2",
+  "t1_inv": "off",
+  "t1_ic": "on",
+  "t1_unique": "on",
+  "txt0": "booker12,9012;Rachel Booker\ngrey07,2070,Laura Grey\njenkins81;4081;Zog Jenkins\njenkins46,9346,Mary Jenkins\nsmith79;5079,Jamie Smith",
+  "_txt1": "grey07,2070,Laura Grey\njenkins81;4081;Zog Jenkins\nsmith79;5079,Jamie Smith\nbooker12,9012;Rachel Booker\njenkins46,9346,Mary Jenkins"
 }
