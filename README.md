@@ -14,4 +14,4 @@ Tests can be executed with "`npm t`"
 
 Build can be executed with "`npm run build`"
 
-The GIT and deployment flow used is described [here](GIT)
+The GIT and deployment flow used is described [here](GIT.md)
