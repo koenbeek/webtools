@@ -1,0 +1,11 @@
+{
+  "tool1": "encodedecode",
+  "t1_decode": "off",
+  "t1_code": "html",
+  "tool2": "encodedecode",
+  "t2_decode": "on",
+  "t2_code": "html",
+  "txt0": "<Html>&</Html>",
+  "_txt1": "&lt;Html&gt;&amp;&lt;/Html&gt;",
+  "_txt2": "<Html>&</Html>"
+}
