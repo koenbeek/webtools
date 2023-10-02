@@ -35,3 +35,7 @@ Or you can use the [examples that put all the parameters in the URL](webtools/_E
     - [List first lowercase word from each line](https://koenbeek.github.io/webtools/tools.html?paramfile=examples/matchlist3.json)
     - [List word at start of Text](https://koenbeek.github.io/webtools/tools.html?paramfile=examples/matchlist4.json)
     - [List word at start of each line](https://koenbeek.github.io/webtools/tools.html?paramfile=examples/matchlist5.json)
+- encoding and decoding text
+    - [Base64](https://koenbeek.github.io/webtools/tools.html?paramfile=examples/Base64.json)
+    - [HTML](https://koenbeek.github.io/webtools/tools.html?paramfile=examples/HTML.json)
+    - [URL](https://koenbeek.github.io/webtools/tools.html?paramfile=examples/URL.json) 

@@ -1,0 +1,11 @@
+{
+  "tool1": "encodedecode",
+  "t1_decode": "off",
+  "t1_code": "b64",
+  "tool2": "encodedecode",
+  "t2_decode": "on",
+  "t2_code": "b64",
+  "txt0": "To do or not to do\nThat is the question",
+  "_txt1": "VG8gZG8gb3Igbm90IHRvIGRvClRoYXQgaXMgdGhlIHF1ZXN0aW9u",
+  "_txt2": "To do or not to do\nThat is the question"
+}

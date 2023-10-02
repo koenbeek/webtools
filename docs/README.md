@@ -4,6 +4,7 @@
 
 - [Lines To List](https://koenbeek.github.io/webtools/tools.html?tool1=lines2list) - join data on several lines into 1 line with seperators
 - [Sort Lines](https://koenbeek.github.io/webtools/tools.html?tool1=sort) - sort lines
+- [Encode/Decode](https://koenbeek.github.io/webtools/tools.html?tool1=encodedecode) - encode or decode Base64/Html/Url text
 
 ## Regular expression text tools
 
