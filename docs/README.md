@@ -2,7 +2,7 @@
 
 ## Basic text tools
 
-- [Lines To List](https://webtools.t00ls.eu/tools.html?tool1=lines2list) - join data on several lines into 1 line with seperators
+- [Lines To List](https://webtools.t00ls.eu/webtools/tools.html?tool1=lines2list) - join data on several lines into 1 line with seperators
 - [Sort Lines](https://webtools.t00ls.eu/webtools/tools.html?tool1=sort) - sort lines
 - [Encode/Decode](https://webtools.t00ls.eu/webtools/tools.html?tool1=encodedecode) - encode or decode Base64/Html/Url text
 
