@@ -6,7 +6,7 @@ The only file really needed to use the webtools is [tools.html](docs/webtools/to
 
 The main part of the code for this repo can be found in the [webtools](docs/webtools) folder, this also includes some examples and regex/xpath docs
 
-These webtools are hosted on the web at this address: <https://koenbeek.github.io> - i.e. the [docs folder](docs)
+These webtools are hosted by github at  <https://webtools.t00ls.eu> - i.e. the [docs folder](docs)
 
 Recommended/Tested browser is chrome
 

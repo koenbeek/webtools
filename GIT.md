@@ -3,7 +3,7 @@
 ## Branches
 
 - main - main/central branch
-  - github currently uses this branch to publish the docs folder on https://koenbeek.github.io
+  - github currently uses this branch to publish the docs folder on https://webtools.t00ls.eu
 - feat-issuenbr-title - feature branches
 - cont-issuenbr-title - content branches
 - bf-issuenbr-title - bugfix branches
@@ -40,4 +40,4 @@ increases in major release number will be handled manually by tagging the specif
 
 ## Deployment process
 
-github automatically publishes the [docs folder from the main branch](https://github.com/koenbeek/koenbeek.github.io/tree/main/docs)
+github automatically publishes the [docs folder from the main branch](https://github.com/koenbeek/webtools/tree/main/docs)
