@@ -218,8 +218,36 @@
       title: 'Lines To List',
       inputs: [
         { id: 'sep', typ: 'text', siz: 4, val: ",", lbl: "Separator String" },
-        { id: 'quote', typ: 'text', siz: 1, val: "'", lbl: "Quote Char" },
+        { id: 'quote', typ: 'text', siz: 1, val: "&#39;", lbl: "Quote Char" },
         { id: 'empty', typ: 'checkbox', val: true, lbl: "Remove empty lines" },
+        { id: 'lead', typ: 'checkbox', val: true, lbl: "Remove leading whitespace" },
+        { id: 'trail', typ: 'checkbox', val: true, lbl: "Remove trailing whitespace" },
+      ]
+    })
+
+  tools.set('lines2sqlinlist', {
+      run: (n) => {
+        const pf = "t" + n + "_";
+        let t = gV("txt" + (n - 1)).split('\n'), q = gV(pf + "quote"), m = Math.max(1,Number(gV(pf + "nbr"))), s = gV(pf + 'sel')
+        t = t.map(l => gC(pf + "lead") ? l.trimLeft() : l).map(l => gC(pf + "trail") ? l.trimEnd() : l)
+        t = t.filter(l => l.length > 0).map(l => q + l + q)
+        if (t.length <= m) {
+          gE("txt" + n).value = s + ' IN (' + t.join(",") + ')'
+        } else {
+          let o = []
+          while (t.length > 0) { 
+            o.push(s + ' IN (' + t.splice(0, m).join(",") + ')') 
+          }
+          gE("txt" + n).value = "(\n" + o.join(" OR\n") + "\n)"
+        }
+      },
+      intxt: [10, 100],
+      outxt: [10, 100],
+      title: 'Lines To SQL in list',
+      inputs: [
+        { id: 'sel', typ: 'text', siz: 20, val: "field", lbl: "Selector" },
+        { id: 'quote', typ: 'text', siz: 4, val: "&#39;", lbl: "Quote character" },
+        { id: 'nbr', typ: 'text', siz: 4, val: "1000", lbl: "Nbr of IDs per list" },
         { id: 'lead', typ: 'checkbox', val: true, lbl: "Remove leading whitespace" },
         { id: 'trail', typ: 'checkbox', val: true, lbl: "Remove trailing whitespace" },
       ]
