@@ -3,6 +3,7 @@
 ## Basic text tools
 
 - [Lines To List](https://webtools.t00ls.eu/webtools/tools.html?tool1=lines2list) - join data on several lines into 1 line with seperators
+- [Lines To SQL IN list](https://webtools.t00ls.eu/webtools/tools.html?tool1=lines2sqlinlist) - make an SQL IN list statement from lines with values
 - [Sort Lines](https://webtools.t00ls.eu/webtools/tools.html?tool1=sort) - sort lines
 - [Encode/Decode](https://webtools.t00ls.eu/webtools/tools.html?tool1=encodedecode) - encode or decode Base64/Html/Url text
 
